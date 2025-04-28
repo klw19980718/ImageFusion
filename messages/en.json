@@ -1,0 +1,218 @@
+{
+  "nav": {
+    "home": "Home",
+    "examples": "Examples",
+    "blog": "Blog",
+    "pricing": "Pricing",
+    "login": "Login/Sign Up",
+    "language": "Language",
+    "chinese": "Simplified Chinese",
+    "english": "English",
+    "signOut": "Sign Out",
+    "menuTitle": "Navigation Menu"
+  },
+  "auth": {
+    "welcome": "Welcome Back",
+    "nickname": "Nickname"
+  },
+  
+  "user": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "signOut": "Sign Out",
+    "account": "Account Management",
+    "preferences": "Preferences",
+    "theme": "Theme",
+    "language": "Language",
+    "generatedImages": "Generated Images",
+    "points": "Points Balance",
+    "recharge": "Recharge",
+    "noImages": "You haven't generated any images yet.",
+    "preview": "Preview",
+    "download": "Download",
+    "delete": "Delete",
+    "nickname": "Nickname",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone",
+    "createdAt": "Created At",
+    "lastSignInAt": "Last Sign In",
+    "emailVerified": "Email Verified",
+    "externalAccounts": "External Accounts",
+    "subscriptionStatus": "Subscription Status",
+    "currentPlan": "Current Plan:",
+    "generationUsage": "Generation Usage:",
+    "basicPlan": "Basic Plan",
+    "premiumPlan": "Premium Plan",
+    "ultimatePlan": "Ultimate Plan",
+    "noSubscription": "No Subscription",
+    "noSubscriptionMessage": "You currently do not have an active subscription.",
+    "viewPlans": "View Plans",
+    "errorFetching": "Error fetching data:",
+    "noData": "No subscription data available.",
+    "noImagesYet": "You haven't generated any images yet.",
+    "generateFirstImage": "Create your first image",
+    "errorFetchingUserInfo": "Error fetching user data:",
+    "userInfoNotAvailable": "User subscription details not available.",
+    "errorFetchingHistory": "Error loading generation history:",
+    "viewDetails": "View",
+    "retry": "Retry",
+    "loginPrompt": "Please log in to view your profile and generation history.",
+    "loginAction": "Log In / Sign Up",
+    "downloadImage": "Download Image",
+    "downloadImageAria": "Download generated image {id}"
+  },
+  "blog": {
+    "title": "Blog",
+    "allArticles": "All Articles",
+    "backToBlog": "Back to Blog",
+    "publishedOn": "Published on",
+    "readMore": "Read More",
+    "categories": "Categories",
+    "updates": "Product Updates",
+    "tutorials": "Tutorials",
+    "stories": "User Stories",
+    "tags": "Tags",
+    "posts": {
+      "how-to-take-perfect-polaroid-style-photos": {
+        "title": "How to Take Perfect Polaroid-Style Photos",
+        "excerpt": "Learn how to shoot photos best suited for conversion to Polaroid style, including lighting, angles, and composition tips.",
+        "content": "<h2>Master the Light</h2><p>Natural light is the soul of Polaroid-style photos. Try to shoot during the day in soft light, avoiding direct sunlight which can cause overexposure or harsh shadows. Diffused light from a window often works great.</p><h2>Choose Angles and Composition</h2><p>Experiment with different angles. Classic front-facing portraits work well, but a slight tilt or a low-angle shot can add interest. Pay attention to the subject's placement in the frame, perhaps using the 'rule of thirds'. To mimic the instant feel, don't strive for perfect symmetry; a candid feel is better.</p><h2>Highlight the Subject</h2><p>Ensure the subject is sharp. Use portrait mode (if available) for a slightly blurred background, or choose a simple background to avoid clutter. Our AI performs best with clear, well-defined subjects.</p><h2>Color and Emotion</h2><p>Vibrant photos with moderate contrast usually yield more appealing conversions. Consider the emotion conveyed; happy, warm moments align well with the nostalgic feel of Polaroids.</p><p>Follow these simple tips, combine them with our AI tool, and you'll easily create charming retro Polaroid-style 3D cartoon photos!</p>"
+      },
+      "new-feature-3d-effect-enhancement": {
+        "title": "New Feature Release: 3D Effect Enhancement",
+        "excerpt": "We're excited to announce the rollout of our new 3D effect enhancement feature, making your photos even more dimensional and lively.",
+        "content": "<h2>Stronger Sense of Depth</h2><p>We've upgraded the core algorithm of our AI model. It now better understands depth information in photos, generating 3D cartoon effects with a more pronounced sense of dimension. Facial contours, hair details, and the layering of foreground and background elements are significantly improved.</p><h2>Optimized Lighting and Shading</h2><p>The new algorithm also optimizes lighting and shading logic, simulating more natural light effects consistent with cartoon styles. Transitions between highlights and shadows are smoother, creating a more harmonious overall image.</p><h2>How to Experience It?</h2><p>No extra steps needed! Starting now, all photos generated via PolaToons will automatically use the enhanced 3D effect. Go ahead, upload your favorite photos, and experience the refreshed visuals!</p><p>We are committed to continuously improving our AI models to bring you more surprises. Stay tuned for future updates!</p>"
+      },
+      "user-story-wedding-photos-to-creative-souvenirs": {
+        "title": "User Story: Wedding Photos Turned into Creative Souvenirs",
+        "excerpt": "Learn how Sarah used our service to transform her wedding photos into beautiful Polaroid-style keepsakes.",
+        "content": "<p>Sarah wanted some special keepsakes for her wedding, beyond just a traditional photo album. She stumbled upon PolaToons and was captivated by its unique Polaroid cartoon style.</p><h2>The Creative Process</h2><p>She selected a few of her favorite wedding photos, including shots with her husband, fun moments with the bridesmaids, and some detail close-ups. Using PolaToons, she converted these photos into charming 3D cartoon images with retro borders with just one click.</p><h2>The Result and Reaction</h2><p>Sarah was thrilled with the outcome. 'They look so fun and heartwarming, perfectly capturing the joyful atmosphere of the wedding day,' she said. She printed these special 'Polaroids' to create unique thank-you cards for guests and also used them to decorate her new home. Friends and family raved about the creativity.</p><p>This story inspired us, showing that AI-generated images can be more than just social media posts; they can become tangible, emotionally resonant keepsakes in our lives. Your photos can have unique stories like this too.</p>"
+      },
+      "history-and-charm-of-polaroid-style": {
+        "title": "The History and Charm of Polaroid Style",
+        "excerpt": "Explore the history of the Polaroid camera and why its unique aesthetic remains beloved today.",
+        "content": "<h2>The Instant Imaging Revolution</h2><p>In the mid-20th century, the Polaroid Corporation introduced revolutionary instant cameras, allowing people to get physical photos minutes after shooting. It caused a sensation at the time, changing how people documented their lives.</p><h2>Unique Aesthetics</h2><p>Polaroid photos weren't just fast; they possessed unique aesthetic traits: the iconic white border, slightly soft colors, gentle vignetting, and that 'captured moment' realism. This imperfection became its unique charm, full of nostalgia and warmth.</p><h2>Revival in the Digital Age</h2><p>Despite the prevalence of digital photography and smartphones, the Polaroid style hasn't disappeared. Instead, in today's pursuit of personality and retro trends, this style has resurged. Whether through vintage cameras, disposable ones, or digital tools like PolaToons, people remain fascinated by the unique visual experience and emotional value Polaroids offer.</p><p>PolaToons aims to use modern AI technology to let everyone easily experience and create this classic style, injecting it with new vitality.</p>"
+      },
+      "5-creative-ways-to-display-polaroid-photos": {
+        "title": "5 Creative Ways to Display Your Polaroid-Style Photos",
+        "excerpt": "From digital albums to physical decor, here are 5 creative ways to showcase and share your Polaroid-style photos.",
+        "content": "<p>So you've generated beautiful Polaroid-style photos, how do you display them? Here are 5 creative ideas:</p><ol><li><strong>Photo Wall/String Lights:</strong> The most classic way. Use small clips and twine to string up photos, hang them on the wall, or casually pin them to a corkboard for a personalized photo display.</li><li><strong>DIY Frames:</strong> Choose a simple photo frame, or DIY a unique display using picture frames, washi tape, etc., to showcase single or multiple photos.</li><li><strong>Journal/Diary Decoration:</strong> Paste small Polaroid photos into your journal or diary to document life's beautiful moments vividly with images and text.</li><li><strong>Fridge Magnets:</strong> Buy some magnetic strips, stick them to the back of printed photos, and turn them into unique fridge magnets.</li><li><strong>Digital Display:</strong> Share on social media, create digital albums, use them as blog illustrations, or even personalized phone wallpapers. PolaToons-generated images are perfect for digital sharing.</li></ol><p>Unleash your creativity and let these stylish photos brighten up your living space!</p>"
+      },
+      "performance-optimization-update-faster-processing": {
+        "title": "Performance Optimization Update: Faster Processing Speed",
+        "excerpt": "We recently upgraded our servers, and photo processing speed is now up to 30% faster.",
+        "content": "<h2>Backend Architecture Upgrade</h2><p>To handle the growing user base and provide a smoother service experience, our technical team recently completed a major backend architecture upgrade. We optimized the image processing pipeline and increased server resources.</p><h2>Significant Speed Improvement</h2><p>Based on internal testing and early user feedback, the average photo generation speed has increased by about 30%. This means you can now get your desired Polaroid-style photos faster, reducing wait times.</p><h2>Continuous Optimization</h2><p>Performance optimization is an ongoing process. We will continue to monitor service performance and explore new technical approaches to ensure PolaToons remains efficient and stable.</p><p>Thank you for your continued support! We hope this update brings you a better user experience.</p>"
+      }
+    }
+  },
+  "pricing": {
+    "title": "Choose Your Perfect Plan",
+    "description": "All plans include HD image download and fast AI generation.",
+    "perMonth": "/month",
+    "mostPopular": "Most Popular",
+    "upgradePlan": "Upgrade Plan",
+    "saveAnnually": "Save 20% with annual billing",
+    "newTag": "New",
+    "loading": "Processing...",
+    "currentPlanText": "No Subscription",
+    "basic": {
+      "title": "Free",
+      "price": "0$",
+      "features": [
+        "10 generations per month",
+        "Standard generation speed",
+        "Download enabled"
+      ]
+    },
+    "premium": {
+      "title": "Premium",
+      "price": "$5",
+      "features": [
+        "Generate 200 images per month",
+        "HD image download",
+        "Faster AI generation",
+        "Commercial use",
+        "Remove watermark"
+      ]
+    },
+    "ultimate": {
+      "title": "Ultimate",
+      "price": "$10",
+      "features": [
+        "Generate 500 images per month",
+        "Everything in Premium",
+        "Priority support",
+        "Early access to new features"
+      ]
+    },
+    "error": {
+      "generic": "Failed to create subscription. Please try again.",
+      "missingUrl": "Could not retrieve payment link. Please try again.",
+      "network": "Network error. Please check your connection and try again.",
+      "missingUserId": "Could not get user information. Please try refreshing the page."
+    }
+  },
+  "terms": {
+    "title": "PolaToons Terms of Service",
+    "effectiveDate": "Effective Date: April 11, 2025",
+    "introduction": "Thank you for choosing PolaToons. These Terms of Service (\"Terms\") are a legal agreement between you and PolaToons and govern your use of the PolaToons services including our website, mobile apps, and other features or services (collectively, the \"Service\"). By using the Service, you agree to be bound by these Terms. If you do not agree to these Terms, you must not use the Service.",
+    "acceptanceTitle": "Acceptance of Terms",
+    "acceptanceContent": "By accessing or using the Service, you confirm your acceptance of these Terms and agree to be bound by them. If you are using the Service on behalf of an organization, you are agreeing to these Terms for that organization and promising that you have the authority to bind that organization to these Terms.",
+    "changesTitle": "Changes to Terms",
+    "changesContent": "PolaToons reserves the right, at its sole discretion, to modify or replace the Terms at any time. If a revision is material, we will provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.",
+    "useServiceTitle": "Use of the Service",
+    "useServiceContent": "Account Registration You may be required to register for an account to access certain features of the Service. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.\nUser Conduct\nYou are responsible for all your activity in connection with the Service. Any fraudulent, abusive, or otherwise illegal activity may be grounds for termination of your right to access or use the Service.\nIntellectual Property\nAll content provided on the Service, including the design, text, graphics, logos, icons, images, and the selection and arrangement thereof, is the exclusive property of PolaToons or its licensors and is protected by U.S. and international copyright laws.",
+    "contentTitle": "Content",
+    "contentContent": "User-Generated Content\nYou may be able to upload, store, or share content through the Service. You retain all rights in, and are solely responsible for, the user-generated content you post to PolaToons.\nContent Use\nBy posting content on the Service, you grant PolaToons a worldwide, non-exclusive, royalty-free license (with the right to sublicense) to use, copy, reproduce, process, translate, format, publish, transmit, display, and distribute such content in any and all media or distribution methods (now known or later developed).",
+    "disclaimersTitle": "Disclaimers",
+    "disclaimersContent": "PolaToons provides the Service on an \"as is\" and \"as available\" basis. You therefore use the Service at your own risk. PolaToons expressly disclaims any and all warranties of any kind, whether express or implied.",
+    "liabilityTitle": "Limitation of Liability",
+    "liabilityContent": "To the fullest extent permitted by law, in no event will PolaToons, its officers, shareholders, employees, agents, directors, subsidiaries, affiliates, successors, assigns, suppliers, or licensors be liable for (1) any indirect, special, incidental, punitive, exemplary, or consequential damages; (2) any loss of use, data, business, or profits (whether direct or indirect), in all cases arising out of the use or inability to use the Service, regardless of legal theory, without regard to whether PolaToons has been warned of the possibility of those damages, and even if a remedy fails of its essential purpose.",
+    "generalTitle": "General",
+    "generalContent": "These Terms are governed by the laws of the jurisdiction in which PolaToons is located, without regard to its conflict of laws rules. The courts in some countries will not apply these jurisdiction laws to some types of disputes. If you reside in one of those countries, then where these jurisdictions laws are required to apply, the laws of your resident country will apply to such disputes related to these Terms."
+  },
+  "privacy": {
+    "title": "PolaToons Privacy Policy",
+    "effectiveDate": "Effective Date: April 11, 2025",
+    "introduction": "At PolaToons, we are committed to protecting the privacy and security of our users. This Privacy Policy describes the types of information we may collect from you or that you may provide when you use our service and our practices for collecting, using, maintaining, protecting, and disclosing that information.",
+    "collectTitle": "Information We Collect",
+    "collectContent": "Information You Provide to Us: Account Information (If you create an account, we may collect your name, email address, and password.), Interaction Infomation (We collect the information you actively provide to us includes data you input during interactions, such as filling out forms on our website, communicating with us via contact forms, emails, social media interactions, surveys, or any other method where you actively send information to us.)",
+    "collectAutoTitle": "Information We Collect Automatically",
+    "collectAutoContent": "Usage Details: When you access and use our Service, we automatically collect details of your access to and use of our Service, including traffic data, location data, logs, and other communication data and the resources that you access and use on or through our Service. Device Information: We collect information about your device, including IP address, operating system, browser type, and device identifiers.",
+    "cookiesTitle": "Cookies and Tracking Technologies",
+    "cookiesContent": "We use cookies and similar tracking technologies to track activity on our Service and hold certain information.",
+    "paymentTitle": "Payment Information",
+    "paymentContent": "Payment and Billing Information: If you purchase a subscription or service from us, we may collect payment and billing information. This includes your credit card number, billing address, and other information necessary for processing payments. We use secure payment processing services to handle transactions and do not store your credit card information on our servers.",
+    "notCollectTitle": "Information We Do Not Collect",
+    "notCollectContent": "Sensitive Personal Information: We do not collect sensitive personal information such as Social Security numbers, genetic data, health information, or religious beliefs.",
+    "howUseTitle": "How We Use Your Information",
+    "howUseContent": "We use the information we collect about you or that you provide to us, including any personal information:\nTo provide you with our Service and its contents, and any other information, products or services that you request from us.\nTo fulfill the purposes for which you provided the information or that were described when it was collected, or any other purpose for which you provide it.\nTo give you notices about your account and subscription, including expiration and renewal notices.\nTo carry out our obligations and enforce our rights arising from any contracts entered into between you and us, including for billing and collection.\nTo notify you about changes to our Service or any products or services we offer or provide through it.\nTo improve our Service, products, and services, and to develop new ones.\nTo measure or understand the effectiveness of the advertising we serve to you and others, and to deliver relevant advertising to you.\nFor any other purpose with your consent.",
+    "dataSecurityTitle": "Data Security",
+    "dataSecurityContent": "We implement measures designed to protect your personal information from accidental loss and from unauthorized access, use, alteration, and disclosure. However, the transmission of information via the internet is not completely secure, and we cannot guarantee the security of your personal information transmitted to our Service.",
+    "changesTitle": "Changes to Our Privacy Policy",
+    "changesContent": "We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes."
+  },
+  "footer": {
+    "copyright": "© 2025 PolaToons. All rights reserved.",
+    "navigation": "Navigation",
+    "home": "Home",
+    "blog": "Blog",
+    "pricing": "Pricing",
+    "legal": "Legal",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "contact": "Contact Us"
+  },
+  "common": {
+    "loading": "Loading...",
+    "loadingHistory": "Loading history..."
+  },
+  "examples": {
+    "title": "See the Magic in Action",
+    "description": "Slide to compare the original photos with their AI-generated Polaroid cartoon versions.",
+    "originalLabel": "Original",
+    "generatedLabel": "Generated"
+  }
+} 

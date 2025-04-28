@@ -1,0 +1,11 @@
+# Allow all user agents access to the entire site by default
+User-agent: *
+Allow: /
+
+# Disallow specific paths if necessary in the future (e.g., API routes, admin panels)
+# Disallow: /api/
+# Disallow: /admin/
+
+# Point to the sitemap (using the correct domain)
+# Ensure your sitemap is accessible at /sitemap.xml
+Sitemap: https://www.framepola.com/sitemap.xml 
