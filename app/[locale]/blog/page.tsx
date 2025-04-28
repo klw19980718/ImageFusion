@@ -26,35 +26,35 @@ export default function Blog() {
   const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : 'zh';
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-black text-white">
       {/* <Navbar /> */}
-      <main className="flex-grow py-12 px-6">
+      <main className="flex-grow py-16 px-6">
         <div className="container mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold font-fredoka text-center mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-center mb-12 text-[#FFD700]">
             {t('title')}
           </h1>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* 侧边栏 - 分类 */}
             <div className="md:col-span-1">
-              <div className="bg-white rounded-2xl p-6 shadow-custom mb-6 sticky top-24">
-                <h3 className="text-lg font-bold mb-4">{t('categories')}</h3>
+              <div className="bg-gray-900 rounded-2xl p-6 border border-[#FFD700]/20 shadow-lg mb-6 sticky top-24">
+                <h3 className="text-lg font-bold mb-4 text-[#FFD700]">{t('categories')}</h3>
                 <ul className="space-y-2">
                   <li>
                     <button
                       onClick={() => setActiveCategory('all')}
-                      className={`w-full text-left px-3 py-2 rounded-lg ${ // 使用 block 替代 w-full text-left?
-                        activeCategory === 'all' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'
+                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                        activeCategory === 'all' ? 'bg-[#FFD700]/20 text-[#FFD700] font-medium' : 'text-white hover:bg-gray-800'
                       }`}
                     >
-                      {t('allArticles')} {/* 使用翻译 */} 
+                      {t('allArticles')}
                     </button>
                   </li>
                   <li>
                     <button
                       onClick={() => setActiveCategory('updates')}
-                      className={`w-full text-left px-3 py-2 rounded-lg ${ // 使用 block 替代 w-full text-left?
-                        activeCategory === 'updates' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'
+                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                        activeCategory === 'updates' ? 'bg-[#FFD700]/20 text-[#FFD700] font-medium' : 'text-white hover:bg-gray-800'
                       }`}
                     >
                       {t('updates')}
@@ -63,8 +63,8 @@ export default function Blog() {
                   <li>
                     <button
                       onClick={() => setActiveCategory('tutorials')}
-                      className={`w-full text-left px-3 py-2 rounded-lg ${ // 使用 block 替代 w-full text-left?
-                        activeCategory === 'tutorials' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'
+                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                        activeCategory === 'tutorials' ? 'bg-[#FFD700]/20 text-[#FFD700] font-medium' : 'text-white hover:bg-gray-800'
                       }`}
                     >
                       {t('tutorials')}
@@ -73,8 +73,8 @@ export default function Blog() {
                   <li>
                     <button
                       onClick={() => setActiveCategory('stories')}
-                      className={`w-full text-left px-3 py-2 rounded-lg ${ // 使用 block 替代 w-full text-left?
-                        activeCategory === 'stories' ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'
+                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                        activeCategory === 'stories' ? 'bg-[#FFD700]/20 text-[#FFD700] font-medium' : 'text-white hover:bg-gray-800'
                       }`}
                     >
                       {t('stories')}
@@ -84,37 +84,31 @@ export default function Blog() {
               </div>
             </div>
             
-            {/* 博客文章列表 - 修改为垂直列表 */}
+            {/* 博客文章列表 */}
             <div className="md:col-span-3">
-              {/* 移除 grid，使用 space-y 控制间距 */}
-              <div className="space-y-8">
-                {/* 使用 filteredPostsMeta 进行迭代 */} 
+              <div className="space-y-6">
                 {filteredPostsMeta.map(post => (
-                  // 更新 Link href 指向 /blog/[slug]
                   <Link 
                     href={`/${locale}/blog/${post.slug}`} 
                     key={post.id}
-                    // 修改卡片样式，移除图片相关
-                    className="block bg-white rounded-2xl p-6 shadow-custom hover:shadow-lg transition-shadow"
+                    className="block bg-gray-900 rounded-2xl p-6 border border-[#FFD700]/20 shadow-lg hover:shadow-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all"
                   >
-                    {/* 内容区调整 */}
                     <div>
                       <div className="flex justify-between items-center mb-3">
-                        <span className="text-xs text-muted-foreground">{post.date}</span>
-                        <span className="px-2 py-1 bg-primary/10 rounded-full text-xs text-primary font-medium">
-                          {/* 使用 t() 直接翻译 category，并添加类型断言 */}
+                        <span className="text-xs text-gray-400">{post.date}</span>
+                        <span className="px-3 py-1 bg-[#FFD700]/10 border border-[#FFD700]/30 rounded-full text-xs text-[#FFD700] font-medium">
                           {t(post.category as 'updates' | 'tutorials' | 'stories')}
                         </span>
                       </div>
-                      {/* 使用翻译函数获取 title */}
-                      <h3 className="text-xl font-bold mb-2 text-foreground hover:text-primary transition-colors">{t(`posts.${post.slug}.title`)}</h3>
-                      {/* 使用翻译函数获取 excerpt */}
-                      <p className="text-muted-foreground line-clamp-3">{t(`posts.${post.slug}.excerpt`)}</p> 
+                      <h3 className="text-xl font-bold mb-2 text-white hover:text-[#FFD700] transition-colors">{t(`posts.${post.slug}.title`)}</h3>
+                      <p className="text-gray-400 line-clamp-3">{t(`posts.${post.slug}.excerpt`)}</p> 
                     </div>
                   </Link>
                 ))} 
                 {filteredPostsMeta.length === 0 && (
-                  <p className="text-muted-foreground text-center">该分类下暂无文章。</p> // 添加无文章提示
+                  <div className="text-center py-12 bg-gray-900 rounded-2xl border border-[#FFD700]/20">
+                    <p className="text-gray-400">{t('noPosts', {defaultMessage: '该分类下暂无文章'})}</p>
+                  </div>
                 )}
               </div>
             </div>

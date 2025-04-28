@@ -102,9 +102,9 @@ export default function PricingSection() {
   };
 
   return (
-    <section id="pricing" className="py-20 px-6 bg-gray-100 dark:bg-gray-900">
+    <section id="pricing" className="py-20 px-6 bg-background">
       <div className="container mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold font-fredoka text-center mb-6 text-foreground">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-foreground">
           {t('title')}
         </h2>
         <p className="text-lg text-muted-foreground text-center mb-16 max-w-3xl mx-auto">
@@ -126,63 +126,65 @@ export default function PricingSection() {
                 <div
                   key={plan.key}
                   className={cn(
-                    'rounded-2xl p-8 flex flex-col h-full relative shadow-xl',
-                    plan.popular ? 'bg-gray-900 text-gray-100 border-2 border-secondary' 
-                    // : isBasic ? 'bg-gray-700 text-gray-300' // 移除 basic 特殊背景 (可选，如果需要统一外观)
-                    : 'bg-gray-800 text-gray-200' // 所有非 popular 卡片使用此样式
+                    'rounded-standard p-8 flex flex-col h-full relative shadow-custom transition-standard',
+                    plan.popular ? 'bg-card border-2 border-primary' 
+                    : 'bg-card border border-muted/30'
                   )}
                 >
                   {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-secondary text-secondary-foreground px-4 py-1 rounded-full text-sm font-bold shadow-md">
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground px-6 py-1.5 rounded-full text-sm font-bold shadow-md">
                       {t('mostPopular')}
                     </div>
                   )}
 
-                  <h3 className="text-2xl font-semibold mb-2 text-center text-white">
+                  <h3 className="text-2xl font-semibold mb-2 text-center text-foreground">
                     {planDetails.title}
                   </h3>
       
                   {/* 始终显示价格 */}
                   <div className="text-center mb-8">
-                    <span className="text-5xl font-bold text-white">
+                    <span className="text-5xl font-bold text-primary">
                       {planDetails.price} {/* 直接使用翻译文件中的价格，包括 "$0" */}
                     </span>
                      {/* 对 basic 也显示 /月，如果需要可以条件隐藏 */}
                      {/* <span className="text-gray-400 text-lg ml-1">{t('perMonth')}</span> */}
                      {/* 或者条件显示 */} 
-                     {!isBasic && (<span className="text-gray-400 text-lg ml-1">{t('perMonth')}</span>)}
+                     {!isBasic && (<span className="text-muted-foreground text-lg ml-1">{t('perMonth')}</span>)}
                   </div>
 
                   {/* 始终显示按钮，但 basic 是禁用状态 */}
                   <Button 
                     className={cn(
-                      'w-full mb-6',
+                      'w-full mb-6 transition-standard',
                       plan.popular
-                        ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
+                        ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                         : isBasic
-                          ? 'bg-gray-600 text-gray-400 cursor-not-allowed' // Basic 禁用样式
-                          : 'bg-gray-700 text-white hover:bg-gray-600'
+                          ? 'bg-muted text-muted-foreground cursor-not-allowed' // Basic 禁用样式
+                          : 'bg-card text-foreground hover:bg-muted border border-primary'
                     )}
                     onClick={() => !isBasic && handleUpgradeClick(plan.priceId, plan.key)} // Basic 不触发 onClick
                     disabled={loadingPlan === plan.key || isBasic} // Basic 计划始终禁用
                   >
-                    {loadingPlan === plan.key 
-                      ? t('loading', { defaultMessage: 'Processing...' })
-                      // Basic 计划按钮文本可以不同，例如 'Current Plan' 或保持 'Upgrade Plan'
-                      : isBasic ? t('currentPlanText', { defaultMessage: 'Current Plan' }) : t('upgradePlan')
-                    }
+                    {loadingPlan === plan.key ? (
+                      <span className="flex items-center">
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                        {t('loading', { defaultMessage: 'Processing...' })}
+                      </span>
+                    ) : (
+                      isBasic ? t('currentPlanText', { defaultMessage: 'Current Plan' }) : t('upgradePlan')
+                    )}
                   </Button>
                   {/* 移除了 Basic 计划的占位符 div */}
 
-                  <div className="flex-grow border-t border-gray-700 pt-6">
-                    <ul className="space-y-3">
+                  <div className="flex-grow border-t border-muted/30 pt-6">
+                    <ul className="space-y-4">
                       {Array.isArray(features) && features.map((feature, featureIndex) => (
                         <li key={featureIndex} className="flex items-start">
-                          <Check className={`w-5 h-5 mr-2 flex-shrink-0 ${plan.popular ? 'text-secondary' : 'text-gray-400'}`} />
-                          <span className="text-sm">
+                          <Check className={`w-5 h-5 mr-3 flex-shrink-0 ${plan.popular ? 'text-primary' : 'text-muted-foreground'}`} />
+                          <span className="text-sm text-foreground">
                             {feature}
                             {plan.key === 'ultimate' && (feature.includes('Multi-to-multi generation') || feature.includes('多图批量生成')) && (
-                                <span className="ml-2 bg-blue-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                                <span className="ml-2 bg-primary/20 text-primary text-xs font-semibold px-2 py-0.5 rounded-full">
                                   {t('newTag')}
                                 </span>
                             )}

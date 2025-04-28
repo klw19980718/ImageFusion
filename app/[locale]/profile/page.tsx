@@ -18,6 +18,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import Link from "next/link";
 
 // 定义从API获取的用户信息类型
 interface UserApiInfo {
@@ -317,64 +318,95 @@ export default function ProfilePage() {
   const currentPlanName = getPlanName(userApiInfo?.level);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <main className="flex-grow py-12 px-6">
-        <div className="container mx-auto max-w-5xl">
-          <h1 className="text-3xl font-bold text-gray-800 mb-10">{t('account')}</h1>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="md:col-span-1 bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col items-center text-center">
-              <Avatar className="w-24 h-24 mb-4 border-2 border-gray-100">
-                <AvatarImage src={user.imageUrl} alt={user.username || 'User Avatar'} />
-                <AvatarFallback className="text-3xl font-semibold bg-gray-100 text-gray-600">{initials}</AvatarFallback>
-              </Avatar>
-              <h2 className="text-xl font-semibold text-gray-800">{user.fullName || user.username}</h2>
-              <p className="text-sm text-gray-500 mt-1">{user.primaryEmailAddress?.emailAddress}</p>
+    <div className="min-h-screen bg-black text-white">
+      <main className="container mx-auto px-4 py-12">
+        {/* 用户信息区 */}
+        <div className="mb-12">
+          {isLoadingUserInfo ? (
+            <div className="flex flex-col items-center justify-center py-8">
+              <div className="w-20 h-20 bg-gray-800 rounded-full animate-pulse mb-4"></div>
+              <div className="w-48 h-6 bg-gray-800 rounded animate-pulse mb-2"></div>
+              <div className="w-32 h-4 bg-gray-800 rounded animate-pulse"></div>
             </div>
-
-            <div className="md:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">{t('subscriptionStatus', { defaultMessage: 'Subscription Status' })}</h3>
-              {isLoadingUserInfo ? (
-                <p className="text-gray-500">{commonT('loading', { defaultMessage: 'Loading...' })}</p>
-              ) : userInfoError ? (
-                <p className="text-red-600">{t('errorFetchingUserInfo', { defaultMessage: 'Error fetching user data:' })} {userInfoError}</p>
-              ) : userApiInfo ? (
-                userApiInfo.level > 0 ? (
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-gray-600">{t('currentPlan', { defaultMessage: 'Current Plan:' })}</span>
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${userApiInfo.level === 2 ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
-                        {currentPlanName}
-                      </span>
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="font-medium text-gray-600">{t('generationUsage', { defaultMessage: 'Generation Usage:' })}</span>
-                        <span className="text-gray-500">{userApiInfo.api_used_times} / {userApiInfo.api_total_times}</span>
+          ) : userInfoError ? (
+            <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 shadow-lg">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+                <div className="relative">
+                  <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#FFD700]/30">
+                    {userApiInfo?.avatar ? (
+                      <Image
+                        src={userApiInfo.avatar}
+                        alt={userApiInfo.name || '用户头像'}
+                        width={128}
+                        height={128}
+                        className="object-cover w-full h-full"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-800 flex items-center justify-center text-4xl text-[#FFD700]">
+                        {(userApiInfo?.name || 'U').charAt(0).toUpperCase()}
                       </div>
-                      <Progress value={usagePercentage} className="h-2" />
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex-1 text-center md:text-left">
+                  <h1 className="text-2xl font-bold mb-2">{userApiInfo?.name || '未设置昵称'}</h1>
+                  <p className="text-gray-400 mb-4">{userApiInfo?.email}</p>
+                  
+                  <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
+                      <p className="text-sm text-gray-400">会员等级</p>
+                      <p className="text-lg font-medium text-[#FFD700]">
+                        {userApiInfo && userApiInfo.level > 0 ? currentPlanName : t('noSubscription', {defaultMessage: '免费用户'})}
+                      </p>
+                    </div>
+                    
+                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
+                      <p className="text-sm text-gray-400">剩余积分</p>
+                      <p className="text-lg font-medium text-[#FFD700]">
+                        {userApiInfo?.api_left_times || 0}
+                      </p>
+                    </div>
+                    
+                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
+                      <p className="text-sm text-gray-400">已生成图片</p>
+                      <p className="text-lg font-medium text-[#FFD700]">
+                        {userApiInfo?.api_used_times || 0}
+                      </p>
                     </div>
                   </div>
-                ) : (
-                  <div className="text-center py-4">
-                    <p className="text-gray-600 mb-4">{t('noSubscriptionMessage', { defaultMessage: 'You currently do not have an active subscription.' })}</p>
-                    <Button onClick={() => window.location.href=`/${locale}/#pricing`}>
-                      {t('viewPlans', { defaultMessage: 'View Plans' })}
-                    </Button>
-                  </div>
-                )
-              ) : (
-                <p className="text-gray-500">{t('userInfoNotAvailable', { defaultMessage: 'User subscription details not available.' })}</p>
-              )}
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 shadow-lg text-center">
+              <p className="text-xl mb-4">请先登录查看您的个人信息</p>
+              <button 
+                onClick={() => window.location.href=`/${locale}/sign-in?redirect_url=/${locale}/profile`}
+                className="px-6 py-2 bg-[#FFD700] text-black font-medium rounded-lg hover:bg-[#FFD700]/80 transition-colors"
+              >
+                登录
+              </button>
+            </div>
+          )}
+        </div>
 
-          <div id="generation-history-section">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">{t('generatedImages')}</h2>
-
+        {/* 生成历史区 */}
+        {userApiInfo && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-6 border-b border-[#FFD700]/20 pb-2 text-[#FFD700]">生成历史</h2>
+            
             {isLoadingHistory ? (
-              <div className="text-center py-10">
-                <p className="text-gray-500">{commonT('loadingHistory', { defaultMessage: 'Loading history...' })}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {[...Array(4)].map((_, index) => (
+                  <div key={index} className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg">
+                    <div className="h-48 bg-gray-800 animate-pulse"></div>
+                    <div className="p-4">
+                      <div className="h-4 bg-gray-800 rounded animate-pulse mb-2"></div>
+                      <div className="h-4 bg-gray-800 rounded animate-pulse w-2/3"></div>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : historyError ? (
               <div className="text-center py-10 bg-red-50 border border-red-200 rounded-lg px-4">
@@ -385,107 +417,82 @@ export default function ProfilePage() {
               </div>
             ) : totalHistoryCount > 0 ? (
               <>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                   {historyList.map((item) => (
                     <div 
                       key={item.id} 
-                      className={`group relative aspect-square overflow-hidden rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${isDownloading === item.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                      onClick={() => {
-                        if (isDownloading !== item.id) { // 防止在下载时再次触发
-                          downloadImageWithCors(
+                      className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl overflow-hidden shadow-lg hover:shadow-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all"
+                    >
+                      <div className="relative h-48 bg-gray-800 overflow-hidden">
+                        <Image
+                          src={item.dist_image}
+                          alt={item.prompt || '生成图片'}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover transition-transform hover:scale-105"
+                        />
+                        <button
+                          onClick={() => downloadImageWithCors(
                             item.dist_image, 
                             `polatoons-image-${item.id}.png`, 
                             setIsDownloading, 
                             item.id,
-                            t // 传入翻译函数
-                          )
-                        }
-                      }}
-                      title={`${t('downloadImage', { defaultMessage: 'Download Image' })}: ${item.prompt || 'Generated Image'}`}
-                      aria-label={t('downloadImageAria', { defaultMessage: 'Download generated image {id}', id: item.id })}
-                    >
-                      <Image
-                        src={item.dist_image}
-                        alt={item.prompt || `Generated Image ${item.id}`}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
-                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                        priority={historyList.slice(0, 10).includes(item)}
-                        unoptimized={true}
-                      />
-                      {isDownloading === item.id && (
-                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                          <svg className="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            t
+                          )}
+                          className="absolute top-2 right-2 bg-black/60 p-2 rounded-full hover:bg-black/80 transition-colors"
+                          title="下载图片"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5 text-white">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                           </svg>
-                        </div>
-                      )}
+                        </button>
+                      </div>
+                      <div className="p-4">
+                        <p className="text-gray-400 text-sm mb-2">
+                          {new Date(item.created).toLocaleDateString()}
+                        </p>
+                        <p className="line-clamp-2 text-sm">{item.prompt}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
-
+                
+                {/* 分页控制 */}
                 {totalPages > 1 && (
-                  <div className="mt-10 flex justify-center">
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handlePageChange(currentPage - 1);
-                            }}
-                            aria-disabled={currentPage <= 1}
-                            className={currentPage <= 1 ? 'pointer-events-none opacity-50' : undefined}
-                          />
-                        </PaginationItem>
-
-                        {getPaginationItems(currentPage, totalPages).map((page, index) => (
-                          <PaginationItem key={index}>
-                            {typeof page === 'number' ? (
-                              <PaginationLink
-                                href="#"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handlePageChange(page);
-                                }}
-                                isActive={currentPage === page}
-                              >
-                                {page}
-                              </PaginationLink>
-                            ) : (
-                              <PaginationEllipsis />
-                            )}
-                          </PaginationItem>
-                        ))}
-
-                        <PaginationItem>
-                          <PaginationNext
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handlePageChange(currentPage + 1);
-                            }}
-                            aria-disabled={currentPage >= totalPages}
-                            className={currentPage >= totalPages ? 'pointer-events-none opacity-50' : undefined}
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
+                  <div className="flex justify-center mt-8 space-x-2">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 rounded-lg border border-[#FFD700]/20 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors"
+                    >
+                      上一页
+                    </button>
+                    <span className="px-4 py-2 rounded-lg bg-gray-800 border border-[#FFD700]/30">
+                      {currentPage} / {totalPages}
+                    </span>
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 rounded-lg border border-[#FFD700]/20 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors"
+                    >
+                      下一页
+                    </button>
                   </div>
                 )}
               </>
             ) : (
-              <div className="text-center py-10 bg-white rounded-xl border border-gray-200 shadow-sm">
-                <p className="text-gray-500 mb-4">{t('noImagesYet', {defaultMessage: 'You haven\'t generated any images yet.'})}</p>
-                <Button variant="default" onClick={() => window.location.href=`/${locale}/`}>
-                  {t('generateFirstImage', {defaultMessage: 'Create your first image'})}
-                </Button>
+              <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 text-center">
+                <p className="text-gray-400 mb-4">您还没有生成过图片</p>
+                <Link 
+                  href="/"
+                  className="px-6 py-2 bg-[#FFD700] text-black font-medium rounded-lg hover:bg-[#FFD700]/80 transition-colors inline-block"
+                >
+                  去生成图片
+                </Link>
               </div>
             )}
           </div>
-        </div>
+        )}
       </main>
       <Footer />
     </div>

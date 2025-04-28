@@ -44,33 +44,34 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  /* 拍立得风格配色 */
-  --background: #FFFDF5; /* 柔和奶油白背景 */
-  --foreground: #212121; /* 深灰色文本 */
+  --radius: 0.75rem; /* 12px圆角统一标准 */
   
-  --card: #FFFFFF; /* 卡片背景 */
-  --card-foreground: #212121; /* 卡片文本 */
+  /* 黑金设计风格配色 */
+  --background: #0A0A0A; /* 黑色背景 */
+  --foreground: #E0E0E0; /* 浅灰色文本 */
   
-  --popover: #FFFFFF; /* 弹出框背景 */
-  --popover-foreground: #212121; /* 弹出框文本 */
+  --card: #1F1F1F; /* 深灰色卡片背景 */
+  --card-foreground: #E0E0E0; /* 卡片文本 */
   
-  --primary: #FF6B6B; /* 樱桃红，主按钮 */
-  --primary-foreground: #FFFFFF; /* 按钮文本 */
+  --popover: #1F1F1F; /* 弹出框背景 */
+  --popover-foreground: #E0E0E0; /* 弹出框文本 */
   
-  --secondary: #FFD93D; /* 明黄色，次要按钮 */
-  --secondary-foreground: #212121; /* 次要按钮文本 */
+  --primary: #FFD700; /* 金色，主按钮 */
+  --primary-foreground: #0A0A0A; /* 按钮文本 */
   
-  --muted: #EAEAEA; /* 淡灰色，边框 */
-  --muted-foreground: #4E4E4E; /* 次要文本 */
+  --secondary: #1F1F1F; /* 深灰色，次要按钮 */
+  --secondary-foreground: #FFD700; /* 次要按钮文本 */
   
-  --accent: #FFFFFF; /* 强调背景 */
-  --accent-foreground: #212121; /* 强调文本 */
+  --muted: #1F1F1F; /* 深灰色，边框 */
+  --muted-foreground: #B0B0B0; /* 辅助文字、副标题 */
+  
+  --accent: #1F1F1F; /* 强调背景 */
+  --accent-foreground: #FFD700; /* 强调文本 */
   
   --destructive: #E63946; /* 错误色 */
-  --border: #EAEAEA; /* 边框色 */
-  --input: #EAEAEA; /* 输入框边框 */
-  --ring: #3A86FF; /* 聚焦环 */
+  --border: #2A2A2A; /* 边框色 */
+  --input: #2A2A2A; /* 输入框边框 */
+  --ring: #FFD700; /* 聚焦环 */
   
   /* 其他颜色 */
   --info: #3A86FF; /* 信息色 */
@@ -83,43 +84,43 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #212121;
-  --sidebar-primary: #FF6B6B;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #FFD93D;
-  --sidebar-accent-foreground: #212121;
-  --sidebar-border: #EAEAEA;
-  --sidebar-ring: #3A86FF;
+  --sidebar: #1F1F1F;
+  --sidebar-foreground: #E0E0E0;
+  --sidebar-primary: #FFD700;
+  --sidebar-primary-foreground: #0A0A0A;
+  --sidebar-accent: #1F1F1F;
+  --sidebar-accent-foreground: #FFD700;
+  --sidebar-border: #2A2A2A;
+  --sidebar-ring: #FFD700;
 }
 
 .dark {
-  /* 暗色模式下的拍立得风格 */
-  --background: #222222;
-  --foreground: #F5F5F5;
+  /* 暗色模式使用相同的黑金风格 */
+  --background: #0A0A0A;
+  --foreground: #E0E0E0;
   
-  --card: #333333;
-  --card-foreground: #F5F5F5;
+  --card: #1F1F1F;
+  --card-foreground: #E0E0E0;
   
-  --popover: #333333;
-  --popover-foreground: #F5F5F5;
+  --popover: #1F1F1F;
+  --popover-foreground: #E0E0E0;
   
-  --primary: #FF6B6B; /* 保持主色调 */
-  --primary-foreground: #FFFFFF;
+  --primary: #FFD700;
+  --primary-foreground: #0A0A0A;
   
-  --secondary: #FFD93D; /* 保持次色调 */
-  --secondary-foreground: #212121;
+  --secondary: #1F1F1F;
+  --secondary-foreground: #FFD700;
   
-  --muted: #444444;
+  --muted: #1F1F1F;
   --muted-foreground: #B0B0B0;
   
-  --accent: #333333; /* 深色卡纸感 */
-  --accent-foreground: #F5F5F5;
+  --accent: #1F1F1F;
+  --accent-foreground: #FFD700;
   
   --destructive: #E63946;
-  --border: #555555;
-  --input: #555555;
-  --ring: #3A86FF;
+  --border: #2A2A2A;
+  --input: #2A2A2A;
+  --ring: #FFD700;
   
   /* 其他默认暗色变量 */
   --chart-1: oklch(0.488 0.243 264.376);
@@ -127,19 +128,20 @@
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: #333333;
-  --sidebar-foreground: #F5F5F5;
-  --sidebar-primary: #FF6B6B;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #333333;
-  --sidebar-accent-foreground: #F5F5F5;
-  --sidebar-border: #555555;
-  --sidebar-ring: #3A86FF;
+  --sidebar: #1F1F1F;
+  --sidebar-foreground: #E0E0E0;
+  --sidebar-primary: #FFD700;
+  --sidebar-primary-foreground: #0A0A0A;
+  --sidebar-accent: #1F1F1F;
+  --sidebar-accent-foreground: #FFD700;
+  --sidebar-border: #2A2A2A;
+  --sidebar-ring: #FFD700;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth; /* 添加平滑滚动 */
+    font-family: 'Poppins', sans-serif; /* 设置全局默认字体 */
   }
 
   * {
@@ -149,44 +151,77 @@
     @apply bg-background text-foreground;
   }
   
-  /* 自定义字体样式 */
-  .font-playfair {
-    font-family: var(--font-playfair);
+  /* 基于规范设置标题样式 */
+  h1, .h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 56px;
   }
   
-  .font-inter {
-    font-family: var(--font-inter);
+  h2, .h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 44px;
   }
   
-  .font-fredoka {
-    font-family: var(--font-fredoka);
+  body, .body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
   }
   
-  .font-baloo {
-    font-family: var(--font-baloo);
+  .small {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
   }
   
-  .font-nunito {
-    font-family: var(--font-nunito);
+  .btn-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 24px;
   }
   
   /* UI风格 */
   .shadow-custom {
-    box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 8px 24px;
   }
   
-  /* 覆盖默认边距，使用更大的内边距 */
-  .p-large {
-    padding: 2rem;
+  /* 动画效果统一 */
+  .transition-standard {
+    transition: all 0.3s ease;
   }
   
-  /* 圆角样式 */
-  .rounded-xl {
-    border-radius: 1rem;
+  /* 按钮、卡片、输入框统一圆角 */
+  .btn, 
+  .card,
+  .input,
+  .rounded-standard {
+    border-radius: 12px;
   }
-  
-  .rounded-2xl {
-    border-radius: 1.5rem;
-  }
+}
+
+/* 添加hover效果 */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.03);
+}
+
+/* 添加动画淡入效果 */
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 

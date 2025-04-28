@@ -67,14 +67,14 @@ export function Navbar() {
     <>
         <Link
             href={`/${currentLocale}`}
-            className={`block w-full text-left rounded-md ${pathname === `/${currentLocale}` ? 'text-primary font-semibold' : 'text-foreground hover:text-primary'} ${isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 font-nunito whitespace-nowrap'}`}
+            className={`block w-full text-left rounded-md ${pathname === `/${currentLocale}` ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'} ${isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 whitespace-nowrap'}`}
         >
           {t('home')}
         </Link>
 
         <Link
             href={`/${currentLocale}/blog`}
-            className={`block w-full text-left rounded-md ${pathname.startsWith(`/${currentLocale}/blog`) ? 'text-primary font-semibold' : 'text-foreground hover:text-primary'} ${isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 font-nunito whitespace-nowrap'}`}
+            className={`block w-full text-left rounded-md ${pathname.startsWith(`/${currentLocale}/blog`) ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'} ${isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 whitespace-nowrap'}`}
         >
           {t('blog')}
         </Link>
@@ -82,13 +82,13 @@ export function Navbar() {
   );
 
   return (
-    <nav className="py-4 px-6 bg-white border-b border-muted shadow-custom sticky top-0 z-50">
+    <nav className="py-4 px-6 bg-background border-b border-muted shadow-custom sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         {/* Left: Logo (ensure it doesn't shrink) */}
         <div className="flex-shrink-0">
           <Link href={`/${currentLocale}`} className="flex items-center space-x-2" onClick={() => setIsMobileMenuOpen(false)}>
-            <span className="text-xl font-bold font-fredoka text-primary">
-              PolaToons
+            <span className="text-2xl font-bold text-primary">
+              ImageFusion
             </span>
           </Link>
         </div>
@@ -109,7 +109,7 @@ export function Navbar() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-1 text-foreground hover:text-primary hover:bg-transparent p-0 h-auto focus:outline-none focus:ring-0"
+                  className="flex items-center gap-1 text-foreground hover:text-primary transition-standard p-0 h-auto focus:outline-none focus:ring-0"
                 >
                   {currentLanguage}
                   <ChevronDown className="h-4 w-4 opacity-50" />
@@ -118,13 +118,13 @@ export function Navbar() {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   onClick={() => switchLocale('zh')}
-                  className="cursor-pointer hover:bg-muted focus:bg-muted"
+                  className="cursor-pointer hover:bg-muted focus:bg-muted transition-standard"
                 >
                   {t('chinese')}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => switchLocale('en')}
-                  className="cursor-pointer hover:bg-muted focus:bg-muted"
+                  className="cursor-pointer hover:bg-muted focus:bg-muted transition-standard"
                 >
                   {t('english')}
                 </DropdownMenuItem>
@@ -141,20 +141,20 @@ export function Navbar() {
             {/* Mobile Menu Trigger */}
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-foreground hover:text-primary hover:bg-muted">
+                <Button variant="ghost" size="icon" className="text-foreground hover:text-primary transition-standard hover:bg-muted">
                   <Menu className="h-6 w-6" />
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[340px] px-6 pt-12 pb-8 bg-background flex flex-col">
                 <SheetHeader className="mb-4 text-left">
-                  <SheetTitle className="text-lg font-semibold">{t('menuTitle', { defaultMessage: 'Menu' })}</SheetTitle>
+                  <SheetTitle className="text-lg font-semibold text-foreground">{t('menuTitle', { defaultMessage: 'Menu' })}</SheetTitle>
                 </SheetHeader>
                 <nav className="flex-1 flex flex-col space-y-2 mb-8 overflow-y-auto">
                     <SheetClose asChild>
                         <Link
                             href={`/${currentLocale}`}
-                            className={`block w-full text-left rounded-md ${pathname === `/${currentLocale}` ? 'text-primary font-semibold' : 'text-foreground hover:text-primary'} px-4 py-3 text-base`}
+                            className={`block w-full text-left rounded-md ${pathname === `/${currentLocale}` ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'} px-4 py-3 text-base`}
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                           {t('home')}
@@ -163,7 +163,7 @@ export function Navbar() {
                     <SheetClose asChild>
                         <Link
                             href={`/${currentLocale}/blog`}
-                            className={`block w-full text-left rounded-md ${pathname.startsWith(`/${currentLocale}/blog`) ? 'text-primary font-semibold' : 'text-foreground hover:text-primary'} px-4 py-3 text-base`}
+                            className={`block w-full text-left rounded-md ${pathname.startsWith(`/${currentLocale}/blog`) ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'} px-4 py-3 text-base`}
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                           {t('blog')}
@@ -175,7 +175,7 @@ export function Navbar() {
                      <DropdownMenuTrigger asChild>
                        <Button
                          variant="ghost"
-                         className="flex w-full justify-between items-center gap-2 text-foreground hover:text-primary focus:outline-none focus:ring-0 px-4 py-3 text-base rounded-md h-auto"
+                         className="flex w-full justify-between items-center gap-2 text-foreground hover:text-primary transition-standard focus:outline-none focus:ring-0 px-4 py-3 text-base rounded-md h-auto"
                        >
                          <span>{t('language')}: {currentLanguage}</span>
                          <ChevronDown className="h-4 w-4 opacity-60" />
@@ -184,13 +184,13 @@ export function Navbar() {
                      <DropdownMenuContent align="end" sideOffset={8} className="w-[calc(300px-3rem)] sm:w-[calc(340px-3rem)] rounded-lg shadow-lg">
                        <DropdownMenuItem
                          onClick={() => switchLocale('zh')}
-                         className="cursor-pointer px-4 py-2.5 text-base hover:bg-muted focus:bg-muted rounded"
+                         className="cursor-pointer px-4 py-2.5 text-base hover:bg-muted focus:bg-muted transition-standard rounded"
                        >
                          {t('chinese')}
                        </DropdownMenuItem>
                        <DropdownMenuItem
                          onClick={() => switchLocale('en')}
-                         className="cursor-pointer px-4 py-2.5 text-base hover:bg-muted focus:bg-muted rounded"
+                         className="cursor-pointer px-4 py-2.5 text-base hover:bg-muted focus:bg-muted transition-standard rounded"
                        >
                          {t('english')}
                        </DropdownMenuItem>
