@@ -7,11 +7,8 @@ import { Upload, ImageIcon, MessageSquare } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { Textarea } from "./ui/textarea";
-import { 
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from './ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import imgFusionTemplates from "@/app/config/styles";
 
 export default function HeroSection() {
   const t = useTranslations("home");
@@ -31,34 +28,35 @@ export default function HeroSection() {
   const [promptPopoverOpen, setPromptPopoverOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [customStyleImage, setCustomStyleImage] = useState<File | null>(null); // 添加自定义风格图片状态
-
-  // 默认示例图片
-  const defaultExample = '/examples/photos/1.jpg';
+  const [isUserUploadedSource, setIsUserUploadedSource] = useState(false); // 追踪sourceImage是否是用户上传的
 
   // 预设风格图片
-  const styleImages = [
-    { src: '/styles/1.jpg', name: isZh ? '水彩风格' : 'Watercolor' },
-    { src: '/styles/2.jpg', name: isZh ? '油画风格' : 'Oil Painting' },
-    { src: '/styles/3.jpg', name: isZh ? '素描风格' : 'Sketch' },
-    { src: '/styles/1.jpg', name: isZh ? '波普艺术' : 'Pop Art' },
-    { src: '/styles/2.jpg', name: isZh ? '赛博朋克' : 'Cyberpunk' },
-    { src: '/styles/3.jpg', name: isZh ? '二次元' : 'Anime' }
-  ];
+  // const styleImages = [
+  //   { src: '/styles/1.jpg', name: isZh ? '水彩风格' : 'Watercolor' },
+  //   { src: '/styles/2.jpg', name: isZh ? '油画风格' : 'Oil Painting' },
+  //   { src: '/styles/3.jpg', name: isZh ? '素描风格' : 'Sketch' },
+  //   { src: '/styles/1.jpg', name: isZh ? '波普艺术' : 'Pop Art' },
+  //   { src: '/styles/2.jpg', name: isZh ? '赛博朋克' : 'Cyberpunk' },
+  //   { src: '/styles/3.jpg', name: isZh ? '二次元' : 'Anime' }
+  // ];
 
   // 组件加载时自动加载默认示例图片
   useEffect(() => {
     loadDefaultExample();
-  }, []);
+  }, [selectedStyleIndex]);
 
   // 加载默认示例图片
   const loadDefaultExample = () => {
-    fetch(defaultExample)
+    const selectStyleDemoSourceImg =
+      imgFusionTemplates[selectedStyleIndex].demo.sourceImageSrc;
+    fetch(selectStyleDemoSourceImg)
       .then((res) => res.blob())
       .then((blob) => {
         const file = new File([blob], `example-source.jpg`, {
           type: "image/jpeg",
         });
         setSourceImage(file);
+        setIsUserUploadedSource(false); // 标记为系统默认图片
       });
   };
 
@@ -67,6 +65,7 @@ export default function HeroSection() {
     const files = e.target.files;
     if (files && files.length > 0) {
       setSourceImage(files[0]);
+      setIsUserUploadedSource(true); // 标记为用户上传的图片
       setResultImage(null); // 重置结果
     }
   };
@@ -87,6 +86,7 @@ export default function HeroSection() {
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
       setSourceImage(files[0]);
+      setIsUserUploadedSource(true); // 标记为用户上传的图片
       setResultImage(null); // 重置结果
     }
   };
@@ -103,7 +103,7 @@ export default function HeroSection() {
   const enablePromptMode = () => {
     setIsPromptMode(true);
     setResultImage(null); // 重置结果
-    
+
     // 在下一个渲染周期后聚焦输入框
     setTimeout(() => {
       if (textareaRef.current) {
@@ -131,7 +131,7 @@ export default function HeroSection() {
       setResultImage(null); // 重置结果
     }
   };
-  
+
   // 点击上传风格图片按钮
   const handleStyleUploadClick = () => {
     styleInputRef.current?.click();
@@ -143,41 +143,55 @@ export default function HeroSection() {
 
     setIsGenerating(true);
 
-    // 模拟生成过程（实际项目中应调用API）
-    setTimeout(() => {
-      // 假设这是生成的图像URL
-      setResultImage("/examples/result.jpg");
-      setIsGenerating(false);
-    }, 2000);
+    // 判断是否使用默认样式和默认原图
+    // 如果使用的是预设风格(非自定义图片和非提示词模式)，且源图是系统加载的默认图片
+    if (!customStyleImage && !isPromptMode && !isUserUploadedSource) {
+      // 获取当前选中风格的demo结果图
+      const demoResultImage =
+        imgFusionTemplates[selectedStyleIndex].demo.resultImageSrc;
+
+      // 延迟一点时间模拟生成过程
+      setTimeout(() => {
+        setResultImage(demoResultImage);
+        setIsGenerating(false);
+      }, 2000);
+    } else {
+      // 模拟生成过程（实际项目中应调用API）
+      setTimeout(() => {
+        // 假设这是生成的图像URL
+        setResultImage("/examples/result.jpg");
+        setIsGenerating(false);
+      }, 2000);
+    }
   };
 
   return (
     <>
-      <section className="pt-24 pb-20 md:pt-32 md:pb-24 bg-gradient-to-b from-black to-zinc-900 relative overflow-hidden min-h-screen">
+      <section className="pt-24 pb-20 md:pt-28 md:pb-28 bg-gradient-to-b from-black to-zinc-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/bg-pattern.svg')] bg-center opacity-20"></div>
 
-        <div className="container mx-auto px-1 sm:px-2 relative z-10 max-w-[1500px]">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-7xl">
           <div className="text-center mb-16 max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5">
               {t("title")}
             </h1>
-            <p className="text-lg md:text-xl text-zinc-300 mb-6">
+            <p className="text-lg md:text-xl text-zinc-300 mb-8 px-4">
               {t("description")}
             </p>
           </div>
 
-          <div className="w-full mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-1">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-8">
               {/* Source区域 */}
               <div className="md:col-span-3">
                 <h2 className="text-2xl font-semibold text-white mb-4">
                   {t("sourceLabel")}
                 </h2>
-                <div className="bg-zinc-800 p-4 rounded-lg shadow-lg border border-zinc-700 mb-4 flex flex-col">
+                <div className="bg-zinc-800 p-4 md:p-5 rounded-lg shadow-lg border border-zinc-700 mb-4 flex flex-col">
                   {/* 当前源图预览 */}
-                  <div className="aspect-square relative overflow-hidden rounded-lg border border-zinc-600">
+                  <div className="aspect-[3/4] relative overflow-hidden rounded-lg border border-zinc-600">
                     {!sourceImage ? (
-                      <div 
+                      <div
                         className="flex flex-col items-center justify-center h-full cursor-pointer"
                         onClick={handleUploadClick}
                         onDragOver={handleDragOver}
@@ -199,7 +213,7 @@ export default function HeroSection() {
                       </div>
                     )}
                   </div>
-                  
+
                   <input
                     type="file"
                     ref={sourceInputRef}
@@ -208,10 +222,10 @@ export default function HeroSection() {
                     accept="image/png, image/jpeg, image/gif, image/webp, image/bmp"
                   />
                 </div>
-                
-                <Button 
-                  variant="outline" 
-                  className="w-full border-zinc-600 text-white hover:bg-zinc-700"
+
+                <Button
+                  variant="outline"
+                  className="w-full border-zinc-600 text-white hover:bg-zinc-700 rounded-md"
                   onClick={handleUploadClick}
                 >
                   {t("chooseFile")}
@@ -239,16 +253,16 @@ export default function HeroSection() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Style区域 - 简化版 */}
               <div className="md:col-span-3">
                 <h2 className="text-2xl font-semibold text-white mb-4">
                   {t("styleLabel")}
                 </h2>
-                
-                <div className="bg-zinc-800 p-4 rounded-lg shadow-lg border border-zinc-700 mb-4 flex flex-col">
+
+                <div className="bg-zinc-800 p-4 md:p-5 rounded-lg shadow-lg border border-zinc-700 mb-4 flex flex-col">
                   {/* 当前选中的风格预览或提示词展示 */}
-                  <div className="aspect-square relative overflow-hidden rounded-lg border border-zinc-600">
+                  <div className="aspect-[3/4] relative overflow-hidden rounded-lg border border-zinc-600">
                     {isPromptMode ? (
                       <div className="h-full w-full flex items-center justify-center bg-zinc-700 rounded-lg p-1">
                         <Textarea
@@ -276,50 +290,64 @@ export default function HeroSection() {
                     ) : (
                       <>
                         <Image
-                          src={styleImages[selectedStyleIndex].src}
-                          alt={styleImages[selectedStyleIndex].name}
+                          src={imgFusionTemplates[selectedStyleIndex].imageSrc}
+                          alt={imgFusionTemplates[selectedStyleIndex].name}
                           fill
                           className="object-cover"
                         />
                         <div className="absolute bottom-0 left-0 right-0 bg-black/70 py-2 px-3">
                           <p className="text-white text-sm font-medium">
-                            {styleImages[selectedStyleIndex].name}
+                            {imgFusionTemplates[selectedStyleIndex].name}
                           </p>
                         </div>
                       </>
                     )}
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-3">
                   {/* 风格选择按钮（弹窗） */}
-                  <Popover open={stylePopoverOpen} onOpenChange={setStylePopoverOpen}>
+                  <Popover
+                    open={stylePopoverOpen}
+                    onOpenChange={setStylePopoverOpen}
+                  >
                     <PopoverTrigger asChild>
-                      <Button 
-                        variant="outline" 
-                        className={`w-full border-zinc-600 ${!isPromptMode && !customStyleImage ? "bg-zinc-700 text-yellow-500" : "text-white hover:bg-zinc-700"} flex items-center justify-center gap-2`}
+                      <Button
+                        variant="outline"
+                        className={`w-full border-zinc-600 ${
+                          !isPromptMode && !customStyleImage
+                            ? "bg-zinc-700 text-yellow-500"
+                            : "text-white hover:bg-zinc-700"
+                        } flex items-center justify-center gap-2 rounded-md`}
                         onClick={disablePromptMode}
                       >
                         <ImageIcon className="h-4 w-4" />
                         {t("chooseStyle")}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-96 p-4 bg-zinc-800 border border-zinc-600" style={{ width: "420px", maxWidth: "90vw" }}>
+                    <PopoverContent
+                      className="w-96 p-4 bg-zinc-800 border border-zinc-600"
+                      style={{ width: "420px", maxWidth: "90vw" }}
+                    >
                       <h3 className="text-white text-sm font-medium mb-3">
                         {t("selectStyle")}
                       </h3>
                       <div className="grid grid-cols-3 gap-3 max-h-[400px] overflow-y-auto pr-1">
-                        {styleImages.map((style, index) => (
+                        {imgFusionTemplates.map((style, index) => (
                           <div
                             key={index}
                             className={`aspect-square relative overflow-hidden rounded-md cursor-pointer
-                              ${selectedStyleIndex === index && !isPromptMode && !customStyleImage
-                                ? 'ring-2 ring-yellow-500' 
-                                : 'opacity-80 hover:opacity-100'}`}
+                              ${
+                                selectedStyleIndex === index &&
+                                !isPromptMode &&
+                                !customStyleImage
+                                  ? "ring-2 ring-yellow-500"
+                                  : "opacity-80 hover:opacity-100"
+                              }`}
                             onClick={() => selectStyle(index)}
                           >
                             <Image
-                              src={style.src}
+                              src={style.imageSrc}
                               alt={style.name}
                               fill
                               className="object-cover"
@@ -329,17 +357,21 @@ export default function HeroSection() {
                       </div>
                     </PopoverContent>
                   </Popover>
-                  
+
                   {/* 上传风格图片按钮 (替换原来的提示词按钮) */}
-                  <Button 
-                    variant="outline" 
-                    className={`w-full border-zinc-600 ${customStyleImage ? "bg-zinc-700 text-yellow-500" : "text-white hover:bg-zinc-700"} flex items-center justify-center gap-2`}
+                  <Button
+                    variant="outline"
+                    className={`w-full border-zinc-600 ${
+                      customStyleImage
+                        ? "bg-zinc-700 text-yellow-500"
+                        : "text-white hover:bg-zinc-700"
+                    } flex items-center justify-center gap-2 rounded-md`}
                     onClick={handleStyleUploadClick}
                   >
                     <Upload className="h-4 w-4" />
                     {isZh ? "上传风格" : "Upload Style"}
                   </Button>
-                  
+
                   {/* 隐藏的风格图片上传输入框 */}
                   <input
                     type="file"
@@ -394,12 +426,14 @@ export default function HeroSection() {
                 <h2 className="text-2xl font-semibold text-white mb-4">
                   {t("resultLabel")}
                 </h2>
-                <div className="bg-zinc-800 p-4 rounded-lg shadow-lg border border-zinc-700 mb-4 flex flex-col">
-                  <div className="aspect-square relative overflow-hidden rounded-lg border border-zinc-600 flex flex-col items-center justify-center">
+                <div className="bg-zinc-800 p-4 md:p-5 rounded-lg shadow-lg border border-zinc-700 mb-4 flex flex-col">
+                  <div className="aspect-[3/4] relative overflow-hidden rounded-lg border border-zinc-600 flex flex-col items-center justify-center">
                     {isGenerating ? (
                       <div className="flex flex-col items-center justify-center h-full">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500 mb-4"></div>
-                        <p className="text-lg text-white text-center">{t("generatingText")}</p>
+                        <p className="text-lg text-white text-center">
+                          {t("generatingText")}
+                        </p>
                       </div>
                     ) : resultImage ? (
                       <div className="relative w-full h-full">
@@ -419,9 +453,9 @@ export default function HeroSection() {
                     )}
                   </div>
                 </div>
-                
-                <Button 
-                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-medium"
+
+                <Button
+                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-medium rounded-md"
                   onClick={generateImage}
                   disabled={!sourceImage || isGenerating}
                 >

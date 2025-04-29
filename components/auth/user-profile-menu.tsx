@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +16,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { apiConfig } from "@/app/config/api";
 
 interface UserProfileMenuProps {
   user: UserResource;
@@ -28,12 +29,12 @@ export default function UserProfileMenu({ user }: UserProfileMenuProps) {
   const userId = user?.id;
 
   const { signOut } = useClerk();
-  const t = useTranslations('user');
+  const t = useTranslations("user");
   const params = useParams();
   const pathname = usePathname();
-  const locale = params.locale as string || 'zh';
+  const locale = (params.locale as string) || "zh";
 
-  const initials = `${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}`;
+  const initials = `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`;
 
   useEffect(() => {
     const effectUserId = user?.id;
@@ -49,24 +50,25 @@ export default function UserProfileMenu({ user }: UserProfileMenuProps) {
         avatar: user.imageUrl,
       };
 
-      const apiUrl = 'https://cartoon.framepola.com/api/user/registerOrUpdate';
-
       const syncUser = async () => {
         try {
-          const response = await fetch(apiUrl, {
-            method: 'POST',
+          const response = await fetch(apiConfig.userRegisterOrUpdate, {
+            method: "POST",
             body: JSON.stringify(userData),
           });
 
           if (!response.ok) {
             const errorData = await response.text();
-            throw new Error(`API Error ${response.status}: ${errorData || response.statusText}`);
+            throw new Error(
+              `API Error ${response.status}: ${
+                errorData || response.statusText
+              }`
+            );
           }
 
-          console.log('用户数据同步 API 调用成功:', await response.json());
-
+          console.log("用户数据同步 API 调用成功:", await response.json());
         } catch (error) {
-          console.error('用户数据同步 API 调用失败:', error);
+          console.error("用户数据同步 API 调用失败:", error);
         }
       };
 
@@ -79,7 +81,7 @@ export default function UserProfileMenu({ user }: UserProfileMenuProps) {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user.imageUrl} alt={user.username || ''} />
+            <AvatarImage src={user.imageUrl} alt={user.username || ""} />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
@@ -87,7 +89,9 @@ export default function UserProfileMenu({ user }: UserProfileMenuProps) {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user.fullName || user.username}</p>
+            <p className="text-sm font-medium leading-none">
+              {user.fullName || user.username}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
               {user.primaryEmailAddress?.emailAddress}
             </p>
@@ -97,27 +101,25 @@ export default function UserProfileMenu({ user }: UserProfileMenuProps) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem 
-          asChild 
+        <DropdownMenuItem
+          asChild
           className={`focus:bg-muted hover:bg-muted cursor-pointer ${
-            pathname === `/${locale}/profile` ? 'bg-muted font-semibold' : ''
+            pathname === `/${locale}/profile` ? "bg-muted font-semibold" : ""
           }`}
         >
-          <Link href={`/${locale}/profile`}>
-            {t('profile')}
-          </Link>
+          <Link href={`/${locale}/profile`}>{t("profile")}</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer focus:bg-muted hover:bg-muted"
           onClick={() => {
-            console.log('用户登出');
+            console.log("用户登出");
             signOut();
           }}
         >
-          {t('signOut')}
+          {t("signOut")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
-} 
+}

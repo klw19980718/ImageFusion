@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useUser } from '@clerk/nextjs';
-import { useTranslations } from 'next-intl';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Footer } from '../../../components/Footer';
-import Image from 'next/image';
-import { Progress } from '../../../components/ui/progress';
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { useParams } from 'next/navigation';
+import { useUser } from "@clerk/nextjs";
+import { useTranslations } from "next-intl";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Footer } from "../../../components/Footer";
+import Image from "next/image";
+import { Progress } from "../../../components/ui/progress";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useParams, useRouter } from "next/navigation";
 import {
   Pagination,
   PaginationContent,
@@ -19,6 +19,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import Link from "next/link";
+import { apiConfig } from "@/app/config/api";
 
 // 定义从API获取的用户信息类型
 interface UserApiInfo {
@@ -58,7 +59,11 @@ interface GenerationHistoryResponse {
 }
 
 // 将辅助函数移到组件外部
-function getPaginationItems(currentPage: number, totalPages: number, siblingCount = 1): (number | '...')[] {
+function getPaginationItems(
+  currentPage: number,
+  totalPages: number,
+  siblingCount = 1
+): (number | "...")[] {
   const totalPageNumbers = siblingCount + 5; // siblings + first + last + current + 2*ellipsis
 
   if (totalPageNumbers >= totalPages) {
@@ -77,28 +82,34 @@ function getPaginationItems(currentPage: number, totalPages: number, siblingCoun
   if (!shouldShowLeftDots && shouldShowRightDots) {
     let leftItemCount = 3 + 2 * siblingCount;
     let leftRange = Array.from({ length: leftItemCount }, (_, i) => i + 1);
-    return [...leftRange, '...', lastPageIndex];
+    return [...leftRange, "...", lastPageIndex];
   }
 
   if (shouldShowLeftDots && !shouldShowRightDots) {
     let rightItemCount = 3 + 2 * siblingCount;
-    let rightRange = Array.from({ length: rightItemCount }, (_, i) => totalPages - rightItemCount + 1 + i);
-    return [firstPageIndex, '...', ...rightRange];
+    let rightRange = Array.from(
+      { length: rightItemCount },
+      (_, i) => totalPages - rightItemCount + 1 + i
+    );
+    return [firstPageIndex, "...", ...rightRange];
   }
 
   if (shouldShowLeftDots && shouldShowRightDots) {
-    let middleRange = Array.from({ length: rightSiblingIndex - leftSiblingIndex + 1 }, (_, i) => leftSiblingIndex + i);
-    return [firstPageIndex, '...', ...middleRange, '...', lastPageIndex];
+    let middleRange = Array.from(
+      { length: rightSiblingIndex - leftSiblingIndex + 1 },
+      (_, i) => leftSiblingIndex + i
+    );
+    return [firstPageIndex, "...", ...middleRange, "...", lastPageIndex];
   }
 
   return Array.from({ length: totalPages }, (_, i) => i + 1); // Fallback
 }
 
-// --- 将下载逻辑定义为独立函数 --- 
+// --- 将下载逻辑定义为独立函数 ---
 // 添加 setIsDownloading 和 t 作为参数
 async function downloadImageWithCors(
-  imageUrl: string, 
-  filename: string, 
+  imageUrl: string,
+  filename: string,
   setIsDownloading: (id: number | null) => void, // 用于更新加载状态
   imageId: number, // 图片 ID 用于设置加载状态
   t: Function // 翻译函数
@@ -106,11 +117,13 @@ async function downloadImageWithCors(
   setIsDownloading(imageId); // 开始下载，设置加载状态
   try {
     // 1. 发起 fetch 请求
-    const response = await fetch(imageUrl, { mode: 'cors' });
+    const response = await fetch(imageUrl, { mode: "cors" });
 
     // 检查响应是否成功并且是 CORS 允许的
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}. Failed to fetch image. Check CORS headers on the server.`);
+      throw new Error(
+        `HTTP error! status: ${response.status}. Failed to fetch image. Check CORS headers on the server.`
+      );
     }
 
     // 2. 将响应体转换为 Blob 对象
@@ -120,7 +133,7 @@ async function downloadImageWithCors(
     const objectUrl = URL.createObjectURL(blob);
 
     // 4. 创建 <a> 标签并触发下载
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = objectUrl;
     link.download = filename || `polatoons-image-${imageId}.png`; // 使用传入的 filename 或生成一个
     document.body.appendChild(link);
@@ -130,23 +143,31 @@ async function downloadImageWithCors(
     // 5. 释放 Object URL 资源
     URL.revokeObjectURL(objectUrl);
 
-    console.log('Image download initiated!');
-
+    console.log("Image download initiated!");
   } catch (error: any) {
-    console.error('Download failed:', error);
+    console.error("Download failed:", error);
     // 使用翻译函数 t 显示错误信息
-    const errorMessage = t('downloadFailed', { defaultMessage: 'Download failed!' });
-    const corsMessage = t('downloadCorsError', {
-        defaultMessage: 'Could not fetch image from {imageUrl}. This is often due to missing CORS headers (Access-Control-Allow-Origin) on the server. Check the browser console for details.',
-        imageUrl: imageUrl
+    const errorMessage = t("downloadFailed", {
+      defaultMessage: "Download failed!",
     });
-    const genericMessage = t('downloadGenericError', { defaultMessage: 'Error: {errorMsg}', errorMsg: error.message });
+    const corsMessage = t("downloadCorsError", {
+      defaultMessage:
+        "Could not fetch image from {imageUrl}. This is often due to missing CORS headers (Access-Control-Allow-Origin) on the server. Check the browser console for details.",
+      imageUrl: imageUrl,
+    });
+    const genericMessage = t("downloadGenericError", {
+      defaultMessage: "Error: {errorMsg}",
+      errorMsg: error.message,
+    });
 
     // 检查是否是网络错误或类型错误（通常与 CORS 相关）
-    if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
-        alert(`${errorMessage}\n\n${corsMessage}`);
+    if (
+      error.message.includes("Failed to fetch") ||
+      error.name === "TypeError"
+    ) {
+      alert(`${errorMessage}\n\n${corsMessage}`);
     } else {
-        alert(`${errorMessage} ${genericMessage}`);
+      alert(`${errorMessage} ${genericMessage}`);
     }
   } finally {
     setIsDownloading(null); // 结束下载（无论成功或失败），清除加载状态
@@ -154,11 +175,12 @@ async function downloadImageWithCors(
 }
 
 export default function ProfilePage() {
-  const { user, isLoaded } = useUser();
-  const t = useTranslations('user');
-  const commonT = useTranslations('common');
+  const { user, isLoaded, isSignedIn } = useUser();
+  const t = useTranslations("user");
+  const commonT = useTranslations("common");
   const params = useParams();
-  const locale = params.locale as string || 'zh';
+  const router = useRouter();
+  const locale = (params.locale as string) || "zh";
 
   // API 数据状态 (用户信息)
   const [userApiInfo, setUserApiInfo] = useState<UserApiInfo | null>(null);
@@ -178,11 +200,25 @@ export default function ProfilePage() {
   // 动态设置页面标题
   useEffect(() => {
     if (isLoaded && user) {
-      document.title = `${user.fullName || user.username || 'Profile'} - PolaToons`;
+      document.title = `${
+        user.fullName || user.username || "Profile"
+      } - PolaToons`;
     } else if (isLoaded && !user) {
       document.title = `Profile - PolaToons`; // 用户未登录的情况
     }
   }, [isLoaded, user]);
+
+  // 未登录用户重定向到首页
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push(`/${locale}`);
+    }
+  }, [isLoaded, isSignedIn, locale, router]);
+
+  // 添加调试日志
+  useEffect(() => {
+    console.log("Auth state:", { isLoaded, isSignedIn, userId: user?.id });
+  }, [isLoaded, isSignedIn, user]);
 
   // API 调用 Effect (获取用户信息)
   useEffect(() => {
@@ -191,21 +227,32 @@ export default function ProfilePage() {
         setIsLoadingUserInfo(true);
         setUserInfoError(null);
         try {
-          const googleIdToFetch = user?.id || '';
-          const response = await fetch(`https://cartoon.framepola.com/api/user/info?google_id=${googleIdToFetch}`);
+          const googleIdToFetch = user?.id || "";
+          const response = await fetch(
+            `${apiConfig.userInfo}?google_id=${googleIdToFetch}`
+          );
           if (!response.ok) {
-            throw new Error(`API Error: ${response.status} ${response.statusText}`);
+            throw new Error(
+              `API Error: ${response.status} ${response.statusText}`
+            );
           }
           const result = await response.json();
           if (result.code === 1000 && result.data) {
             setUserApiInfo(result.data);
           } else {
-            console.warn("User info API returned success code but no data for:", googleIdToFetch);
+            console.warn(
+              "User info API returned success code but no data for:",
+              googleIdToFetch
+            );
             setUserApiInfo(null);
           }
         } catch (error) {
           console.error("Failed to fetch user API info:", error);
-          setUserInfoError(error instanceof Error ? error.message : 'An unknown error occurred fetching user info');
+          setUserInfoError(
+            error instanceof Error
+              ? error.message
+              : "An unknown error occurred fetching user info"
+          );
         } finally {
           setIsLoadingUserInfo(false);
         }
@@ -224,12 +271,12 @@ export default function ProfilePage() {
         setIsLoadingHistory(true);
         setHistoryError(null);
         try {
-          const googleIdToFetch = user?.id || '';
-          const response = await fetch(`https://cartoon.framepola.com/api/generateImageOpus/list`, {
-            method: 'POST',
-            // headers: {
-            //   'Content-Type': 'application/json',
-            // },
+          const googleIdToFetch = user?.id || "";
+          const response = await fetch(`${apiConfig.opusList}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
             body: JSON.stringify({
               page: page,
               page_size: historyPageSize,
@@ -238,7 +285,9 @@ export default function ProfilePage() {
           });
 
           if (!response.ok) {
-            throw new Error(`API Error: ${response.status} ${response.statusText}`);
+            throw new Error(
+              `API Error: ${response.status} ${response.statusText}`
+            );
           }
           const result = await response.json();
 
@@ -247,72 +296,86 @@ export default function ProfilePage() {
             setTotalPages(result.data.total_page || 0);
             setTotalHistoryCount(result.data.count || 0);
           } else {
-            console.error("Failed to fetch history:", result.msg || 'Unknown API error');
+            console.error(
+              "Failed to fetch history:",
+              result.msg || "Unknown API error"
+            );
+            setHistoryError(
+              result.msg ||
+                t("historyFetchError", { defaultMessage: "获取历史记录失败" })
+            );
             setHistoryList([]);
-            setTotalPages(0);
-            setTotalHistoryCount(0);
-            setHistoryError(result.msg || 'Failed to fetch generation history');
           }
         } catch (error) {
-          console.error("Failed to fetch generation history:", error);
-          setHistoryError(error instanceof Error ? error.message : 'An unknown error occurred fetching history');
+          console.error("Failed to fetch history:", error);
+          setHistoryError(
+            error instanceof Error
+              ? error.message
+              : "获取历史记录时发生未知错误"
+          );
           setHistoryList([]);
-          setTotalPages(0);
-          setTotalHistoryCount(0);
         } finally {
           setIsLoadingHistory(false);
         }
       };
+
       fetchGenerationHistory(currentPage);
     } else if (isLoaded && !user) {
       setIsLoadingHistory(false);
       setHistoryList([]);
-      setTotalPages(0);
-      setTotalHistoryCount(0);
-      setHistoryError(null);
     }
-  }, [isLoaded, user, currentPage]);
+  }, [isLoaded, user, currentPage, historyPageSize, t]);
 
   // 处理分页变化
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
       setCurrentPage(newPage);
-      const historySection = document.getElementById('generation-history-section');
+      const historySection = document.getElementById(
+        "generation-history-section"
+      );
       if (historySection) {
-        historySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        historySection.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
   };
 
   if (!isLoaded) {
-    return <div className="flex justify-center items-center min-h-screen">{commonT('loading', { defaultMessage: 'Loading...' })}</div>;
-  }
-
-  if (!user) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-screen text-center px-6">
-        <p className="text-lg mb-4">{t('loginPrompt', {defaultMessage: 'Please log in to view your profile and generation history.'})}</p>
-        <Button onClick={() => window.location.href=`/${locale}/sign-in?redirect_url=/${locale}/profile`}>
-          {t('loginAction', {defaultMessage: 'Log In / Sign Up'})}
-        </Button>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-lg">
+            {commonT("loading", { defaultMessage: "加载中..." })}
+          </p>
+        </div>
       </div>
     );
   }
 
-  const initials = `${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}`.toUpperCase();
+  if (!isSignedIn) {
+    return null;
+  }
+
+  const initials = `${user.firstName?.[0] || ""}${
+    user.lastName?.[0] || ""
+  }`.toUpperCase();
 
   // 根据 API 数据计算使用率
-  const usagePercentage = userApiInfo?.api_total_times && userApiInfo.api_total_times > 0
-    ? (userApiInfo.api_used_times / userApiInfo.api_total_times) * 100
-    : 0;
+  const usagePercentage =
+    userApiInfo?.api_total_times && userApiInfo.api_total_times > 0
+      ? (userApiInfo.api_used_times / userApiInfo.api_total_times) * 100
+      : 0;
 
   // 获取订阅计划名称 (可以从翻译文件获取)
   const getPlanName = (level: number | undefined) => {
     switch (level) {
-      case 1: return t('premiumPlan', {defaultMessage: 'Premium Plan'}); // Level 1 -> Basic
-      case 2: return t('ultimatePlan', {defaultMessage: 'Ultimate Plan'}); // Level 2 -> Premium
+      case 1:
+        return t("premiumPlan", { defaultMessage: "Premium Plan" }); // Level 1 -> Basic
+      case 2:
+        return t("ultimatePlan", { defaultMessage: "Ultimate Plan" }); // Level 2 -> Premium
       // case 3: return t('ultimatePlan', {defaultMessage: 'Ultimate Plan'}); // Level 3 -> Ultimate
-      default: return t('noSubscription', {defaultMessage: 'No Subscription'}); // Level 0 或 undefined -> No Subscription
+      default:
+        return t("noSubscription", { defaultMessage: "No Subscription" }); // Level 0 或 undefined -> No Subscription
     }
   };
   const currentPlanName = getPlanName(userApiInfo?.level);
@@ -336,38 +399,42 @@ export default function ProfilePage() {
                     {userApiInfo?.avatar ? (
                       <Image
                         src={userApiInfo.avatar}
-                        alt={userApiInfo.name || '用户头像'}
+                        alt={userApiInfo.name || "用户头像"}
                         width={128}
                         height={128}
                         className="object-cover w-full h-full"
                       />
                     ) : (
                       <div className="w-full h-full bg-gray-800 flex items-center justify-center text-4xl text-[#FFD700]">
-                        {(userApiInfo?.name || 'U').charAt(0).toUpperCase()}
+                        {(userApiInfo?.name || "U").charAt(0).toUpperCase()}
                       </div>
                     )}
                   </div>
                 </div>
-                
+
                 <div className="flex-1 text-center md:text-left">
-                  <h1 className="text-2xl font-bold mb-2">{userApiInfo?.name || '未设置昵称'}</h1>
+                  <h1 className="text-2xl font-bold mb-2">
+                    {userApiInfo?.name || "未设置昵称"}
+                  </h1>
                   <p className="text-gray-400 mb-4">{userApiInfo?.email}</p>
-                  
+
                   <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
                       <p className="text-sm text-gray-400">会员等级</p>
                       <p className="text-lg font-medium text-[#FFD700]">
-                        {userApiInfo && userApiInfo.level > 0 ? currentPlanName : t('noSubscription', {defaultMessage: '免费用户'})}
+                        {userApiInfo && userApiInfo.level > 0
+                          ? currentPlanName
+                          : t("noSubscription", { defaultMessage: "免费用户" })}
                       </p>
                     </div>
-                    
+
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
                       <p className="text-sm text-gray-400">剩余积分</p>
                       <p className="text-lg font-medium text-[#FFD700]">
                         {userApiInfo?.api_left_times || 0}
                       </p>
                     </div>
-                    
+
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
                       <p className="text-sm text-gray-400">已生成图片</p>
                       <p className="text-lg font-medium text-[#FFD700]">
@@ -381,8 +448,10 @@ export default function ProfilePage() {
           ) : (
             <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 shadow-lg text-center">
               <p className="text-xl mb-4">请先登录查看您的个人信息</p>
-              <button 
-                onClick={() => window.location.href=`/${locale}/sign-in?redirect_url=/${locale}/profile`}
+              <button
+                onClick={() =>
+                  (window.location.href = `/${locale}/sign-in?redirect_url=/${locale}/profile`)
+                }
                 className="px-6 py-2 bg-[#FFD700] text-black font-medium rounded-lg hover:bg-[#FFD700]/80 transition-colors"
               >
                 登录
@@ -394,12 +463,17 @@ export default function ProfilePage() {
         {/* 生成历史区 */}
         {userApiInfo && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 border-b border-[#FFD700]/20 pb-2 text-[#FFD700]">生成历史</h2>
-            
+            <h2 className="text-2xl font-bold mb-6 border-b border-[#FFD700]/20 pb-2 text-[#FFD700]">
+              生成历史
+            </h2>
+
             {isLoadingHistory ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {[...Array(4)].map((_, index) => (
-                  <div key={index} className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg">
+                  <div
+                    key={index}
+                    className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg"
+                  >
                     <div className="h-48 bg-gray-800 animate-pulse"></div>
                     <div className="p-4">
                       <div className="h-4 bg-gray-800 rounded animate-pulse mb-2"></div>
@@ -410,40 +484,62 @@ export default function ProfilePage() {
               </div>
             ) : historyError ? (
               <div className="text-center py-10 bg-red-50 border border-red-200 rounded-lg px-4">
-                <p className="text-red-600">{t('errorFetchingHistory', { defaultMessage: 'Error loading generation history:' })} {historyError}</p>
-                <Button variant="link" className="mt-2 text-red-600" onClick={() => handlePageChange(currentPage)}>
-                  {t('retry', { defaultMessage: 'Retry' })}
+                <p className="text-red-600">
+                  {t("errorFetchingHistory", {
+                    defaultMessage: "Error loading generation history:",
+                  })}{" "}
+                  {historyError}
+                </p>
+                <Button
+                  variant="link"
+                  className="mt-2 text-red-600"
+                  onClick={() => handlePageChange(currentPage)}
+                >
+                  {t("retry", { defaultMessage: "Retry" })}
                 </Button>
               </div>
             ) : totalHistoryCount > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                   {historyList.map((item) => (
-                    <div 
-                      key={item.id} 
+                    <div
+                      key={item.id}
                       className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl overflow-hidden shadow-lg hover:shadow-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all"
                     >
                       <div className="relative h-48 bg-gray-800 overflow-hidden">
                         <Image
                           src={item.dist_image}
-                          alt={item.prompt || '生成图片'}
+                          alt={item.prompt || "生成图片"}
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover transition-transform hover:scale-105"
                         />
                         <button
-                          onClick={() => downloadImageWithCors(
-                            item.dist_image, 
-                            `polatoons-image-${item.id}.png`, 
-                            setIsDownloading, 
-                            item.id,
-                            t
-                          )}
+                          onClick={() =>
+                            downloadImageWithCors(
+                              item.dist_image,
+                              `polatoons-image-${item.id}.png`,
+                              setIsDownloading,
+                              item.id,
+                              t
+                            )
+                          }
                           className="absolute top-2 right-2 bg-black/60 p-2 rounded-full hover:bg-black/80 transition-colors"
                           title="下载图片"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5 text-white">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            className="w-5 h-5 text-white"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                            />
                           </svg>
                         </button>
                       </div>
@@ -456,7 +552,7 @@ export default function ProfilePage() {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* 分页控制 */}
                 {totalPages > 1 && (
                   <div className="flex justify-center mt-8 space-x-2">
@@ -483,7 +579,7 @@ export default function ProfilePage() {
             ) : (
               <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 text-center">
                 <p className="text-gray-400 mb-4">您还没有生成过图片</p>
-                <Link 
+                <Link
                   href="/"
                   className="px-6 py-2 bg-[#FFD700] text-black font-medium rounded-lg hover:bg-[#FFD700]/80 transition-colors inline-block"
                 >
@@ -497,4 +593,4 @@ export default function ProfilePage() {
       <Footer />
     </div>
   );
-} 
+}

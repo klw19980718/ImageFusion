@@ -18,12 +18,12 @@ export default function DemoSection() {
             <div className="relative">
               {/* 创意合成组件 */}
               <div className="relative mb-5">
-                <div className="absolute top-1/2 left-1/4 -translate-y-1/2 z-10">
+                {/* <div className="absolute top-1/2 left-1/4 -translate-y-1/2 z-10">
                   <div className="bg-[#00b894] text-black p-1 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
                   </div>
-                </div>
-                <div className="flex items-center">
+                </div> */}
+                {/* <div className="flex items-center">
                   <img
                     src="https://picsum.photos/200/300?random=1"
                     alt="原始图片1"
@@ -34,27 +34,27 @@ export default function DemoSection() {
                     alt="原始图片2"
                     className="w-32 h-32 rounded-lg shadow-lg object-cover ml-3"
                   />
-                </div>
+                </div> */}
               </div>
               
               {/* 合成结果 */}
-              <div className="relative ml-12">
+              <div className="relative">
                 <img
-                  src="https://picsum.photos/600/400?random=3"
+                  src="/demo.webp"
                   alt="合成结果"
                   className="w-full rounded-lg shadow-lg object-cover"
                 />
-                <div className="absolute bottom-5 left-5 bg-[#00b894] text-black px-5 py-2 rounded-full font-medium shadow-lg">
+                {/* <div className="absolute bottom-5 left-5 bg-[#00b894] text-black px-5 py-2 rounded-full font-medium shadow-lg">
                   <span>{t('generate')}</span>
-                </div>
+                </div> */}
               </div>
               
               {/* 箭头 */}
-              <div className="absolute -left-10 top-1/2 -translate-y-1/2">
+              {/* <div className="absolute -left-10 top-1/2 -translate-y-1/2">
                 <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M30 40C30 25 55 20 70 40" stroke="white" strokeWidth="3" strokeLinecap="round"/>
                 </svg>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="md:w-1/2 text-white">
@@ -79,7 +79,7 @@ export default function DemoSection() {
               {/* 第一组图片 */}
               <div className="flex-shrink-0 w-1/3">
                 <img 
-                  src="https://picsum.photos/200/400?random=4" 
+                  src="/images/templates/Magical Princess/source.jpg" 
                   alt="产品组1"
                   className="w-full h-[350px] rounded-lg object-cover"
                 />
@@ -88,7 +88,7 @@ export default function DemoSection() {
               {/* 第二组图片 (中间组带加号) */}
               <div className="flex-shrink-0 w-1/3 relative">
                 <img 
-                  src="https://picsum.photos/200/400?random=5" 
+                  src="/images/templates/Magical Princess/style.jpg" 
                   alt="产品组2"
                   className="w-full h-[350px] rounded-lg object-cover"
                 />
@@ -100,7 +100,7 @@ export default function DemoSection() {
               {/* 第三组图片 */}
               <div className="flex-shrink-0 w-1/3">
                 <img 
-                  src="https://picsum.photos/200/400?random=6" 
+                  src="/images/templates/Magical Princess/result.jpg" 
                   alt="产品组3"
                   className="w-full h-[350px] rounded-lg object-cover"
                 />
@@ -116,7 +116,7 @@ export default function DemoSection() {
               {/* 原始照片 */}
               <div className="absolute top-10 left-0 z-10 w-48 h-48">
                 <img
-                  src="https://picsum.photos/200/300?random=7"
+                  src="/images/templates/Future Vivid Fashion/source.jpg"
                   alt="原始照片"
                   className="w-full h-full rounded-lg shadow-lg object-cover border-4 border-white"
                 />
@@ -125,7 +125,7 @@ export default function DemoSection() {
               {/* 风格照片 */}
               <div className="absolute top-5 right-5 z-10 w-32 h-32">
                 <img
-                  src="https://picsum.photos/200/300?random=8"
+                  src="/images/templates/Future Vivid Fashion/style.jpg"
                   alt="风格照片"
                   className="w-full h-full rounded-lg shadow-lg object-cover border-4 border-white"
                 />
@@ -137,7 +137,7 @@ export default function DemoSection() {
               {/* 结果照片 */}
               <div className="mt-16 ml-20 relative">
                 <img
-                  src="https://picsum.photos/600/400?random=9"
+                  src="/images/templates/Future Vivid Fashion/result.jpg"
                   alt="合成结果"
                   className="w-full rounded-lg shadow-lg object-cover"
                 />

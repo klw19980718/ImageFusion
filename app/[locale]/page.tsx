@@ -8,6 +8,7 @@ import FeaturesSection from '../../components/FeaturesSection';
 import DemoSection from '../../components/DemoSection';
 import TestimonialsSection from '../../components/TestimonialsSection';
 import FaqSection from '../../components/FaqSection';
+import StyleShowcaseSection from '../../components/StyleShowcaseSection';
 import { Footer } from '../../components/Footer';
 import PageLayout from './page-layout';
 
@@ -24,6 +25,11 @@ export default function Home() {
           {/* Features Section */}
           <section id="features">
             <FeaturesSection />
+          </section>
+          
+          {/* Style Showcase Section */}
+          <section id="showcase">
+            <StyleShowcaseSection />
           </section>
 
           {/* Demo Section */}

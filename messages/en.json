@@ -16,7 +16,10 @@
   },
   "auth": {
     "welcome": "Welcome Back",
-    "nickname": "Nickname"
+    "nickname": "Nickname",
+    "createAccount": "Create Account",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
   },
   
   "user": {
@@ -79,34 +82,34 @@
     "tags": "Tags",
     "posts": {
       "how-to-take-perfect-polaroid-style-photos": {
-        "title": "How to Take Perfect Polaroid-Style Photos",
-        "excerpt": "Learn how to shoot photos best suited for conversion to Polaroid style, including lighting, angles, and composition tips.",
-        "content": "<h2>Master the Light</h2><p>Natural light is the soul of Polaroid-style photos. Try to shoot during the day in soft light, avoiding direct sunlight which can cause overexposure or harsh shadows. Diffused light from a window often works great.</p><h2>Choose Angles and Composition</h2><p>Experiment with different angles. Classic front-facing portraits work well, but a slight tilt or a low-angle shot can add interest. Pay attention to the subject's placement in the frame, perhaps using the 'rule of thirds'. To mimic the instant feel, don't strive for perfect symmetry; a candid feel is better.</p><h2>Highlight the Subject</h2><p>Ensure the subject is sharp. Use portrait mode (if available) for a slightly blurred background, or choose a simple background to avoid clutter. Our AI performs best with clear, well-defined subjects.</p><h2>Color and Emotion</h2><p>Vibrant photos with moderate contrast usually yield more appealing conversions. Consider the emotion conveyed; happy, warm moments align well with the nostalgic feel of Polaroids.</p><p>Follow these simple tips, combine them with our AI tool, and you'll easily create charming retro Polaroid-style 3D cartoon photos!</p>"
+        "title": "How to Take Perfect Photos for Image Fusion",
+        "excerpt": "Learn how to take photos that are perfect for image fusion, including lighting, angles, and composition tips.",
+        "content": "<h2>Master the Lighting</h2><p>Natural light is key to great photos for fusion. Try to shoot in soft, diffused daylight, avoiding harsh direct sunlight that can cause overexposure or hard shadows. The scattered light near windows typically works wonderfully.</p><h2>Choose Your Angles and Composition</h2><p>Experiment with different shooting angles. While classic frontal portraits work well, slight tilts or low-angle shots can add interest. Pay attention to subject placement, utilizing the \"rule of thirds\". For the best fusion results, capture natural moments rather than perfectly posed shots.</p><h2>Emphasize Your Subject</h2><p>Ensure your subject is well-defined. Use portrait mode (if your phone supports it) for a slightly blurred background, or choose simple backgrounds to avoid clutter. Our AI performs best when processing photos with clear, well-defined subjects.</p><h2>Colors and Emotions</h2><p>Vibrant colors and moderate contrast typically yield more appealing results after fusion. Consider the emotions your photo conveys - joyful, warm moments work excellently with our artistic fusion algorithms.</p><p>Follow these simple tips with our AI tools, and you'll easily create stunning artistic images with unique visual appeal!</p>"
       },
       "new-feature-3d-effect-enhancement": {
-        "title": "New Feature Release: 3D Effect Enhancement",
-        "excerpt": "We're excited to announce the rollout of our new 3D effect enhancement feature, making your photos even more dimensional and lively.",
-        "content": "<h2>Stronger Sense of Depth</h2><p>We've upgraded the core algorithm of our AI model. It now better understands depth information in photos, generating 3D cartoon effects with a more pronounced sense of dimension. Facial contours, hair details, and the layering of foreground and background elements are significantly improved.</p><h2>Optimized Lighting and Shading</h2><p>The new algorithm also optimizes lighting and shading logic, simulating more natural light effects consistent with cartoon styles. Transitions between highlights and shadows are smoother, creating a more harmonious overall image.</p><h2>How to Experience It?</h2><p>No extra steps needed! Starting now, all photos generated via PolaToons will automatically use the enhanced 3D effect. Go ahead, upload your favorite photos, and experience the refreshed visuals!</p><p>We are committed to continuously improving our AI models to bring you more surprises. Stay tuned for future updates!</p>"
+        "title": "New Feature Release: Enhanced Image Fusion Effects",
+        "excerpt": "We're excited to announce the launch of our enhanced image fusion effects that make your photos more vivid and dynamic.",
+        "content": "<h2>Improved Depth Perception</h2><p>We've upgraded the core algorithms of our AI model, which now better understands depth information in photos, generating image fusions with enhanced dimensionality. Facial contours, hair details, and the layering of foreground and background elements have all been significantly improved.</p><h2>Optimized Light and Shadow Processing</h2><p>The new algorithm has also optimized light and shadow processing logic, simulating more natural lighting effects that complement the artistic style. Highlights and shadows transition more smoothly, creating a more harmonious overall image.</p><h2>How to Experience It?</h2><p>No additional steps required! From now on, all photos processed through ImageFusion will automatically apply these enhanced effects. Upload your favorite photos and experience the refreshed visual quality!</p><p>We are committed to continuously improving our AI models to bring you more exciting features. Stay tuned for more updates coming soon!</p>"
       },
       "user-story-wedding-photos-to-creative-souvenirs": {
-        "title": "User Story: Wedding Photos Turned into Creative Souvenirs",
-        "excerpt": "Learn how Sarah used our service to transform her wedding photos into beautiful Polaroid-style keepsakes.",
-        "content": "<p>Sarah wanted some special keepsakes for her wedding, beyond just a traditional photo album. She stumbled upon PolaToons and was captivated by its unique Polaroid cartoon style.</p><h2>The Creative Process</h2><p>She selected a few of her favorite wedding photos, including shots with her husband, fun moments with the bridesmaids, and some detail close-ups. Using PolaToons, she converted these photos into charming 3D cartoon images with retro borders with just one click.</p><h2>The Result and Reaction</h2><p>Sarah was thrilled with the outcome. 'They look so fun and heartwarming, perfectly capturing the joyful atmosphere of the wedding day,' she said. She printed these special 'Polaroids' to create unique thank-you cards for guests and also used them to decorate her new home. Friends and family raved about the creativity.</p><p>This story inspired us, showing that AI-generated images can be more than just social media posts; they can become tangible, emotionally resonant keepsakes in our lives. Your photos can have unique stories like this too.</p>"
+        "title": "User Story: Wedding Photos Transformed into Creative Souvenirs",
+        "excerpt": "Learn how Sarah used our service to transform her wedding photos into beautiful artistic souvenirs.",
+        "content": "<p>Sarah wanted to create special mementos for her wedding beyond just traditional albums. She stumbled upon ImageFusion and was captivated by its unique image fusion style.</p><h2>The Creation Process</h2><p>She selected several of her favorite wedding photos, including shots with her husband, fun moments with bridesmaids, and detail closeups. Using ImageFusion, she transformed these photos into beautifully stylized images with just one click.</p><h2>Results and Reception</h2><p>Sarah was thrilled with the results. \"They look both artistic and heartwarming, perfectly capturing the joyful atmosphere of our wedding day,\" she said. She printed these special images and created unique thank-you cards for guests, as well as decorating her new home with them. Friends and family were impressed by the creative touch.</p><p>This story inspires us - AI-generated images can become meaningful physical mementos that capture life's special moments, not just digital content for social sharing. Your photos can tell unique stories too.</p>"
       },
       "history-and-charm-of-polaroid-style": {
-        "title": "The History and Charm of Polaroid Style",
-        "excerpt": "Explore the history of the Polaroid camera and why its unique aesthetic remains beloved today.",
-        "content": "<h2>The Instant Imaging Revolution</h2><p>In the mid-20th century, the Polaroid Corporation introduced revolutionary instant cameras, allowing people to get physical photos minutes after shooting. It caused a sensation at the time, changing how people documented their lives.</p><h2>Unique Aesthetics</h2><p>Polaroid photos weren't just fast; they possessed unique aesthetic traits: the iconic white border, slightly soft colors, gentle vignetting, and that 'captured moment' realism. This imperfection became its unique charm, full of nostalgia and warmth.</p><h2>Revival in the Digital Age</h2><p>Despite the prevalence of digital photography and smartphones, the Polaroid style hasn't disappeared. Instead, in today's pursuit of personality and retro trends, this style has resurged. Whether through vintage cameras, disposable ones, or digital tools like PolaToons, people remain fascinated by the unique visual experience and emotional value Polaroids offer.</p><p>PolaToons aims to use modern AI technology to let everyone easily experience and create this classic style, injecting it with new vitality.</p>"
+        "title": "The History and Charm of Image Fusion Art",
+        "excerpt": "Explore the history of image fusion technology and why its unique aesthetic appeal continues to be loved today.",
+        "content": "<h2>The Image Fusion Revolution</h2><p>Image fusion technology began developing in the late 20th century, and with advances in artificial intelligence and computer vision, it has enabled unprecedented creative possibilities, revolutionizing how people create visual content.</p><h2>Unique Aesthetics</h2><p>Image fusion is not just a technical combination - it creates a unique aesthetic style by perfectly blending elements, textures, and colors from different images to create visual effects that would otherwise be impossible, full of creativity and artistic sensibility.</p><h2>Applications in the Digital Age</h2><p>Today, with the rapid development of AI technology, image fusion has become an essential tool in creative industries. Whether professional designers, marketers, or ordinary users, everyone can create professional-level fusion effects through tools like ImageFusion, giving images new vitality and expressiveness.</p><p>ImageFusion is committed to making this unique visual style easily accessible to everyone through advanced AI technology, injecting new energy into the field of image processing.</p>"
       },
       "5-creative-ways-to-display-polaroid-photos": {
-        "title": "5 Creative Ways to Display Your Polaroid-Style Photos",
-        "excerpt": "From digital albums to physical decor, here are 5 creative ways to showcase and share your Polaroid-style photos.",
-        "content": "<p>So you've generated beautiful Polaroid-style photos, how do you display them? Here are 5 creative ideas:</p><ol><li><strong>Photo Wall/String Lights:</strong> The most classic way. Use small clips and twine to string up photos, hang them on the wall, or casually pin them to a corkboard for a personalized photo display.</li><li><strong>DIY Frames:</strong> Choose a simple photo frame, or DIY a unique display using picture frames, washi tape, etc., to showcase single or multiple photos.</li><li><strong>Journal/Diary Decoration:</strong> Paste small Polaroid photos into your journal or diary to document life's beautiful moments vividly with images and text.</li><li><strong>Fridge Magnets:</strong> Buy some magnetic strips, stick them to the back of printed photos, and turn them into unique fridge magnets.</li><li><strong>Digital Display:</strong> Share on social media, create digital albums, use them as blog illustrations, or even personalized phone wallpapers. PolaToons-generated images are perfect for digital sharing.</li></ol><p>Unleash your creativity and let these stylish photos brighten up your living space!</p>"
+        "title": "5 Creative Ways to Display Your Fused Images",
+        "excerpt": "From digital albums to physical decorations, here are 5 creative ways to showcase and share your fused images.",
+        "content": "<p>Once you've created beautiful fused images, how should you display them? Here are 5 creative ideas:</p><ol><li><strong>Photo Wall/String Display:</strong> This is a classic approach. Use small clips and string to hang photos on your wall, or casually attach them to a cork board for a personalized photo wall.</li><li><strong>DIY Frames:</strong> Choose minimalist frames or create unique display frames using paint frames, washi tape, or other materials to showcase single images or creative combinations.</li><li><strong>Journal/Diary Decoration:</strong> Attach small-sized fused images in your journals or diaries to document life's beautiful moments with both text and visuals.</li><li><strong>Refrigerator/Magnetic Stickers:</strong> Purchase magnetic backing strips to attach to your printed photos, turning them into one-of-a-kind refrigerator magnets.</li><li><strong>Digital Display:</strong> Share on social media, create electronic albums, use as blog illustrations, or even as personalized phone wallpapers. Images created with ImageFusion are perfect for digital sharing.</li></ol><p>Get creative and let these stylish images brighten your living spaces!</p>"
       },
       "performance-optimization-update-faster-processing": {
         "title": "Performance Optimization Update: Faster Processing Speed",
-        "excerpt": "We recently upgraded our servers, and photo processing speed is now up to 30% faster.",
-        "content": "<h2>Backend Architecture Upgrade</h2><p>To handle the growing user base and provide a smoother service experience, our technical team recently completed a major backend architecture upgrade. We optimized the image processing pipeline and increased server resources.</p><h2>Significant Speed Improvement</h2><p>Based on internal testing and early user feedback, the average photo generation speed has increased by about 30%. This means you can now get your desired Polaroid-style photos faster, reducing wait times.</p><h2>Continuous Optimization</h2><p>Performance optimization is an ongoing process. We will continue to monitor service performance and explore new technical approaches to ensure PolaToons remains efficient and stable.</p><p>Thank you for your continued support! We hope this update brings you a better user experience.</p>"
+        "excerpt": "We recently upgraded our servers, and now image processing is 30% faster than before.",
+        "content": "<h2>Backend Architecture Upgrade</h2><p>To accommodate our growing user base and provide a smoother service experience, our tech team recently completed an important backend architecture upgrade. We've optimized the image processing pipeline and increased server resources.</p><h2>Significant Speed Improvements</h2><p>Based on internal testing and early user feedback, image generation speed has improved by an average of 30%. This means you can now get your desired fused images faster, with reduced waiting times.</p><h2>Continuous Optimization</h2><p>Performance optimization is an ongoing process. We will continue to monitor service performance and explore new technical approaches to ensure ImageFusion maintains efficient and stable operation.</p><p>Thank you for your continued support! We hope this update brings you an even better user experience.</p>"
       }
     }
   },
@@ -158,28 +161,28 @@
     }
   },
   "terms": {
-    "title": "PolaToons Terms of Service",
+    "title": "ImageFusion Terms of Service",
     "effectiveDate": "Effective Date: April 11, 2025",
-    "introduction": "Thank you for choosing PolaToons. These Terms of Service (\"Terms\") are a legal agreement between you and PolaToons and govern your use of the PolaToons services including our website, mobile apps, and other features or services (collectively, the \"Service\"). By using the Service, you agree to be bound by these Terms. If you do not agree to these Terms, you must not use the Service.",
+    "introduction": "Thank you for choosing ImageFusion. These Terms of Service (\"Terms\") are a legal agreement between you and ImageFusion and govern your use of the ImageFusion services including our website, mobile apps, and other features or services (collectively the \"Services\"). By using the Services, you agree to be bound by these Terms. If you do not agree to these Terms, you may not use the Services.",
     "acceptanceTitle": "Acceptance of Terms",
-    "acceptanceContent": "By accessing or using the Service, you confirm your acceptance of these Terms and agree to be bound by them. If you are using the Service on behalf of an organization, you are agreeing to these Terms for that organization and promising that you have the authority to bind that organization to these Terms.",
+    "acceptanceContent": "By accessing or using the Services, you confirm your acceptance of these Terms and agree to be bound by them. If you are using the Services on behalf of an organization, you agree to these Terms on behalf of that organization, and you promise that you have the authority to bind that organization to these Terms.",
     "changesTitle": "Changes to Terms",
-    "changesContent": "PolaToons reserves the right, at its sole discretion, to modify or replace the Terms at any time. If a revision is material, we will provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.",
-    "useServiceTitle": "Use of the Service",
-    "useServiceContent": "Account Registration You may be required to register for an account to access certain features of the Service. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.\nUser Conduct\nYou are responsible for all your activity in connection with the Service. Any fraudulent, abusive, or otherwise illegal activity may be grounds for termination of your right to access or use the Service.\nIntellectual Property\nAll content provided on the Service, including the design, text, graphics, logos, icons, images, and the selection and arrangement thereof, is the exclusive property of PolaToons or its licensors and is protected by U.S. and international copyright laws.",
+    "changesContent": "ImageFusion reserves the right, at its sole discretion, to modify or replace the Terms at any time. If a revision is material, we will provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.",
+    "useServiceTitle": "Use of the Services",
+    "useServiceContent": "Account Registration\nYou may be required to register for an account to access certain features of the Services. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.\nUser Conduct\nYou are responsible for all activities that occur under your account. Any fraudulent, abusive, or otherwise illegal activity may be grounds for termination of your access to or use of the Services.\nIntellectual Property\nAll content provided on the Services, including designs, text, graphics, logos, icons, images, and their selection and arrangement, is the proprietary property of ImageFusion or its licensors and is protected by U.S. and international copyright laws.",
     "contentTitle": "Content",
-    "contentContent": "User-Generated Content\nYou may be able to upload, store, or share content through the Service. You retain all rights in, and are solely responsible for, the user-generated content you post to PolaToons.\nContent Use\nBy posting content on the Service, you grant PolaToons a worldwide, non-exclusive, royalty-free license (with the right to sublicense) to use, copy, reproduce, process, translate, format, publish, transmit, display, and distribute such content in any and all media or distribution methods (now known or later developed).",
+    "contentContent": "User Generated Content\nYou may upload, store, or share content via the Services. You retain all rights in your user-generated content that you post to ImageFusion and are solely responsible for it.\nContent Use\nBy posting content on the Services, you grant ImageFusion a worldwide, non-exclusive, royalty-free license (with the right to sublicense) to use, copy, process, translate, format, publish, transmit, display, and distribute such content in any and all media or distribution methods (now known or later developed).",
     "disclaimersTitle": "Disclaimers",
-    "disclaimersContent": "PolaToons provides the Service on an \"as is\" and \"as available\" basis. You therefore use the Service at your own risk. PolaToons expressly disclaims any and all warranties of any kind, whether express or implied.",
+    "disclaimersContent": "ImageFusion provides the Services on an \"as is\" and \"as available\" basis. As such, your use of the Services is at your sole risk. ImageFusion expressly disclaims all warranties of any kind, whether express or implied.",
     "liabilityTitle": "Limitation of Liability",
-    "liabilityContent": "To the fullest extent permitted by law, in no event will PolaToons, its officers, shareholders, employees, agents, directors, subsidiaries, affiliates, successors, assigns, suppliers, or licensors be liable for (1) any indirect, special, incidental, punitive, exemplary, or consequential damages; (2) any loss of use, data, business, or profits (whether direct or indirect), in all cases arising out of the use or inability to use the Service, regardless of legal theory, without regard to whether PolaToons has been warned of the possibility of those damages, and even if a remedy fails of its essential purpose.",
+    "liabilityContent": "To the maximum extent permitted by law, ImageFusion and its officers, shareholders, employees, agents, directors, subsidiaries, affiliates, successors, assigns, suppliers, or licensors shall not be liable for (1) any indirect, special, incidental, punitive, exemplary, or consequential damages; (2) any loss of use, data, business, or profits (whether direct or indirect), in all cases arising out of the use of or inability to use the Services, regardless of legal theory, without regard to whether ImageFusion has been warned of the possibility of those damages, and even if a remedy fails of its essential purpose.",
     "generalTitle": "General",
-    "generalContent": "These Terms are governed by the laws of the jurisdiction in which PolaToons is located, without regard to its conflict of laws rules. The courts in some countries will not apply these jurisdiction laws to some types of disputes. If you reside in one of those countries, then where these jurisdictions laws are required to apply, the laws of your resident country will apply to such disputes related to these Terms."
+    "generalContent": "These Terms are governed by the laws of the jurisdiction in which ImageFusion is located, without regard to its conflict of laws rules. The courts in some countries will not apply these jurisdiction laws to some types of disputes. If you reside in one of those countries, then where the laws of these jurisdictions must be applied to a dispute the laws of your country of residence will apply to such dispute as related to these Terms."
   },
   "privacy": {
-    "title": "PolaToons Privacy Policy",
+    "title": "ImageFusion Privacy Policy",
     "effectiveDate": "Effective Date: April 11, 2025",
-    "introduction": "At PolaToons, we are committed to protecting the privacy and security of our users. This Privacy Policy describes the types of information we may collect from you or that you may provide when you use our service and our practices for collecting, using, maintaining, protecting, and disclosing that information.",
+    "introduction": "At ImageFusion, we are committed to protecting the privacy and security of our users. This Privacy Policy describes the types of information we may collect from you or that you may provide when you use our services, and our practices for collecting, using, maintaining, protecting, and disclosing that information.",
     "collectTitle": "Information We Collect",
     "collectContent": "Information You Provide to Us: Account Information (If you create an account, we may collect your name, email address, and password.), Interaction Infomation (We collect the information you actively provide to us includes data you input during interactions, such as filling out forms on our website, communicating with us via contact forms, emails, social media interactions, surveys, or any other method where you actively send information to us.)",
     "collectAutoTitle": "Information We Collect Automatically",
@@ -267,8 +270,8 @@
     "tryNowButton": "Try Now",
     "generate": "Generate",
     "conceptArt": {
-      "title": "Level Up Your Concept Art with AI Image Combiner",
-      "description": "Create concept art creation for video games, movies, and other media by combining diverse elements and ideas. AI image fusion empowers creators to seamlessly blend textures, colors, and forms, sparking innovative designs for characters, environments, and props."
+      "title": "Create Cool Portraits with AI Image Fusion for Social Media",
+      "description": "With AI Image Fusion, you can fuse traditional portraits with abstract patterns or textures to create visually striking artworks. The combination of realistic human features with abstract designs adds depth and emotion, offering a fresh take on portrait art."
     },
     "productBranding": {
       "title": "Stylish Product Branding Images with AI Image Fusion",
@@ -340,29 +343,32 @@
       "originalLabel": "Original",
       "generatedLabel": "Generated"
     },
-    "title": "Create Stunning Visual Images Online",
-    "description": "The best AI Image Fusion tool using advanced AI technology to seamlessly merge images and effortlessly create artistic visuals",
-    "uploadLabel": "Drag & drop or click to upload",
+    "title": "Combine Images to Create Stunning Visuals Online",
+    "description": "The best AI Image Fusion tool to seamlessly combine images into one and effortlessly generate creative art using advanced AI technology.",
+    "uploadLabel": "Drag and drop or click to upload images",
     "chooseFile": "Choose File",
-    "dragDropText": "Drag & drop or click to upload",
+    "dragDropText": "Drag & Drop or click to upload",
     "tryExamples": "Try Examples",
     "generateButton": "Generate",
     "generatingText": "Generating...",
-    "supportedFormats": "Supported formats: JPG, PNG, GIF, WebP, BMP",
-    "maxFileSize": "Max file size: 50 MB",
-    "sourceLabel": "Source",
+    "supportedFormats": "Supported file formats: JPG, PNG, GIF, WebP, BMP",
+    "maxFileSize": "Maximum file size: 50 MB",
+    "sourceLabel": "Source Image",
     "styleLabel": "Style",
     "resultLabel": "Result",
-    "clickToGenerate": "Click 'Generate' button to start",
+    "clickToGenerate": "Click \"Generate\" button to start generation",
     "selectStyle": "Select Style:",
     "imageStyleTab": "Image Style",
     "promptStyleTab": "Prompt",
-    "promptPlaceholder": "E.g.: Watercolor style, vibrant colors, dreamy atmosphere...",
-    "promptLabel": "Enter prompts to describe your style",
+    "promptPlaceholder": "e.g. watercolor style, vibrant colors, dreamy atmosphere...",
+    "promptLabel": "Enter prompt to describe the style you want",
     "promptStyleOption": "Use Prompt",
     "chooseStyle": "Choose Style",
     "customPrompt": "Custom Prompt",
     "usePrompt": "Use Prompt",
-    "promptPreview": "Custom prompt will be displayed here"
+    "promptPreview": "Custom prompt will appear here",
+    "styleShowcase": {
+      "title": "Style Showcase"
+    }
   }
 } 

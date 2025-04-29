@@ -66,7 +66,7 @@ export function Navbar() {
   const renderNavLinks = (isMobile = false) => {
     const navItems = [
       { id: 'features', label: t('features'), section: true },
-      { id: 'demo', label: t('examples'), section: true },
+      { id: 'showcase', label: t('examples'), section: true },
       { id: 'testimonials', label: t('reviews'), section: true },
       { id: 'pricing', label: t('pricing'), section: true },
       { id: 'faq', label: t('faq'), section: true },
@@ -219,7 +219,7 @@ export function Navbar() {
                       </SheetClose>
                       <SheetClose asChild>
                         <button
-                          onClick={() => handleMobileLinkClick(() => scrollToSection('demo'))}
+                          onClick={() => handleMobileLinkClick(() => scrollToSection('showcase'))}
                           className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
                         >
                           {t('examples')}
@@ -262,7 +262,7 @@ export function Navbar() {
                       </SheetClose>
                       <SheetClose asChild>
                         <Link
-                          href={`/${currentLocale}#demo`}
+                          href={`/${currentLocale}#showcase`}
                           className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
                         >
                           {t('examples')}

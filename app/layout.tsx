@@ -11,65 +11,109 @@ const fredoka = Fredoka({ subsets: ['latin'], variable: '--font-fredoka', weight
 const baloo = Baloo_2({ subsets: ['latin'], variable: '--font-baloo', weight: ['400', '500', '600', '700', '800'] });
 const nunito = Nunito({ subsets: ['latin'], variable: '--font-nunito', weight: ['200', '300', '400', '500', '600', '700', '800', '900'] });
 
-export const metadata: Metadata = {
-  title: 'PolaToons - Turn Photos into Polaroid-Style 3D Cartoons',
-  description: 'Transform your photos into playful Polaroid-style 3D cartoons in seconds with our easy-to-use, AI-powered generator. Try it now!',
-  keywords: ['Polaroid-style photos', '3D cartoon generator', 'AI photo transformation', 'vintage photo effects', 'instant photo generation', 'cartoon character creation', 'online photo editing', 'playful photo effects'],
-  openGraph: {
-    title: 'PolaToons - Turn Photos into Polaroid-Style 3D Cartoons',
-    description: 'Transform your photos into playful Polaroid-style 3D cartoons in seconds with our easy-to-use, AI-powered generator. Try it now!',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.framepola.com',
-    siteName: 'PolaToons',
-    images: [
-      {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.framepola.com'}/og-img.png`,
-        width: 1200,
-        height: 630,
-        alt: 'PolaToons - Polaroid-Style 3D Cartoon Generator Preview',
+// 根据不同语言提供不同的元数据
+export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
+  const locale = params?.locale || 'zh';
+  
+  if (locale === 'en') {
+    return {
+      title: 'ImageFusion - Intelligent Image Fusion & Enhancement Platform',
+      description: 'Use our AI-powered image fusion technology to seamlessly blend multiple images and create stunning visual effects. Easily achieve style transfer, image enhancement, and creative compositions.',
+      keywords: ['image fusion', 'AI image processing', 'intelligent image composition', 'style transfer', 'image enhancement', 'creative image tools', 'high-quality image processing', 'visual art creation'],
+      openGraph: {
+        title: 'ImageFusion - Intelligent Image Fusion & Enhancement Platform',
+        description: 'Use our AI-powered image fusion technology to seamlessly blend multiple images and create stunning visual effects. Easily achieve style transfer, image enhancement, and creative compositions.',
+        url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com',
+        siteName: 'ImageFusion',
+        images: [
+          {
+            url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com'}/og-img.png`,
+            width: 1200,
+            height: 630,
+            alt: 'ImageFusion - Intelligent Image Fusion & Enhancement Platform Preview',
+          },
+        ],
+        locale: 'en_US',
+        type: 'website',
       },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'PolaToons - Turn Photos into Polaroid-Style 3D Cartoons',
-    description: 'Transform your photos into playful Polaroid-style 3D cartoons in seconds with our easy-to-use, AI-powered generator. Try it now!',
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://wwww.framepola.com'}/og-img.png`],
-  },
+      twitter: {
+        card: 'summary_large_image',
+        title: 'ImageFusion - Intelligent Image Fusion & Enhancement Platform',
+        description: 'Use our AI-powered image fusion technology to seamlessly blend multiple images and create stunning visual effects. Easily achieve style transfer, image enhancement, and creative compositions.',
+        images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com'}/og-img.png`],
+      },
+    };
+  }
+  
+  // 默认使用中文
+  return {
+    title: 'ImageFusion - 智能图像融合与增强平台',
+    description: '使用我们的AI驱动图像融合技术，将多种图像无缝融合，创造令人惊叹的视觉效果。轻松实现风格转换、图像增强和创意合成。',
+    keywords: ['图像融合', 'AI图像处理', '智能图像合成', '风格转换', '图像增强', '创意图像工具', '高质量图像处理', '视觉艺术创作'],
+    openGraph: {
+      title: 'ImageFusion - 智能图像融合与增强平台',
+      description: '使用我们的AI驱动图像融合技术，将多种图像无缝融合，创造令人惊叹的视觉效果。轻松实现风格转换、图像增强和创意合成。',
+      url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com',
+      siteName: 'ImageFusion',
+      images: [
+        {
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com'}/og-img.png`,
+          width: 1200,
+          height: 630,
+          alt: 'ImageFusion - 智能图像融合与增强平台预览',
+        },
+      ],
+      locale: 'zh_CN',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'ImageFusion - 智能图像融合与增强平台',
+      description: '使用我们的AI驱动图像融合技术，将多种图像无缝融合，创造令人惊叹的视觉效果。轻松实现风格转换、图像增强和创意合成。',
+      images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com'}/og-img.png`],
+    },
+  };
 }
 
 // 定义 Organization 和 WebSite 的 Schema 结构化数据
-const schemaData = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "name": "PolaToons",
-      "url": process.env.NEXT_PUBLIC_SITE_URL || 'https://wwww.framepola.com'
-    },
-    {
-      "@type": "WebSite",
-      "name": "PolaToons",
-      "url": process.env.NEXT_PUBLIC_SITE_URL || 'https://wwww.framepola.com',
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://wwww.framepola.com'}/search?q={search_term_string}`,
-        "query-input": "required name=search_term_string"
+export function getSchemaData({ params }: { params: { locale: string } }) {
+  const locale = params?.locale || 'zh';
+  
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "ImageFusion",
+        "url": process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com'
+      },
+      {
+        "@type": "WebSite",
+        "name": "ImageFusion",
+        "url": process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com',
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com'}/search?q={search_term_string}`,
+          "query-input": "required name=search_term_string"
+        }
       }
-    }
-  ]
-};
+    ]
+  };
+}
 
 export default function RootLayout({
   children,
+  params = { locale: 'zh' },
 }: {
-  children: React.ReactNode
+  children: React.ReactNode,
+  params?: { locale: string }
 }) {
+  const locale = params?.locale || 'zh';
+  const schemaData = getSchemaData({ params });
   const GA_TRACKING_ID = 'G-BST9KGD31X';
 
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={`${inter.variable} ${playfair.variable} ${fredoka.variable} ${baloo.variable} ${nunito.variable} bg-background text-foreground`}>
         <script
           type="application/ld+json"
