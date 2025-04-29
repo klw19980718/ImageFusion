@@ -3,46 +3,139 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { Upload, ImageIcon, MessageSquare } from "lucide-react";
+import { Upload, ImageIcon, MessageSquare, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { Textarea } from "./ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import imgFusionTemplates from "@/app/config/styles";
+import { useAuth, useClerk, useUser } from '@clerk/nextjs';
+import { Progress } from "./ui/progress";
+import { apiConfig } from "@/app/config/api";
+
+// 下载图片函数
+async function downloadImageWithCors(
+  imageUrl: string,
+  filename: string,
+  setIsDownloading: (isDownloading: boolean) => void,
+  t: Function
+) {
+  setIsDownloading(true);
+  try {
+    const response = await fetch(imageUrl, { mode: 'cors' });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}. Failed to fetch image.`);
+    }
+
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = objectUrl;
+    link.download = filename || `imagefusion-result.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(objectUrl);
+
+    console.log('Image download initiated!');
+  } catch (error: any) {
+    console.error('Download failed:', error);
+    const errorMessage = t('downloadFailed', { defaultMessage: '下载失败！' });
+    const corsMessage = t('downloadCorsError', {
+      defaultMessage: '无法从 {imageUrl} 获取图像。这通常是由于服务器缺少CORS头 (Access-Control-Allow-Origin)。',
+      imageUrl: imageUrl
+    });
+    const genericMessage = t('downloadGenericError', { 
+      defaultMessage: '错误: {errorMsg}', 
+      errorMsg: error.message 
+    });
+
+    if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+      alert(`${errorMessage}\n\n${corsMessage}`);
+    } else {
+      alert(`${errorMessage} ${genericMessage}`);
+    }
+  } finally {
+    setIsDownloading(false);
+  }
+}
+
+// 定义接口
+interface CheckStatusData {
+  opsuinfo: {
+    id: number;
+    google_id: string;
+    task_id: string;
+    prompt: string;
+    origin_image: string;
+    dist_image: string;
+    size: string;
+    is_enhance: number;
+    status: number;
+    created: number;
+    updated: number;
+  } | null;
+  status: number;
+  status_msg: string;
+}
 
 export default function HeroSection() {
   const t = useTranslations("home");
   const params = useParams();
   const currentLocale = (params.locale as string) || "zh";
   const isZh = currentLocale === "zh";
+  const { isSignedIn } = useAuth();
+  const { openSignIn } = useClerk();
+  const { user } = useUser();
 
   const [sourceImage, setSourceImage] = useState<File | null>(null);
-  const [selectedStyleIndex, setSelectedStyleIndex] = useState<number>(0); // 选中的风格索引
+  const [selectedStyleIndex, setSelectedStyleIndex] = useState<number>(0);
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const sourceInputRef = useRef<HTMLInputElement>(null);
-  const styleInputRef = useRef<HTMLInputElement>(null); // 添加风格图片上传的ref
-  const [isPromptMode, setIsPromptMode] = useState(false); // 是否使用提示词模式
-  const [promptText, setPromptText] = useState(""); // 提示词文本
+  const styleInputRef = useRef<HTMLInputElement>(null);
+  const [isPromptMode, setIsPromptMode] = useState(false);
+  const [promptText, setPromptText] = useState("");
   const [stylePopoverOpen, setStylePopoverOpen] = useState(false);
   const [promptPopoverOpen, setPromptPopoverOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [customStyleImage, setCustomStyleImage] = useState<File | null>(null); // 添加自定义风格图片状态
-  const [isUserUploadedSource, setIsUserUploadedSource] = useState(false); // 追踪sourceImage是否是用户上传的
+  const [customStyleImage, setCustomStyleImage] = useState<File | null>(null);
+  const [isUserUploadedSource, setIsUserUploadedSource] = useState(false);
+  
+  // 添加生成和下载相关状态
+  const [generationProgress, setGenerationProgress] = useState(0);
+  const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isCheckingLevel, setIsCheckingLevel] = useState(false);
+  
+  // Refs for intervals and timeouts
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 预设风格图片
-  // const styleImages = [
-  //   { src: '/styles/1.jpg', name: isZh ? '水彩风格' : 'Watercolor' },
-  //   { src: '/styles/2.jpg', name: isZh ? '油画风格' : 'Oil Painting' },
-  //   { src: '/styles/3.jpg', name: isZh ? '素描风格' : 'Sketch' },
-  //   { src: '/styles/1.jpg', name: isZh ? '波普艺术' : 'Pop Art' },
-  //   { src: '/styles/2.jpg', name: isZh ? '赛博朋克' : 'Cyberpunk' },
-  //   { src: '/styles/3.jpg', name: isZh ? '二次元' : 'Anime' }
-  // ];
+  // 停止所有生成过程的辅助函数
+  const stopGenerationProcess = () => {
+    setIsGenerating(false);
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+    if (pollingTimeoutRef.current) {
+      clearTimeout(pollingTimeoutRef.current);
+      pollingTimeoutRef.current = null;
+    }
+    setCurrentTaskId(null);
+    setGenerationProgress(0);
+  };
 
-  // 组件加载时自动加载默认示例图片
   useEffect(() => {
     loadDefaultExample();
+    
+    // 组件卸载时清理定时器
+    return () => {
+      stopGenerationProcess();
+    };
   }, [selectedStyleIndex]);
 
   // 加载默认示例图片
@@ -56,7 +149,7 @@ export default function HeroSection() {
           type: "image/jpeg",
         });
         setSourceImage(file);
-        setIsUserUploadedSource(false); // 标记为系统默认图片
+        setIsUserUploadedSource(false);
       });
   };
 
@@ -65,46 +158,40 @@ export default function HeroSection() {
     const files = e.target.files;
     if (files && files.length > 0) {
       setSourceImage(files[0]);
-      setIsUserUploadedSource(true); // 标记为用户上传的图片
-      setResultImage(null); // 重置结果
+      setIsUserUploadedSource(true);
+      setResultImage(null);
     }
   };
 
-  // 点击上传按钮
   const handleUploadClick = () => {
     sourceInputRef.current?.click();
   };
 
-  // 处理拖拽
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };
 
-  // 处理文件放置
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
       setSourceImage(files[0]);
-      setIsUserUploadedSource(true); // 标记为用户上传的图片
-      setResultImage(null); // 重置结果
+      setIsUserUploadedSource(true);
+      setResultImage(null);
     }
   };
 
-  // 选择风格
   const selectStyle = (index: number) => {
     setSelectedStyleIndex(index);
     setIsPromptMode(false);
-    setResultImage(null); // 重置结果
-    setStylePopoverOpen(false); // 关闭弹窗
+    setResultImage(null);
+    setStylePopoverOpen(false);
   };
 
-  // 切换到提示词模式
   const enablePromptMode = () => {
     setIsPromptMode(true);
-    setResultImage(null); // 重置结果
+    setResultImage(null);
 
-    // 在下一个渲染周期后聚焦输入框
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
@@ -112,58 +199,248 @@ export default function HeroSection() {
     }, 0);
   };
 
-  // 切换到图片风格模式
   const disablePromptMode = () => {
     setIsPromptMode(false);
   };
 
-  // 提示词输入处理
   const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPromptText(e.target.value);
   };
 
-  // 处理风格图片上传
   const handleStyleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       setCustomStyleImage(files[0]);
-      setIsPromptMode(false); // 切换到图片风格模式
-      setResultImage(null); // 重置结果
+      setIsPromptMode(false);
+      setResultImage(null);
     }
   };
 
-  // 点击上传风格图片按钮
   const handleStyleUploadClick = () => {
     styleInputRef.current?.click();
   };
 
-  // 生成融合图片
-  const generateImage = () => {
-    if (!sourceImage) return;
+  // 下载结果图片
+  const handleDownloadClick = () => {
+    if (!resultImage || isDownloading) return;
 
+    const fileName = resultImage.split('/').pop() || 'imagefusion-result.png';
+    downloadImageWithCors(
+      resultImage,
+      fileName,
+      setIsDownloading,
+      t
+    );
+  };
+
+  // 新增：实际API调用生成图片过程
+  const startImageGeneration = async () => {
+    setIsCheckingLevel(false);
     setIsGenerating(true);
+    setResultImage(null);
+    setCurrentTaskId(null);
+    setGenerationProgress(0);
+    setApiError(null);
 
-    // 判断是否使用默认样式和默认原图
-    // 如果使用的是预设风格(非自定义图片和非提示词模式)，且源图是系统加载的默认图片
-    if (!customStyleImage && !isPromptMode && !isUserUploadedSource) {
-      // 获取当前选中风格的demo结果图
-      const demoResultImage =
-        imgFusionTemplates[selectedStyleIndex].demo.resultImageSrc;
-
-      // 延迟一点时间模拟生成过程
-      setTimeout(() => {
-        setResultImage(demoResultImage);
-        setIsGenerating(false);
-      }, 2000);
+    // 构建FormData
+    const formData = new FormData();
+    // 更新参数名称为最新API格式
+    formData.append('origin_img', sourceImage!);
+    
+    // 必须添加风格图片
+    if (customStyleImage) {
+      formData.append('style_img', customStyleImage);
     } else {
-      // 模拟生成过程（实际项目中应调用API）
-      setTimeout(() => {
-        // 假设这是生成的图像URL
-        setResultImage("/examples/result.jpg");
-        setIsGenerating(false);
-      }, 2000);
+      // 如果没有自定义风格图，则需要从预设风格中获取一个图片
+      try {
+        const styleSrc = imgFusionTemplates[selectedStyleIndex].imageSrc;
+        const styleResponse = await fetch(styleSrc);
+        const styleBlob = await styleResponse.blob();
+        const styleFile = new File([styleBlob], "style-image.jpg", { type: "image/jpeg" });
+        formData.append('style_img', styleFile);
+      } catch (error) {
+        console.error("获取风格图失败:", error);
+        setApiError("无法获取风格图，请上传自定义风格图或重试");
+        stopGenerationProcess();
+        setIsCheckingLevel(false);
+        return;
+      }
+    }
+    
+    const googleId = user?.id || '';
+    formData.append('google_id', googleId);
+    
+    // 构建合适的提示词
+    const basePrompt = "把图一的人物融入图二的风格，人物姿势、五官、表情不变，发型、妆容、服装造型使用图二的风格。直接出超拟真细节版本图片。";
+    
+    // 根据当前模式设置prompt
+    if (isPromptMode && promptText.trim()) {
+      formData.append('prompt', promptText.trim());
+    } else {
+      // 如果没有提示词或不是提示词模式，使用默认提示词
+      formData.append('prompt', basePrompt);
+    }
+    
+    // 设置尺寸比例，使用1:1固定值
+    formData.append('size', "2:3");
+    
+    // 增强选项，这里使用boolean值false
+    formData.append('is_enhance', "false");
+
+    // 启动进度模拟
+    if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    const totalSimulationTime = 110 * 1000;
+    const intervals = 95;
+    const intervalDuration = totalSimulationTime / intervals;
+
+    progressIntervalRef.current = setInterval(() => {
+      setGenerationProgress(prev => {
+        if (prev >= 95) {
+          if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+          return 95;
+        }
+        return prev + 1;
+      });
+    }, intervalDuration);
+
+    try {
+      const response = await fetch(apiConfig.generateImage, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        let errorMsg = `API错误: ${response.status} ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.msg) {
+            if (errorData.code === 1003) {
+              errorMsg = t('error.insufficientCredits', { defaultMessage: '可用配额不足。' });
+            } else {
+              errorMsg = errorData.msg;
+            }
+          }
+        } catch (e) { /* 忽略JSON解析错误 */ };
+        throw new Error(errorMsg);
+      }
+
+      const result = await response.json();
+
+      if (result.code === 1000 && typeof result.data === 'string' && result.data.length > 0) {
+        const taskId = result.data;
+        console.log('生成任务已启动。任务ID:', taskId);
+        setCurrentTaskId(taskId); // 启动轮询
+      } else {
+        let errorMessage = result.msg || t('error.genericGeneration', { defaultMessage: '创建生成任务失败。' });
+        if (result.code === 1003) {
+          errorMessage = t('error.insufficientCredits', { defaultMessage: '可用配额不足。' });
+        }
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      console.error('生成过程中失败:', error);
+      setApiError(error instanceof Error ? error.message : '任务创建过程中发生未知错误。');
+      stopGenerationProcess();
     }
   };
+
+  // 生成融合图片 - 修改为调用API
+  const generateImage = async () => {
+    if (!sourceImage || isGenerating) return;
+
+    // 检查登录状态
+    if (!isSignedIn) {
+      openSignIn();
+      return;
+    }
+
+    setIsCheckingLevel(true);
+    setApiError(null);
+
+    try {
+      // 判断是否使用默认样式和默认原图
+      if (!customStyleImage && !isPromptMode && !isUserUploadedSource) {
+        // 获取当前选中风格的demo结果图
+        const demoResultImage = imgFusionTemplates[selectedStyleIndex].demo.resultImageSrc;
+
+        // 延迟一点时间模拟生成过程
+        setTimeout(() => {
+          setResultImage(demoResultImage);
+          setIsGenerating(false);
+          setIsCheckingLevel(false);
+        }, 2000);
+      } else {
+        // 实际API调用
+        await startImageGeneration();
+      }
+    } catch (error) {
+      console.error('检查用户等级或启动生成失败:', error);
+      setApiError(error instanceof Error ? error.message : '发生未知错误。');
+      setIsCheckingLevel(false);
+    }
+  };
+
+  // 添加轮询逻辑
+  useEffect(() => {
+    if (currentTaskId && isGenerating) {
+      const pollTaskStatus = async () => {
+        console.log(`检查任务状态: ${currentTaskId}`);
+        try {
+          const checkResponse = await fetch(`${apiConfig.checkStatus}?task_id=${currentTaskId}`);
+
+          if (!checkResponse.ok) {
+            throw new Error(`检查API错误: ${checkResponse.status} ${checkResponse.statusText}`);
+          }
+
+          const checkResult = await checkResponse.json();
+
+          if (checkResult.code === 1000 && checkResult.data) {
+            const statusData = checkResult.data as CheckStatusData;
+
+            if (statusData.status === 1 && statusData.opsuinfo?.dist_image) {
+              // 成功：任务完成
+              console.log('轮询: 任务完成!', statusData.opsuinfo.dist_image);
+              setGenerationProgress(100);
+              setResultImage(statusData.opsuinfo.dist_image);
+              setApiError(null);
+              stopGenerationProcess();
+            } else if (statusData.status === 0) {
+              // 待处理：任务仍在处理中，继续轮询
+              console.log('轮询: 任务处理中...');
+              if (pollingTimeoutRef.current) clearTimeout(pollingTimeoutRef.current);
+              pollingTimeoutRef.current = setTimeout(pollTaskStatus, 20000); // 20秒后再次轮询
+            } else {
+              // 失败：根据API状态任务失败
+              console.error('轮询: 任务失败，状态:', statusData.status);
+              setApiError(statusData.status_msg || '图像生成失败。');
+              setResultImage(null);
+              stopGenerationProcess();
+            }
+          } else {
+            // 失败：检查API错误
+            console.error('检查API返回意外响应。');
+            setApiError(checkResult.msg || '检查API返回意外响应。');
+            setResultImage(null);
+            stopGenerationProcess();
+          }
+        } catch (error) {
+          console.error('轮询失败:', error);
+          setApiError(error instanceof Error ? error.message : '轮询过程中发生未知错误。');
+          setResultImage(null);
+          stopGenerationProcess();
+        }
+      };
+      pollTaskStatus();
+
+      return () => {
+        console.log('清理任务轮询:', currentTaskId);
+        if (pollingTimeoutRef.current) {
+          clearTimeout(pollingTimeoutRef.current);
+          pollingTimeoutRef.current = null;
+        }
+      };
+    }
+  }, [currentTaskId, isGenerating]);
 
   return (
     <>
@@ -358,7 +635,7 @@ export default function HeroSection() {
                     </PopoverContent>
                   </Popover>
 
-                  {/* 上传风格图片按钮 (替换原来的提示词按钮) */}
+                  {/* 上传风格图片按钮 */}
                   <Button
                     variant="outline"
                     className={`w-full border-zinc-600 ${
@@ -429,11 +706,14 @@ export default function HeroSection() {
                 <div className="bg-zinc-800 p-4 md:p-5 rounded-lg shadow-lg border border-zinc-700 mb-4 flex flex-col">
                   <div className="aspect-[3/4] relative overflow-hidden rounded-lg border border-zinc-600 flex flex-col items-center justify-center">
                     {isGenerating ? (
-                      <div className="flex flex-col items-center justify-center h-full">
+                      <div className="flex flex-col items-center justify-center h-full w-full p-6">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500 mb-4"></div>
-                        <p className="text-lg text-white text-center">
+                        <p className="text-lg text-white text-center mb-4">
                           {t("generatingText")}
                         </p>
+                        {/* 添加进度条 */}
+                        <Progress value={generationProgress} className="w-full h-2 bg-zinc-700" />
+                        <p className="text-sm text-zinc-400 mt-2">{generationProgress}%</p>
                       </div>
                     ) : resultImage ? (
                       <div className="relative w-full h-full">
@@ -454,15 +734,53 @@ export default function HeroSection() {
                   </div>
                 </div>
 
-                <Button
-                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-medium rounded-md"
-                  onClick={generateImage}
-                  disabled={!sourceImage || isGenerating}
-                >
-                  {isGenerating ? t("generatingText") : t("generateButton")}
-                </Button>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium rounded-md"
+                    onClick={generateImage}
+                    disabled={!sourceImage || isGenerating || isCheckingLevel}
+                  >
+                    {isCheckingLevel ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        {isZh ? "检查中..." : "Checking..."}
+                      </>
+                    ) : isGenerating ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        {t("generatingText")}
+                      </>
+                    ) : (
+                      t("generateButton")
+                    )}
+                  </Button>
+                  
+                  {/* 添加下载按钮 */}
+                  <Button
+                    variant="outline"
+                    className="border-zinc-600 text-white hover:bg-zinc-700 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleDownloadClick}
+                    disabled={!resultImage || isDownloading}
+                  >
+                    {isDownloading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        {isZh ? "下载中..." : "Downloading..."}
+                      </>
+                    ) : (
+                      isZh ? "下载结果" : "Download"
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
+
+            {/* 添加错误提示 */}
+            {apiError && (
+              <div className="mt-6 p-4 bg-red-900/50 border border-red-700 rounded-lg text-white text-center max-w-2xl mx-auto">
+                <p className="text-sm font-medium">{apiError}</p>
+              </div>
+            )}
           </div>
         </div>
       </section>

@@ -274,9 +274,6 @@ export default function ProfilePage() {
           const googleIdToFetch = user?.id || "";
           const response = await fetch(`${apiConfig.opusList}`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({
               page: page,
               page_size: historyPageSize,
@@ -445,6 +442,60 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
+          ) : userApiInfo ? (
+            <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 shadow-lg">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+                <div className="relative">
+                  <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#FFD700]/30">
+                    {userApiInfo?.avatar ? (
+                      <Image
+                        src={userApiInfo.avatar}
+                        alt={userApiInfo.name || "用户头像"}
+                        width={128}
+                        height={128}
+                        className="object-cover w-full h-full"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-800 flex items-center justify-center text-4xl text-[#FFD700]">
+                        {(userApiInfo?.name || "U").charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex-1 text-center md:text-left">
+                  <h1 className="text-2xl font-bold mb-2">
+                    {userApiInfo?.name || "未设置昵称"}
+                  </h1>
+                  <p className="text-gray-400 mb-4">{userApiInfo?.email}</p>
+
+                  <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
+                      <p className="text-sm text-gray-400">会员等级</p>
+                      <p className="text-lg font-medium text-[#FFD700]">
+                        {userApiInfo && userApiInfo.level > 0
+                          ? currentPlanName
+                          : t("noSubscription", { defaultMessage: "免费用户" })}
+                      </p>
+                    </div>
+
+                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
+                      <p className="text-sm text-gray-400">剩余积分</p>
+                      <p className="text-lg font-medium text-[#FFD700]">
+                        {userApiInfo?.api_left_times || 0}
+                      </p>
+                    </div>
+
+                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
+                      <p className="text-sm text-gray-400">已生成图片</p>
+                      <p className="text-lg font-medium text-[#FFD700]">
+                        {userApiInfo?.api_used_times || 0}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 shadow-lg text-center">
               <p className="text-xl mb-4">请先登录查看您的个人信息</p>
@@ -500,18 +551,18 @@ export default function ProfilePage() {
               </div>
             ) : totalHistoryCount > 0 ? (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                   {historyList.map((item) => (
                     <div
                       key={item.id}
                       className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl overflow-hidden shadow-lg hover:shadow-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all"
                     >
-                      <div className="relative h-48 bg-gray-800 overflow-hidden">
+                      <div className="relative bg-gray-800 overflow-hidden" style={{ paddingBottom: '150%' }}>
                         <Image
                           src={item.dist_image}
-                          alt={item.prompt || "生成图片"}
+                          alt={"生成图片"}
                           fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 16vw"
                           className="object-cover transition-transform hover:scale-105"
                         />
                         <button
@@ -543,11 +594,10 @@ export default function ProfilePage() {
                           </svg>
                         </button>
                       </div>
-                      <div className="p-4">
-                        <p className="text-gray-400 text-sm mb-2">
-                          {new Date(item.created).toLocaleDateString()}
+                      <div className="p-3">
+                        <p className="text-gray-400 text-sm">
+                          {new Date(item.created * 1000).toLocaleDateString()}
                         </p>
-                        <p className="line-clamp-2 text-sm">{item.prompt}</p>
                       </div>
                     </div>
                   ))}

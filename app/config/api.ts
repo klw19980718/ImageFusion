@@ -9,4 +9,6 @@ export const apiConfig = {
   stripeSubscriptionCreate: `${baseApiUrl}/stripe/subscription/create`,
   opusList: `${baseApiUrl}/${siteSign}/generateImageOpus/list`,
   priceList: `${baseApiUrl}/website/pricelist`,
+  generateImage: `${baseApiUrl}/${siteSign}/generateImage/generate`,
+  checkStatus: `${baseApiUrl}/${siteSign}/generateImage/check`,
 };
