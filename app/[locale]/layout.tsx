@@ -9,8 +9,8 @@ export function generateStaticParams() {
 }
 
 // 根据不同语言提供不同的元数据
-export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
-  const locale = params.locale || 'zh';
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+  const locale = (await params).locale || 'zh';
   
   const metadata: Metadata = {
     alternates: {
@@ -92,13 +92,24 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const { locale } = await params;
+  const locale = (await params).locale || 'zh';
   
+  // 动态导入消息文件并进行错误处理
   let messages;
   try {
-    messages = (await import(`../../messages/${locale}.json`)).default;
+    const userModule = await import(`../../messages/${locale}.json`);
+    messages = userModule.default;
   } catch (error) {
-    messages = (await import(`../../messages/zh.json`)).default;
+    console.error(`Failed to load messages for ${locale}:`, error);
+    // 如果无法加载特定语言，尝试加载默认语言
+    try {
+      const defaultModule = await import(`../../messages/zh.json`);
+      messages = defaultModule.default;
+    } catch (fallbackError) {
+      console.error(`Failed to load fallback messages:`, fallbackError);
+      // 如果连默认语言也加载失败，提供一个最小的消息对象以避免应用崩溃
+      messages = {};
+    }
   }
 
   return (
