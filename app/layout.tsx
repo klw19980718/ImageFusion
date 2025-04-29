@@ -74,7 +74,7 @@ export default function RootLayout({
   // 由于我们不能在这里直接使用params，改为使用默认值
   const locale = 'zh'; // 默认使用中文
   const schemaData = getSchemaData(locale);
-  const GA_TRACKING_ID = 'G-BST9KGD31X';
+  const GA_TRACKING_ID = 'G-3DB3HY13E2';
 
   return (
     <html lang={locale}>
