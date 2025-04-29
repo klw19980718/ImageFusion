@@ -1,8 +1,6 @@
-import { Navbar } from '../../components/Navbar';
 import ClientProviders from './ClientProviders';
 import ClerkProviderWithLocale from '../../components/auth/clerk-provider';
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://framepola.com';
 
@@ -10,32 +8,16 @@ export function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'zh' }];
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
-  const awaitedParams = await params;
-  const { locale } = awaitedParams;
-
-  const headersList = await headers();
-  const pathname = headersList.get('x-next-pathname') || '';
-  
-  const canonicalUrl = `${BASE_URL}${pathname === '/' ? `/${locale}` : `/${locale}${pathname}`}`;
-  const englishUrl = `${BASE_URL}${pathname === '/' ? '/en' : `/en${pathname}`}`;
-  const chineseUrl = `${BASE_URL}${pathname === '/' ? '/zh' : `/zh${pathname}`}`;
-
-  return {
-    alternates: {
-      canonical: canonicalUrl,
-      languages: {
-        'en': englishUrl,
-        'zh': chineseUrl,
-        'x-default': englishUrl,
-      },
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://framepola.com',
+    languages: {
+      'en': 'https://framepola.com/en',
+      'zh': 'https://framepola.com/zh',
+      'x-default': 'https://framepola.com/en',
     },
-  };
-}
+  },
+};
 
 export default async function LocaleLayout({
   children,
@@ -57,7 +39,6 @@ export default async function LocaleLayout({
     <ClientProviders locale={locale} messages={messages}>
       <ClerkProviderWithLocale>
         <main className="min-h-screen">
-          <Navbar />
           {children}
         </main>
       </ClerkProviderWithLocale>

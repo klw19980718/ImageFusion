@@ -3,7 +3,6 @@
 import { useTranslations } from 'next-intl';
 import { useParams, notFound, usePathname } from 'next/navigation'; // 添加 usePathname
 import Link from 'next/link';
-import { Footer } from '../../../../components/Footer'; // 确认路径正确
 import { useEffect } from 'react'; // 添加 useEffect
 // 导入博客元数据
 import { blogPostMetadata } from '../../../../lib/blogData'; 
@@ -36,17 +35,14 @@ export default function BlogPostPage() {
     console.error(`Missing or invalid translation for posts.${slug}`);
     // Render an error or fallback - simplified here
     return (
-      <div className="min-h-screen flex flex-col bg-background">
-        <main className="flex-grow py-12 px-6">
-          <div className="container mx-auto max-w-2xl text-center">
-            <p>Error loading post content or translation missing.</p>
-            <Link href={`/${locale}/blog`} className="text-primary hover:underline mt-4 inline-block">
-              &larr; {t('backToBlog')}
-            </Link>
-          </div>
-        </main>
-        <Footer />
-      </div>
+      <main className="flex-grow py-12 px-6">
+        <div className="container mx-auto max-w-2xl text-center">
+          <p>Error loading post content or translation missing.</p>
+          <Link href={`/${locale}/blog`} className="text-primary hover:underline mt-4 inline-block">
+            &larr; {t('backToBlog')}
+          </Link>
+        </div>
+      </main>
     );
   }
 
@@ -64,38 +60,34 @@ export default function BlogPostPage() {
   }, [postTitle]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      {/* <Navbar /> */}
-      <main className="flex-grow py-12 px-6">
-        {/* 优化容器样式：max-w-2xl */}
-        <div className="container mx-auto max-w-2xl bg-white p-8 md:p-12 rounded-2xl shadow-custom"> 
-          {/* 返回链接 */}
-          <Link href={`/${locale}/blog`} className="text-primary hover:underline mb-8 inline-block">
-            &larr; {t('backToBlog')} 
-          </Link>
+    <main className="flex-grow py-12 px-6 bg-background">
+      {/* 优化容器样式：max-w-2xl */}
+      <div className="container mx-auto max-w-2xl bg-white p-8 md:p-12 rounded-2xl shadow-custom"> 
+        {/* 返回链接 */}
+        <Link href={`/${locale}/blog`} className="text-primary hover:underline mb-8 inline-block">
+          &larr; {t('backToBlog')} 
+        </Link>
 
-          {/* 文章头部 */}
-          <h1 className="text-3xl md:text-4xl font-bold font-fredoka mb-4 text-foreground">
-            {postTitle} 
-          </h1>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mb-8 border-b pb-4">
-            {/* 使用 postMeta 中的 date */}
-            <span>{t('publishedOn')} {postMeta.date}</span> 
-            <span className="hidden md:inline">&bull;</span> 
-            <span className="px-2 py-0.5 bg-primary/10 rounded-full text-xs text-primary font-medium">
-              {categoryText} 
-            </span>
-          </div>
-
-          {/* 文章内容 */}
-          {/* 优化 prose 样式：移除 max-w-none, 调整 headings 边距 */}
-          <article
-            className="prose prose-slate prose-lg prose-headings:mt-8 prose-headings:mb-4 prose-p:leading-relaxed prose-p:mb-5 prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:font-semibold"
-            dangerouslySetInnerHTML={{ __html: postContent }} 
-          />
+        {/* 文章头部 */}
+        <h1 className="text-3xl md:text-4xl font-bold font-fredoka mb-4 text-foreground">
+          {postTitle} 
+        </h1>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mb-8 border-b pb-4">
+          {/* 使用 postMeta 中的 date */}
+          <span>{t('publishedOn')} {postMeta.date}</span> 
+          <span className="hidden md:inline">&bull;</span> 
+          <span className="px-2 py-0.5 bg-primary/10 rounded-full text-xs text-primary font-medium">
+            {categoryText} 
+          </span>
         </div>
-      </main>
-      <Footer />
-    </div>
+
+        {/* 文章内容 */}
+        {/* 优化 prose 样式：移除 max-w-none, 调整 headings 边距 */}
+        <article
+          className="prose prose-slate prose-lg prose-headings:mt-8 prose-headings:mb-4 prose-p:leading-relaxed prose-p:mb-5 prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:font-semibold"
+          dangerouslySetInnerHTML={{ __html: postContent }} 
+        />
+      </div>
+    </main>
   );
 } 

@@ -1,9 +1,12 @@
 {
   "nav": {
     "home": "首页",
+    "features": "特点",
     "examples": "示例",
+    "reviews": "评价",
     "blog": "博客",
     "pricing": "价格",
+    "faq": "FAQ",
     "login": "登录/注册",
     "language": "语言",
     "chinese": "简体中文",
@@ -220,6 +223,147 @@
     "examples": {
       "originalLabel": "原始",
       "generatedLabel": "生成"
+    },
+    "title": "在线合成令人惊艳的视觉图像",
+    "description": "使用先进的AI技术，无缝合成图像，轻松生成创意艺术作品的最佳AI图像融合工具",
+    "uploadLabel": "拖放或点击上传图片",
+    "chooseFile": "选择文件",
+    "dragDropText": "拖放或点击上传",
+    "tryExamples": "试用示例",
+    "generateButton": "生成",
+    "generatingText": "生成中...",
+    "supportedFormats": "支持的文件格式: JPG, PNG, GIF, WebP, BMP",
+    "maxFileSize": "最大文件大小: 50 MB",
+    "sourceLabel": "源图片",
+    "styleLabel": "风格",
+    "resultLabel": "结果",
+    "clickToGenerate": "点击\"生成\"按钮开始生成",
+    "selectStyle": "选择风格:",
+    "imageStyleTab": "图片风格",
+    "promptStyleTab": "提示词",
+    "promptPlaceholder": "例如：水彩风格，鲜艳的颜色，梦幻的氛围...",
+    "promptLabel": "输入提示词描述您想要的风格",
+    "promptStyleOption": "使用提示词",
+    "chooseStyle": "选择风格",
+    "customPrompt": "自定义提示词",
+    "usePrompt": "使用提示词",
+    "promptPreview": "自定义提示词将显示在这里"
+  },
+  "features": {
+    "title": "产品特点",
+    "howItWorksTitle": "使用步骤",
+    "features": {
+      "enhancedCreativity": {
+        "title": "增强创造力",
+        "description": "AI图像融合技术结合多种元素，帮助艺术家和设计师创造出难以手动实现的富有想象力的视觉效果。"
+      },
+      "quickAndEasy": {
+        "title": "快速简便",
+        "description": "以前需要数小时的手动编辑工作，现在只需几次点击就能完成。"
+      },
+      "highQualityResults": {
+        "title": "高质量成果",
+        "description": "我们先进的AI算法确保高质量输出，同时保留源图像中的最佳细节。"
+      },
+      "styleFlexibility": {
+        "title": "风格灵活",
+        "description": "尝试各种风格和组合，创造完美匹配您愿景的独特视觉效果。"
+      },
+      "costEffective": {
+        "title": "成本效益",
+        "description": "通过自动化复杂的图像融合过程节省时间和资源，同时不影响质量。"
+      },
+      "commercialReady": {
+        "title": "商业就绪",
+        "description": "创建适用于营销、电商和其他商业应用的专业级图像。"
+      }
+    },
+    "steps": {
+      "upload": {
+        "title": "上传图片",
+        "description": "上传您想要合成的图片。为获得最佳效果，请使用高质量、清晰的图片。"
+      },
+      "style": {
+        "title": "选择风格",
+        "description": "从我们的预设风格中选择，或上传您自己的参考图片以获得自定义效果。"
+      },
+      "results": {
+        "title": "获取成果",
+        "description": "预览并下载您的AI融合图片，高分辨率成品即刻可用。"
+      }
+    }
+  },
+  "demo": {
+    "title": "见证魔法效果",
+    "tryNowButton": "立即体验",
+    "generate": "生成",
+    "conceptArt": {
+      "title": "用AI图像合成器提升您的概念艺术",
+      "description": "通过结合多样化的元素和创意，为视频游戏、电影和其他媒体创建概念艺术。AI图像融合使创作者能够无缝混合纹理、颜色和形状，为角色、环境和道具激发创新设计。"
+    },
+    "productBranding": {
+      "title": "用AI图像融合打造时尚产品品牌形象",
+      "description": "AI图像融合混合元素，打造在市场中脱颖而出的视觉冲击力和难忘形象。通过无缝结合纹理、颜色和设计，AI图像融合创造出增强品牌身份并吸引受众的引人注目的视觉效果。"
+    },
+    "portraitEnhancement": {
+      "title": "AI驱动的人像照片增强与风格转换",
+      "description": "将普通人像照片转变为专业级艺术作品，应用于社交媒体、个人品牌和创意项目。我们的AI技术可以智能保留面部细节，同时应用令人惊艳的艺术风格，创造出独一无二的视觉效果。"
+    },
+    "examples": {
+      "portrait": {
+        "title": "人像增强",
+        "description": "使用我们的AI融合技术，将普通人像转化为令人惊艳的艺术创作。"
+      },
+      "concept": {
+        "title": "创意概念艺术",
+        "description": "通过无缝结合不同风格和元素，生成独特的概念艺术。"
+      },
+      "product": {
+        "title": "产品可视化",
+        "description": "创建在市场中脱颖而出的吸睛产品图片。"
+      }
+    }
+  },
+  "testimonials": {
+    "title": "用户评价",
+    "totalReviews": "{{count}}条评价",
+    "userSatisfaction": "用户满意度",
+    "happy": "满意",
+    "verySatisfied": "非常满意",
+    "testimonialFrom": "来自{{location}}的评价",
+    "joinCommunity": "加入10,000+快乐用户"
+  },
+  "faq": {
+    "title": "常见问题解答",
+    "items": {
+      "what": {
+        "question": "AI图像融合是什么？",
+        "answer": "AI图像融合通过合并多张图片的最佳特征和细节，将它们组合成单一的增强图像。它只需要一个源图像和一个参考图像，就能实现无限的创意可能。"
+      },
+      "best": {
+        "question": "什么是最好的AI图像融合？",
+        "answer": "ImageFusion的AI图像融合使用强大的AI算法，其超级简化的界面使其易于使用，而且是100%在线的，因此无需下载任何大型软件。"
+      },
+      "howto": {
+        "question": "如何使用AI图像融合？",
+        "answer": "只需上传一张图片并选择一种风格，或从参考图片中提取风格。预览您的生成结果并下载到您的设备。您可以在线完成所有这些操作，无需下载任何大型AI软件。"
+      },
+      "skills": {
+        "question": "使用AI图像融合需要技术技能吗？",
+        "answer": "不需要任何技能。AI图像融合将为您完成所有繁重的工作。以前需要数小时的精心手动图层编辑、遮罩和混合，现在只需点击几下就能完成。"
+      },
+      "commercial": {
+        "question": "我可以将AI图像融合用于商业用途吗？",
+        "answer": "AI图像融合可以增强电子商务的产品照片，创建高质量的营销材料，简化时尚和美容行业的照片修饰。事实上，AI图像融合有着几乎无穷的商业应用可能性。"
+      },
+      "why": {
+        "question": "为什么我想使用AI图像融合？",
+        "answer": "您会想使用AI图像融合来通过结合多张照片的最佳特征来增强图像质量，节省手动照片编辑的时间，并为营销、电子商务等制作视觉吸引力强且细节丰富的图像。您本质上是消除了高级图层编辑、混合和遮罩的繁琐过程，这些过程可能需要多年的专注时间投入才能产生高质量的结果。"
+      },
+      "types": {
+        "question": "我可以在AI图像融合中使用哪些类型的图像？",
+        "answer": "上传高质量、无模糊的图像以获得最佳效果。ImageFusion支持流行的图像格式。"
+      }
     }
   }
 } 

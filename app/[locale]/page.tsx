@@ -1,37 +1,53 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import ComparisonSlider from '../../components/ComparisonSlider';
 import PricingSection from '../../components/PricingSection';
 import HeroSection from '../../components/HeroSection';
-import UseCasesSection from '../../components/UseCasesSection';
-import HowItWorksSection from '../../components/HowItWorksSection';
-import BenefitsSection from '../../components/BenefitsSection';
+import FeaturesSection from '../../components/FeaturesSection';
+import DemoSection from '../../components/DemoSection';
+import TestimonialsSection from '../../components/TestimonialsSection';
 import FaqSection from '../../components/FaqSection';
 import { Footer } from '../../components/Footer';
+import PageLayout from './page-layout';
 
 export default function Home() {
+  const t = useTranslations('home');
+  
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <HeroSection />
+    <PageLayout>
+      <div className="min-h-screen flex flex-col">
+        <main className="flex-grow">
+          {/* Hero Section */}
+          <HeroSection />
 
-        {/* Use Cases Section */}
-        <UseCasesSection />
+          {/* Features Section */}
+          <section id="features">
+            <FeaturesSection />
+          </section>
 
-        {/* How It Works Section */}
-        <HowItWorksSection />
+          {/* Demo Section */}
+          <section id="demo">
+            <DemoSection />
+          </section>
 
-        {/* Benefits Section */}
-        <BenefitsSection />
+          {/* Testimonials Section */}
+          <section id="testimonials">
+            <TestimonialsSection />
+          </section>
 
-        {/* Pricing Section */}
-        <PricingSection />
+          {/* Pricing Section */}
+          <section id="pricing">
+            <PricingSection />
+          </section>
 
-        {/* FAQ Section */}
-        <FaqSection />
-      </main>
-      <Footer />
-    </div>
+          {/* FAQ Section */}
+          <section id="faq">
+            <FaqSection />
+          </section>
+        </main>
+        <Footer />
+      </div>
+    </PageLayout>
   );
 } 

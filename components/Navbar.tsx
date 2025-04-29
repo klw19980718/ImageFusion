@@ -63,23 +63,67 @@ export function Navbar() {
   };
 
   // Render navigation links (WITHOUT SheetClose wrapper)
-  const renderNavLinks = (isMobile = false) => (
-    <>
+  const renderNavLinks = (isMobile = false) => {
+    const navItems = [
+      { id: 'features', label: t('features'), section: true },
+      { id: 'demo', label: t('examples'), section: true },
+      { id: 'testimonials', label: t('reviews'), section: true },
+      { id: 'pricing', label: t('pricing'), section: true },
+      { id: 'faq', label: t('faq'), section: true },
+      { id: 'blog', label: t('blog'), href: `/${currentLocale}/blog` },
+    ];
+
+    return (
+      <>
         <Link
-            href={`/${currentLocale}`}
-            className={`block w-full text-left rounded-md ${pathname === `/${currentLocale}` ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'} ${isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 whitespace-nowrap'}`}
+          href={`/${currentLocale}`}
+          className={`block w-full text-left rounded-md ${
+            pathname === `/${currentLocale}` ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'
+          } ${isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 whitespace-nowrap'}`}
+          onClick={() => setIsMobileMenuOpen(false)}
         >
           {t('home')}
         </Link>
 
-        <Link
-            href={`/${currentLocale}/blog`}
-            className={`block w-full text-left rounded-md ${pathname.startsWith(`/${currentLocale}/blog`) ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'} ${isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 whitespace-nowrap'}`}
-        >
-          {t('blog')}
-        </Link>
-    </>
-  );
+        {navItems.map((item) => (
+          item.section ? (
+            isHomePage ? (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`block w-full text-left rounded-md text-foreground hover:text-primary transition-standard ${
+                  isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 whitespace-nowrap'
+                }`}
+              >
+                {item.label}
+              </button>
+            ) : (
+              <Link
+                key={item.id}
+                href={`/${currentLocale}#${item.id}`}
+                className={`block w-full text-left rounded-md text-foreground hover:text-primary transition-standard ${
+                  isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 whitespace-nowrap'
+                }`}
+              >
+                {item.label}
+              </Link>
+            )
+          ) : item.href ? (
+            <Link
+              key={item.id}
+              href={item.href}
+              className={`block w-full text-left rounded-md ${
+                pathname.startsWith(item.href) ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'
+              } ${isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 whitespace-nowrap'}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ) : null
+        ))}
+      </>
+    );
+  };
 
   return (
     <nav className="py-4 px-6 bg-background border-b border-muted shadow-custom sticky top-0 z-50">
@@ -151,24 +195,116 @@ export function Navbar() {
                   <SheetTitle className="text-lg font-semibold text-foreground">{t('menuTitle', { defaultMessage: 'Menu' })}</SheetTitle>
                 </SheetHeader>
                 <nav className="flex-1 flex flex-col space-y-2 mb-8 overflow-y-auto">
-                    <SheetClose asChild>
-                        <Link
-                            href={`/${currentLocale}`}
-                            className={`block w-full text-left rounded-md ${pathname === `/${currentLocale}` ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'} px-4 py-3 text-base`}
-                            onClick={() => setIsMobileMenuOpen(false)}
+                  <SheetClose asChild>
+                    <Link
+                      href={`/${currentLocale}`}
+                      className={`block w-full text-left rounded-md ${
+                        pathname === `/${currentLocale}` ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'
+                      } px-4 py-3 text-base`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {t('home')}
+                    </Link>
+                  </SheetClose>
+                  
+                  {isHomePage ? (
+                    <>
+                      <SheetClose asChild>
+                        <button
+                          onClick={() => handleMobileLinkClick(() => scrollToSection('features'))}
+                          className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
                         >
-                          {t('home')}
-                        </Link>
-                    </SheetClose>
-                    <SheetClose asChild>
-                        <Link
-                            href={`/${currentLocale}/blog`}
-                            className={`block w-full text-left rounded-md ${pathname.startsWith(`/${currentLocale}/blog`) ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'} px-4 py-3 text-base`}
-                            onClick={() => setIsMobileMenuOpen(false)}
+                          {t('features')}
+                        </button>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <button
+                          onClick={() => handleMobileLinkClick(() => scrollToSection('demo'))}
+                          className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
                         >
-                          {t('blog')}
+                          {t('examples')}
+                        </button>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <button
+                          onClick={() => handleMobileLinkClick(() => scrollToSection('testimonials'))}
+                          className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
+                        >
+                          {t('reviews')}
+                        </button>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <button
+                          onClick={() => handleMobileLinkClick(() => scrollToSection('pricing'))}
+                          className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
+                        >
+                          {t('pricing')}
+                        </button>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <button
+                          onClick={() => handleMobileLinkClick(() => scrollToSection('faq'))}
+                          className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
+                        >
+                          {t('faq')}
+                        </button>
+                      </SheetClose>
+                    </>
+                  ) : (
+                    <>
+                      <SheetClose asChild>
+                        <Link
+                          href={`/${currentLocale}#features`}
+                          className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
+                        >
+                          {t('features')}
                         </Link>
-                    </SheetClose>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Link
+                          href={`/${currentLocale}#demo`}
+                          className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
+                        >
+                          {t('examples')}
+                        </Link>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Link
+                          href={`/${currentLocale}#testimonials`}
+                          className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
+                        >
+                          {t('reviews')}
+                        </Link>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Link
+                          href={`/${currentLocale}#pricing`}
+                          className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
+                        >
+                          {t('pricing')}
+                        </Link>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Link
+                          href={`/${currentLocale}#faq`}
+                          className="block w-full text-left rounded-md text-foreground hover:text-primary transition-standard px-4 py-3 text-base"
+                        >
+                          {t('faq')}
+                        </Link>
+                      </SheetClose>
+                    </>
+                  )}
+                  <SheetClose asChild>
+                    <Link
+                      href={`/${currentLocale}/blog`}
+                      className={`block w-full text-left rounded-md ${
+                        pathname.startsWith(`/${currentLocale}/blog`) ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'
+                      } px-4 py-3 text-base`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {t('blog')}
+                    </Link>
+                  </SheetClose>
                 </nav>
                 <div className="mt-auto border-t border-muted/80 pt-6">
                   <DropdownMenu>
