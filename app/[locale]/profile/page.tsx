@@ -396,7 +396,7 @@ export default function ProfilePage() {
                     {userApiInfo?.avatar ? (
                       <Image
                         src={userApiInfo.avatar}
-                        alt={userApiInfo.name || "用户头像"}
+                        alt={t('avatarAlt', { name: userApiInfo.name || 'User' })}
                         width={128}
                         height={128}
                         className="object-cover w-full h-full"
@@ -411,29 +411,29 @@ export default function ProfilePage() {
 
                 <div className="flex-1 text-center md:text-left">
                   <h1 className="text-2xl font-bold mb-2">
-                    {userApiInfo?.name || "未设置昵称"}
+                    {userApiInfo?.name || t('nicknameNotSet')}
                   </h1>
                   <p className="text-gray-400 mb-4">{userApiInfo?.email}</p>
 
                   <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
-                      <p className="text-sm text-gray-400">会员等级</p>
+                      <p className="text-sm text-gray-400">{t('membershipLevel')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
                         {userApiInfo && userApiInfo.level > 0
                           ? currentPlanName
-                          : t("noSubscription", { defaultMessage: "免费用户" })}
+                          : t("freeUser")}
                       </p>
                     </div>
 
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
-                      <p className="text-sm text-gray-400">剩余积分</p>
+                      <p className="text-sm text-gray-400">{t('pointsRemaining')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
                         {userApiInfo?.api_left_times || 0}
                       </p>
                     </div>
 
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
-                      <p className="text-sm text-gray-400">已生成图片</p>
+                      <p className="text-sm text-gray-400">{t('generatedImages')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
                         {userApiInfo?.api_used_times || 0}
                       </p>
@@ -450,7 +450,7 @@ export default function ProfilePage() {
                     {userApiInfo?.avatar ? (
                       <Image
                         src={userApiInfo.avatar}
-                        alt={userApiInfo.name || "用户头像"}
+                        alt={t('avatarAlt', { name: userApiInfo.name || 'User' })}
                         width={128}
                         height={128}
                         className="object-cover w-full h-full"
@@ -465,29 +465,29 @@ export default function ProfilePage() {
 
                 <div className="flex-1 text-center md:text-left">
                   <h1 className="text-2xl font-bold mb-2">
-                    {userApiInfo?.name || "未设置昵称"}
+                    {userApiInfo?.name || t('nicknameNotSet')}
                   </h1>
                   <p className="text-gray-400 mb-4">{userApiInfo?.email}</p>
 
                   <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
-                      <p className="text-sm text-gray-400">会员等级</p>
+                      <p className="text-sm text-gray-400">{t('membershipLevel')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
                         {userApiInfo && userApiInfo.level > 0
                           ? currentPlanName
-                          : t("noSubscription", { defaultMessage: "免费用户" })}
+                          : t("freeUser")}
                       </p>
                     </div>
 
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
-                      <p className="text-sm text-gray-400">剩余积分</p>
+                      <p className="text-sm text-gray-400">{t('pointsRemaining')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
                         {userApiInfo?.api_left_times || 0}
                       </p>
                     </div>
 
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
-                      <p className="text-sm text-gray-400">已生成图片</p>
+                      <p className="text-sm text-gray-400">{t('generatedImages')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
                         {userApiInfo?.api_used_times || 0}
                       </p>
@@ -497,15 +497,15 @@ export default function ProfilePage() {
               </div>
             </div>
           ) : (
-            <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 shadow-lg text-center">
-              <p className="text-xl mb-4">请先登录查看您的个人信息</p>
+            <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 text-center">
+              <p className="text-xl mb-4">{t('loginPromptProfile')}</p>
               <button
                 onClick={() =>
                   (window.location.href = `/${locale}/sign-in?redirect_url=/${locale}/profile`)
                 }
                 className="px-6 py-2 bg-[#FFD700] text-black font-medium rounded-lg hover:bg-[#FFD700]/80 transition-colors"
               >
-                登录
+                {t('loginAction')}
               </button>
             </div>
           )}
@@ -513,9 +513,9 @@ export default function ProfilePage() {
 
         {/* 生成历史区 */}
         {userApiInfo && (
-          <div className="mb-12">
+          <div id="generation-history-section" className="mb-12">
             <h2 className="text-2xl font-bold mb-6 border-b border-[#FFD700]/20 pb-2 text-[#FFD700]">
-              生成历史
+              {t('historyTitle')}
             </h2>
 
             {isLoadingHistory ? (
@@ -560,7 +560,7 @@ export default function ProfilePage() {
                       <div className="relative bg-gray-800 overflow-hidden" style={{ paddingBottom: '150%' }}>
                         <Image
                           src={item.dist_image}
-                          alt={"生成图片"}
+                          alt={t('generatedImageAlt')}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 16vw"
                           className="object-cover transition-transform hover:scale-105"
@@ -576,7 +576,7 @@ export default function ProfilePage() {
                             )
                           }
                           className="absolute top-2 right-2 bg-black/60 p-2 rounded-full hover:bg-black/80 transition-colors"
-                          title="下载图片"
+                          title={t('downloadImage')}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -611,7 +611,7 @@ export default function ProfilePage() {
                       disabled={currentPage === 1}
                       className="px-4 py-2 rounded-lg border border-[#FFD700]/20 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors"
                     >
-                      上一页
+                      {t('paginationPrevious')}
                     </button>
                     <span className="px-4 py-2 rounded-lg bg-gray-800 border border-[#FFD700]/30">
                       {currentPage} / {totalPages}
@@ -621,19 +621,19 @@ export default function ProfilePage() {
                       disabled={currentPage === totalPages}
                       className="px-4 py-2 rounded-lg border border-[#FFD700]/20 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors"
                     >
-                      下一页
+                      {t('paginationNext')}
                     </button>
                   </div>
                 )}
               </>
             ) : (
               <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 text-center">
-                <p className="text-gray-400 mb-4">您还没有生成过图片</p>
+                <p className="text-gray-400 mb-4">{t('noImagesYet')}</p>
                 <Link
                   href="/"
                   className="px-6 py-2 bg-[#FFD700] text-black font-medium rounded-lg hover:bg-[#FFD700]/80 transition-colors inline-block"
                 >
-                  去生成图片
+                  {t('goGenerate')}
                 </Link>
               </div>
             )}

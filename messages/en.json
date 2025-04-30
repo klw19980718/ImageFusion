@@ -68,7 +68,18 @@
     "loginPrompt": "Please log in to view your profile and generation history.",
     "loginAction": "Log In / Sign Up",
     "downloadImage": "Download Image",
-    "downloadImageAria": "Download generated image {id}"
+    "downloadImageAria": "Download generated image {id}",
+    "avatarAlt": "User avatar for {name}",
+    "nicknameNotSet": "Nickname not set",
+    "membershipLevel": "Membership Level",
+    "freeUser": "Free User",
+    "pointsRemaining": "Points Remaining",
+    "loginPromptProfile": "Please log in to view your profile information",
+    "goGenerate": "Generate Images Now",
+    "historyTitle": "Generation History",
+    "generatedImageAlt": "Generated image",
+    "paginationPrevious": "Previous",
+    "paginationNext": "Next"
   },
   "blog": {
     "title": "AI Image Fusion Blog: Tips, Tutorials & Updates",
