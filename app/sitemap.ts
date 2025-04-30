@@ -11,7 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
     '/',
     '/blog',
-    '/pricing',
     '/terms',
     '/privacy',
     // 如果有其他静态页面，在此添加 (例如 '/contact')
