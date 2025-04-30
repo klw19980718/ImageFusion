@@ -857,7 +857,7 @@ export default function HeroSection() {
                           {t("generatingText")}
                         </>
                       ) : (
-                        t("generateButton")
+                        t("generateAgain")
                       )}
                     </Button>
 
