@@ -146,7 +146,7 @@ export default function HeroSection() {
 
   // 加载默认示例图片
   const loadDefaultExample = () => {
-    const defaultSourceImg = "/images/templates/Magical Princess/source.jpg";
+    const defaultSourceImg = "/images/templates/Magical Princess/new_source.png";
     fetch(defaultSourceImg)
       .then((res) => res.blob())
       .then((blob) => {
