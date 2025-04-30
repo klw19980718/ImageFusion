@@ -17,20 +17,20 @@ export async function generateMetadata({ params }: { params: { locale: string } 
     description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
     keywords: ['AI Image Fusion', 'Image Fusion Tool', 'Online Image Fusion', 'AI Photo Fusion', 'Free Image Fusion', 'Combine Images', 'Merge Photos', 'Blend Pictures', 'Image Combiner', 'Image Blender', 'Photo Merger', 'AI Photo Enhancer', 'Enhance Images'],
     alternates: {
-      canonical: `${BASE_URL}/en`, // 指定英文版的规范 URL
+      canonical: '/en', // Use relative path
       languages: {
-        'en': `${BASE_URL}/en`,
-        'x-default': `${BASE_URL}/en`, // 默认指向英文版
+        'en': '/en', // Use relative path
+        'x-default': '/en', // Use relative path
       },
     },
     openGraph: {
       title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
       description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
-      url: `${BASE_URL}/en`, // Open Graph URL 指向英文版
+      url: '/en', // Use relative path for the English version
       siteName: 'ImageFusion',
       images: [
         {
-          url: `${BASE_URL}/og-img.png`,
+          url: '/og-img.png', // Use relative path
           width: 1200,
           height: 630,
           alt: 'AI Image Fusion Tool - Combine and Enhance Photos with AI',
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
       card: 'summary_large_image',
       title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
       description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
-      images: [`${BASE_URL}/og-img.png`],
+      images: ['/og-img.png'], // Use relative path
       // creator: '@yourTwitterHandle', // 可选
     },
     // verification: { ... }, // 可选

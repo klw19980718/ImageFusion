@@ -22,11 +22,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
     description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
-    url: BASE_URL,
+    url: '/',
     siteName: 'ImageFusion',
     images: [
       {
-        url: `${BASE_URL}/og-img.png`,
+        url: '/og-img.png',
         width: 1200,
         height: 630,
         alt: 'AI Image Fusion Tool - Combine and Enhance Photos with AI',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
     description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
-    images: [`${BASE_URL}/og-img.png`],
+    images: ['/og-img.png'],
     // 可选: 添加 Twitter 账号
     // creator: '@yourTwitterHandle',
   },
