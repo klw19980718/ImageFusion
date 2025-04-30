@@ -17,16 +17,16 @@ export async function generateMetadata({ params }: { params: { locale: string } 
     description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
     keywords: ['AI Image Fusion', 'Image Fusion Tool', 'Online Image Fusion', 'AI Photo Fusion', 'Free Image Fusion', 'Combine Images', 'Merge Photos', 'Blend Pictures', 'Image Combiner', 'Image Blender', 'Photo Merger', 'AI Photo Enhancer', 'Enhance Images'],
     alternates: {
-      canonical: '/en', // Use relative path
+      canonical: '/', // Use relative path
       languages: {
-        'en': '/en', // Use relative path
-        'x-default': '/en', // Use relative path
+        'en': '/', // Use relative path
+        'x-default': '/', // Use relative path
       },
     },
     openGraph: {
       title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
       description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
-      url: '/en', // Use relative path for the English version
+      url: '/', // Use relative path for the English version
       siteName: 'ImageFusion',
       images: [
         {

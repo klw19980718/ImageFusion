@@ -1,22 +1,20 @@
 import { MetadataRoute } from 'next';
 
-// !!! IMPORTANT: Replace with your actual production domain !!!
-// You can use environment variables like process.env.NEXT_PUBLIC_SITE_URL
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'www.imagefusionai.com';
+// 使用固定值或环境变量
+const BASE_URL = 'https://www.imagefusionai.com'; 
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const locales = ['en']; // 支持的语言环境
+  // const locales = ['en']; // 不再需要遍历 locale
 
-  // 静态页面列表 (相对于根目录)
+  // 静态页面列表 (根相对路径)
   const staticPages = [
     '/',
     '/blog',
     '/terms',
     '/privacy',
-    // 如果有其他静态页面，在此添加 (例如 '/contact')
   ];
 
-  // 从翻译文件中获取的博客文章 slugs (实际应用中可能需要从 API 或 CMS 获取)
+  // 博客文章 slugs
   const blogPostSlugs = [
     'how-to-take-perfect-polaroid-style-photos',
     'new-feature-3d-effect-enhancement',
@@ -28,31 +26,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
-
-
-  locales.forEach(locale => {
-    // 添加静态页面的 URL
-    staticPages.forEach(page => {
-      sitemapEntries.push({
-        url: `${BASE_URL}/${locale}${page === '/' ? '' : page}`, // 构建特定语言环境的 URL
-        lastModified: new Date(), // 为简单起见使用当前日期，理想情况下获取实际修改日期
-        changeFrequency: page === '/' ? 'daily' : 'weekly', // 根据更新频率调整
-        priority: page === '/' ? 1.0 : 0.8, // 首页优先级更高
-      });
+  // 添加静态页面的 URL (不带 /en)
+  staticPages.forEach(page => {
+    sitemapEntries.push({
+      url: `${BASE_URL}${page === '/' ? '' : page}`, // 直接拼接基础 URL 和页面路径
+      lastModified: new Date(),
+      changeFrequency: page === '/' ? 'daily' : 'weekly',
+      priority: page === '/' ? 1.0 : 0.8,
     });
+  });
 
-    // --- 添加动态博客文章路由 ---
-    blogPostSlugs.forEach(slug => {
-      sitemapEntries.push({
-        // 注意：路径是 /blog/post/[slug]，请根据实际路由调整
-        url: `${BASE_URL}/${locale}/blog/post/${slug}`,
-        lastModified: new Date(), // 理想情况下获取文章的实际修改日期
-        changeFrequency: 'monthly', // 假设博客文章每月更新或检查
-        priority: 0.7, // 博客文章的优先级
-      });
+  // 添加动态博客文章路由 (不带 /en)
+  blogPostSlugs.forEach(slug => {
+    sitemapEntries.push({
+      // 确认你的博客文章路由是 /blog/[slug]
+      url: `${BASE_URL}/blog/${slug}`,
+      lastModified: new Date(), 
+      changeFrequency: 'monthly',
+      priority: 0.7,
     });
-
   });
 
   return sitemapEntries;
-} 
+}

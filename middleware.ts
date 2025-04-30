@@ -1,29 +1,45 @@
 import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 
-// 创建国际化中间件实例
+const locales = ['en'];
+const defaultLocale = 'en';
+
+// 创建 next-intl 中间件实例 (后面调用)
 const intlMiddleware = createMiddleware({
-  // 配置默认本地化信息
-  defaultLocale: 'en',
-  // 支持的本地化语言
-  locales: ['en'],
-  // 禁用浏览器语言检测
-  localeDetection: false
+  locales: locales,
+  defaultLocale: defaultLocale,
+  localeDetection: false, // 已禁用
+  localePrefix: 'as-needed' // 让默认语言 'en' 不需要前缀 (虽然我们下面会重写)
 });
 
-// 自定义中间件函数
-export default async function middleware(request: NextRequest) {
-  // 如果访问的是根路径，重定向到英文版本
-  if (request.nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/en', request.url));
+export default function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  // 检查是否需要添加 /en 前缀进行内部重写
+  // 1. 路径不是 API, _next, _vercel, 或包含点号 (静态文件)
+  // 2. 路径不以 /en 开头
+  const pathnameIsMissingLocale = 
+    !pathname.startsWith(`/${defaultLocale}/`) && 
+    !pathname.startsWith('/api') && 
+    !pathname.startsWith('/_next') && 
+    !pathname.startsWith('/_vercel') && 
+    !pathname.includes('.');
+
+  if (pathnameIsMissingLocale) {
+    // 重写 URL，在内部添加 /en 前缀
+    // 例如: /blog -> /en/blog
+    // console.log(`Rewriting ${pathname} to /${defaultLocale}${pathname}`); // 调试信息 (可选)
+    return NextResponse.rewrite(
+      new URL(`/${defaultLocale}${pathname}`, request.url)
+    );
   }
-  
-  // 对于其他路径，使用next-intl的中间件处理
+
+  // 对于其他路径 (已经是 /en/... 或 API 等)，让 next-intl 处理
+  // 注意：由于上面的重写，这里接收到的请求路径理论上都应该有 /en 前缀了
   return intlMiddleware(request);
 }
 
-// 配置匹配器
+// 配置匹配器 (保持不变)
 export const config = {
-  // 匹配所有路径，除了这些路径
   matcher: ['/((?!api|_next|_vercel|.*\\..*).*)', '/']
-}; 
+};
