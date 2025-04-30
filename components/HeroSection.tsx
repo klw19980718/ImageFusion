@@ -136,9 +136,11 @@ export default function HeroSection() {
   };
 
   useEffect(() => {
-    loadDefaultExample();
-
-    // 组件卸载时清理定时器
+    // 只有当用户未上传图片时，才在选择风格后加载默认图
+    if (!isUserUploadedSource) {
+      loadDefaultExample();
+    }
+    // 清理逻辑保持不变
     return () => {
       stopGenerationProcess();
     };
