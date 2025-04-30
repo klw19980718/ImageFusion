@@ -464,7 +464,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-[url('/bg-pattern.svg')] bg-center opacity-20"></div>
 
         <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-7xl">
-          <div className="text-center mb-16 max-w-4xl mx-auto">
+          <div className="text-center mb-16 max-w-6xl mx-auto">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5">
               {t("title")}
             </h1>
@@ -606,11 +606,8 @@ export default function HeroSection() {
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className={`w-full border-zinc-600 ${
-                          !isPromptMode && !customStyleImage
-                            ? "bg-zinc-700 text-yellow-500"
-                            : "text-white hover:bg-zinc-700"
-                        } flex items-center justify-center gap-2 rounded-md`}
+                        className={`w-full border-zinc-600 ${!isPromptMode && !customStyleImage ? "bg-zinc-700 text-yellow-500" : "text-white hover:bg-zinc-700"
+                          } flex items-center justify-center gap-2 rounded-md`}
                         onClick={disablePromptMode}
                       >
                         <ImageIcon className="h-4 w-4" />
@@ -618,13 +615,12 @@ export default function HeroSection() {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent
-                      className="w-96 p-4 bg-zinc-800 border border-zinc-600"
-                      style={{ width: "420px", maxWidth: "90vw" }}
+                      className="w-96 md:w-[580px] max-w-[90vw] p-4 bg-zinc-800 border border-zinc-600"
                     >
                       <h3 className="text-white text-sm font-medium mb-3">
                         {t("selectStyle")}
                       </h3>
-                      <div className="grid grid-cols-3 gap-3 max-h-[400px] overflow-y-auto pr-1">
+                      <div className="grid grid-cols-4 gap-3 max-h-[400px] overflow-y-auto pr-1">
                         {imgFusionTemplates.map((style, index) => (
                           <div
                             key={index}
@@ -653,11 +649,8 @@ export default function HeroSection() {
                   {/* 上传风格图片按钮 */}
                   <Button
                     variant="outline"
-                    className={`w-full border-zinc-600 ${
-                      customStyleImage
-                        ? "bg-zinc-700 text-yellow-500"
-                        : "text-white hover:bg-zinc-700"
-                    } flex items-center justify-center gap-2 rounded-md`}
+                    className={`w-full border-zinc-600 ${customStyleImage ? "bg-zinc-700 text-yellow-500" : "text-white hover:bg-zinc-700"
+                      } flex items-center justify-center gap-2 rounded-md`}
                     onClick={handleStyleUploadClick}
                   >
                     <Upload className="h-4 w-4" />
