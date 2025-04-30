@@ -22,4 +22,4 @@ Disallow: /api/
 Disallow: /_next/
 
 # Point to the correct sitemap
-Sitemap: https://www.imagefusion.com/sitemap.xml 
+Sitemap: www.imagefusionai.com/sitemap.xml 

@@ -12,7 +12,7 @@ const baloo = Baloo_2({ subsets: ['latin'], variable: '--font-baloo', weight: ['
 const nunito = Nunito({ subsets: ['latin'], variable: '--font-nunito', weight: ['200', '300', '400', '500', '600', '700', '800', '900'] });
 
 // 定义元数据
-const BASE_URL = 'https://www.imagefusion.com'; // 使用固定值
+const BASE_URL = 'www.imagefusionai.com'; // 使用固定值
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

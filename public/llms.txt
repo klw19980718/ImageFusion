@@ -4,19 +4,19 @@ ImageFusion
 > AI Image Fusion Tool | Free Online Photo Combiner & Enhancer. Combine images online effortlessly using AI to merge photos, enhance detail, and create seamless results.
 
 ## Core Content
-- [AI Image Fusion Tool Features](https://www.imagefusion.com/en#features)
-- [Online Image Fusion Examples](https://www.imagefusion.com/en#showcase)
-- [AI Photo Fusion Pricing](https://www.imagefusion.com/en#pricing)
-- [AI Image Fusion Blog](https://www.imagefusion.com/en/blog)
-- [Combine Images FAQ](https://www.imagefusion.com/en#faq)
+- [AI Image Fusion Tool Features](www.imagefusionai.com/en#features)
+- [Online Image Fusion Examples](www.imagefusionai.com/en#showcase)
+- [AI Photo Fusion Pricing](www.imagefusionai.com/en#pricing)
+- [AI Image Fusion Blog](www.imagefusionai.com/en/blog)
+- [Combine Images FAQ](www.imagefusionai.com/en#faq)
 
 ## Important Pages
-- [Homepage - AI Image Combiner](https://www.imagefusion.com/en)
-- [Terms of Service](https://www.imagefusion.com/en/terms)
-- [Privacy Policy](https://www.imagefusion.com/en/privacy)
+- [Homepage - AI Image Combiner](www.imagefusionai.com/en)
+- [Terms of Service](www.imagefusionai.com/en/terms)
+- [Privacy Policy](www.imagefusionai.com/en/privacy)
 
 ## Latest Updates (Blog)
 # Note: Replace with actual latest blog post URLs if possible
-- [How to Take Perfect Photos for AI Image Fusion](https://www.imagefusion.com/en/blog/how-to-take-perfect-polaroid-style-photos)
-- [New AI Image Fusion Effects: Enhanced Depth & Realism](https://www.imagefusion.com/en/blog/new-feature-3d-effect-enhancement)
-- [Faster AI Image Fusion: Performance Optimization Update](https://www.imagefusion.com/en/blog/performance-optimization-update-faster-processing) 
+- [How to Take Perfect Photos for AI Image Fusion](www.imagefusionai.com/en/blog/how-to-take-perfect-polaroid-style-photos)
+- [New AI Image Fusion Effects: Enhanced Depth & Realism](www.imagefusionai.com/en/blog/new-feature-3d-effect-enhancement)
+- [Faster AI Image Fusion: Performance Optimization Update](www.imagefusionai.com/en/blog/performance-optimization-update-faster-processing) 

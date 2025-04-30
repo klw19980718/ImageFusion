@@ -3,7 +3,7 @@ import ClerkProviderWithLocale from '../../components/auth/clerk-provider';
 import type { Metadata } from 'next';
 
 // 使用固定值，与 app/layout.tsx 保持一致
-const BASE_URL = 'https://www.imagefusion.com'; 
+const BASE_URL = 'www.imagefusionai.com'; 
 
 export function generateStaticParams() {
   return [{ locale: 'en' }];
