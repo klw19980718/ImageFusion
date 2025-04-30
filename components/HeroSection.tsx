@@ -189,6 +189,7 @@ export default function HeroSection() {
   const selectStyle = (index: number) => {
     setSelectedStyleIndex(index);
     setIsPromptMode(false);
+    setCustomStyleImage(null);
     setResultImage(null);
     setStylePopoverOpen(false);
   };
