@@ -2,12 +2,12 @@
 
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+// import { useParams } from 'next/navigation'; // No longer needed
 
 export function Footer() {
   const t = useTranslations('footer');
-  const params = useParams();
-  const currentLocale = params.locale as string || 'zh';
+  // const params = useParams(); // No longer needed
+  // const currentLocale = params.locale as string || 'zh'; // No longer needed
   
   return (
     <footer className="bg-background border-t border-muted py-12">
@@ -15,8 +15,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Copyright */}
           <div className="md:col-span-1">
-            <Link href={`/${currentLocale}`} className="flex items-center space-x-2 mb-4">
-              <span className="text-2xl font-bold text-primary">
+            <Link href="/" className="flex items-center space-x-2 mb-4">
+              {/* Consider applying the same font as Navbar Logo if desired */}
+              <span className="text-2xl font-bold text-primary font-baloo" style={{ fontFamily: 'var(--font-baloo)' }} >
                 ImageFusion
               </span>
             </Link>
@@ -33,7 +34,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link 
-                  href={`/${currentLocale}`}
+                  href="/"
                   className="text-muted-foreground hover:text-primary transition-standard text-sm"
                 >
                   {t('home')}
@@ -41,7 +42,7 @@ export function Footer() {
               </li>
               <li>
                 <Link 
-                  href={`/${currentLocale}/blog`}
+                  href="/blog"
                   className="text-muted-foreground hover:text-primary transition-standard text-sm"
                 >
                   {t('blog')}
@@ -49,7 +50,7 @@ export function Footer() {
               </li>
               <li>
                 <Link 
-                  href={`/${currentLocale}/#pricing`}
+                  href="/#pricing" // Keep hash for section link
                   className="text-muted-foreground hover:text-primary transition-standard text-sm"
                 >
                   {t('pricing')}
@@ -66,7 +67,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link 
-                  href={`/${currentLocale}/terms`}
+                  href="/terms"
                   className="text-muted-foreground hover:text-primary transition-standard text-sm"
                 >
                   {t('terms')}
@@ -74,7 +75,7 @@ export function Footer() {
               </li>
               <li>
                 <Link 
-                  href={`/${currentLocale}/privacy`}
+                  href="/privacy"
                   className="text-muted-foreground hover:text-primary transition-standard text-sm"
                 >
                   {t('privacy')}

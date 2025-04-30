@@ -23,8 +23,8 @@ export function Navbar() {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
-  // 检查是否在首页
-  const isHomePage = pathname === '/en';
+  // 检查是否在首页 (现在是根路径)
+  const isHomePage = pathname === '/';
 
   // 平滑滚动到指定ID
   const scrollToSection = (id: string) => {
@@ -45,19 +45,23 @@ export function Navbar() {
   const renderNavLinks = (isMobile = false) => {
     const navItems = [
       { id: 'features', label: t('features'), section: true },
-      { id: 'showcase', label: t('examples'), section: true },
+      // 使用 "useCases" 作为 key, 对应翻译文件中的 "Use Cases"
+      { id: 'showcase', label: t('useCases'), section: true }, 
       { id: 'testimonials', label: t('reviews'), section: true },
       { id: 'pricing', label: t('pricing'), section: true },
       { id: 'faq', label: t('faq'), section: true },
-      { id: 'blog', label: t('blog'), href: '/en/blog' },
+      // 移除了 /en 前缀
+      { id: 'blog', label: t('blog'), href: '/blog' }, 
     ];
 
     return (
       <>
         <Link
-          href="/en"
+          // 移除了 /en 前缀
+          href="/"
           className={`block w-full text-left rounded-md ${
-            pathname === '/en' ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'
+            // 移除了 /en 前缀
+            pathname === '/' ? 'text-primary font-semibold' : 'text-foreground hover:text-primary transition-standard'
           } ${isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 whitespace-nowrap'}`}
           onClick={() => setIsMobileMenuOpen(false)}
         >
@@ -79,7 +83,8 @@ export function Navbar() {
             ) : (
               <Link
                 key={item.id}
-                href={`/en#${item.id}`}
+                // 移除了 /en 前缀
+                href={`/#${item.id}`} 
                 className={`block w-full text-left rounded-md text-foreground hover:text-primary transition-standard ${
                   isMobile ? 'px-4 py-3 text-base' : 'px-4 py-2 whitespace-nowrap'
                 }`}
@@ -107,10 +112,15 @@ export function Navbar() {
   return (
     <nav className="py-4 px-6 bg-background border-b border-muted shadow-custom sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Left: Logo */}
+        {/* Left: Logo */} 
         <div className="flex-shrink-0">
-          <Link href="/en" className="flex items-center space-x-2" onClick={() => setIsMobileMenuOpen(false)}>
-            <span className="text-2xl font-bold text-primary">
+          {/* 移除了 /en 前缀 */}
+          <Link href="/" className="flex items-center space-x-2" onClick={() => setIsMobileMenuOpen(false)}>
+            {/* 应用了 Baloo 2 字体 (通过 style) */}
+            <span 
+              className="text-2xl font-bold text-primary" 
+              style={{ fontFamily: 'var(--font-baloo)' }}
+            >
               ImageFusion
             </span>
           </Link>
@@ -125,13 +135,15 @@ export function Navbar() {
         
         {/* Right Section */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          {/* Desktop: Auth Button */}
+          {/* Desktop: Auth Button */} 
           <div className="hidden lg:flex items-center">
+            {/* AuthButton 本身需要修改才能应用按钮样式 */}
             <AuthButton />
           </div>
 
           {/* Mobile: Auth Button + Menu Trigger */}
           <div className="flex lg:hidden items-center gap-2">
+            {/* AuthButton 本身需要修改才能应用按钮样式 */}
             <AuthButton />
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>

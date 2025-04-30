@@ -36,7 +36,7 @@ export default function DemoSection() {
                   />
                 </div> */}
               </div>
-              
+
               {/* 合成结果 */}
               <div className="relative">
                 <img
@@ -48,7 +48,7 @@ export default function DemoSection() {
                   <span>{t('generate')}</span>
                 </div> */}
               </div>
-              
+
               {/* 箭头 */}
               {/* <div className="absolute -left-10 top-1/2 -translate-y-1/2">
                 <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -65,65 +65,52 @@ export default function DemoSection() {
           </div>
         </div>
 
-        {/* 第二个示例：产品品牌 */}
-        <div className="mb-32 flex flex-col-reverse md:flex-row items-center gap-12">
+        {/* 第二个示例：个人形象提升 (原产品品牌) */}
+        <div className="mb-32 flex flex-col md:flex-row items-center gap-12">
+          {/* 文字容器 */}
           <div className="md:w-1/2 text-white">
             <h3 className="text-2xl md:text-3xl font-bold mb-6">{t('productBranding.title')}</h3>
             <p className="text-gray-300 leading-relaxed">
               {t('productBranding.description')}
             </p>
           </div>
+          {/* 图片容器 (替换原有三张图片布局) */}
           <div className="md:w-1/2 relative">
-            {/* 产品图片布局 - 保留 gap 并调整宽度 */}
-            <div className="flex gap-4">
-              {/* 第一组图片 */}
-              <div className="flex-shrink-0" style={{ width: 'calc((100% - 2rem) / 3)' }}>
-                <img 
-                  src="/images/templates/Magical Princess/source.jpg" 
-                  alt={`Source image for ${t('productBranding.title')}`}
-                  className="w-full h-[350px] rounded-lg object-cover"
-                />
-              </div>
-              
-              {/* 第二组图片 (中间组带加号) */}
-              <div className="flex-shrink-0 relative" style={{ width: 'calc((100% - 2rem) / 3)' }}>
-                <img 
-                  src="/images/templates/Magical Princess/style.jpg" 
-                  alt={`Style image for ${t('productBranding.title')}`}
-                  className="w-full h-[350px] rounded-lg object-cover"
-                />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#00b894] text-black p-2 rounded-full font-medium shadow-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
-                </div>
-              </div>
-              
-              {/* 第三组图片 */}
-              <div className="flex-shrink-0" style={{ width: 'calc((100% - 2rem) / 3)' }}>
-                <img 
-                  src="/images/templates/Magical Princess/result.jpg" 
-                  alt={`Result image from AI Image Fusion - ${t('productBranding.title')}`}
-                  className="w-full h-[350px] rounded-lg object-cover"
-                />
-              </div>
-            </div>
+            <img
+              src="/person.webp"
+              alt={t('productBranding.title')}
+              className="w-full rounded-lg shadow-lg object-cover max-h-[600px]"
+            />
           </div>
+
         </div>
 
-        {/* 第三个示例：肖像增强 */}
         <div className="mb-24 flex flex-col md:flex-row items-center gap-12">
-          <div className="md:w-1/2 relative">
-            <div className="relative">
-              {/* 原始照片 */}
-              <div className="absolute top-10 left-0 z-10 w-48 h-48">
+          {/* 图片容器 - 响应式处理 */}
+          <div className="w-full md:w-1/2 relative">
+            {/* --- 桌面端布局 (md 及以上) --- */}
+            <div className="hidden md:block">
+              {/* 结果照片 - 居中 */}
+              <div className="relative w-full max-w-md mx-auto">
+                <img
+                  src="/images/templates/Future Vivid Fashion/result.jpg"
+                  alt={`Result of AI Photo Enhancement - ${t('portraitEnhancement.title')}`}
+                  className="block w-full rounded-lg shadow-lg object-cover"
+                />
+                <div className="absolute bottom-5 left-5 bg-[#00b894] text-black px-5 py-2 rounded-full font-medium shadow-lg z-10">
+                  <span>{t('generate')}</span>
+                </div>
+              </div>
+              {/* 原始照片 - 绝对定位左上角 */}
+              <div className="absolute top-4 left-4 z-10 w-40 h-40">
                 <img
                   src="/images/templates/Future Vivid Fashion/source.jpg"
                   alt={`Source portrait for ${t('portraitEnhancement.title')}`}
                   className="w-full h-full rounded-lg shadow-lg object-cover border-4 border-white"
                 />
               </div>
-              
-              {/* 风格照片 */}
-              <div className="absolute top-5 right-5 z-10 w-32 h-32">
+              {/* 风格照片 - 绝对定位在原始照片下方 */}
+              <div className="absolute top-[11.5rem] left-4 z-10 w-40 h-40">
                 <img
                   src="/images/templates/Future Vivid Fashion/style.jpg"
                   alt={`Style image for ${t('portraitEnhancement.title')}`}
@@ -133,21 +120,48 @@ export default function DemoSection() {
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
                 </div>
               </div>
-              
-              {/* 结果照片 */}
-              <div className="mt-16 ml-20 relative">
+            </div>
+            {/* --- END 桌面端布局 --- */}
+
+            {/* --- 移动端布局 (md 以下) --- */}
+            <div className="md:hidden flex flex-col items-center gap-4">
+              {/* 结果照片 - 居中，限制宽度 */}
+              <div className="relative w-full max-w-xs mx-auto"> 
                 <img
                   src="/images/templates/Future Vivid Fashion/result.jpg"
                   alt={`Result of AI Photo Enhancement - ${t('portraitEnhancement.title')}`}
-                  className="w-full rounded-lg shadow-lg object-cover"
+                  className="block w-full rounded-lg shadow-lg object-cover"
                 />
-                <div className="absolute bottom-5 left-5 bg-[#00b894] text-black px-5 py-2 rounded-full font-medium shadow-lg">
+                <div className="absolute bottom-4 left-4 bg-[#00b894] text-black px-4 py-1 text-sm rounded-full font-medium shadow-lg z-10">
                   <span>{t('generate')}</span>
                 </div>
               </div>
+              {/* 原始和风格照片 - 水平排列，居中，缩小尺寸 */}
+              <div className="flex justify-center items-center gap-4 mt-4">
+                {/* 原始照片 */}
+                <img
+                  src="/images/templates/Future Vivid Fashion/source.jpg"
+                  alt={`Source portrait mobile`}
+                  className="w-24 h-24 rounded-lg shadow-lg object-cover border-2 border-white"
+                />
+                {/* 风格照片带加号 */}
+                <div className="relative w-24 h-24">
+                  <img
+                    src="/images/templates/Future Vivid Fashion/style.jpg"
+                    alt={`Style image mobile`}
+                    className="w-full h-full rounded-lg shadow-lg object-cover border-2 border-white"
+                  />
+                  <div className="absolute -top-2 -left-2 bg-[#00b894] text-black p-1 rounded-full font-medium shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+                  </div>
+                </div>
+              </div>
             </div>
+            {/* --- END 移动端布局 --- */}
           </div>
-          <div className="md:w-1/2 text-white">
+          
+          {/* 文字描述部分 - 添加移动端上边距 */}
+          <div className="w-full md:w-1/2 text-white mt-8 md:mt-0">
             <h3 className="text-2xl md:text-3xl font-bold mb-6">{t('portraitEnhancement.title')}</h3>
             <p className="text-gray-300 leading-relaxed">
               {t('portraitEnhancement.description')}

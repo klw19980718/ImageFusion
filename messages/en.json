@@ -3,6 +3,7 @@
     "home": "Home",
     "features": "Features",
     "examples": "Examples",
+    "useCases": "Use Cases",
     "reviews": "Reviews",
     "blog": "Blog",
     "pricing": "Pricing",
@@ -127,10 +128,11 @@
       "title": "Free AI Image Fusion",
       "price": "$0",
       "features": [
-        "10 free AI image fusions per month",
+        "10 free generation points for new users",
         "Standard generation speed for image combination",
         "Download generated images enabled"
-      ]
+      ],
+      "startGenerating": "Login to experience for free"
     },
     "premium": {
       "title": "Premium Image Fusion Tool",
@@ -274,8 +276,8 @@
       "description": "Use AI Image Fusion to blend portraits with abstract patterns or textures for striking artworks. Combine realistic features with abstract designs for depth and emotion."
     },
     "productBranding": {
-      "title": "Stylish Product Branding with AI Image Combiner",
-      "description": "Our AI image combiner blends elements for memorable images that stand out. Seamlessly combine textures, colors, and designs for compelling visuals."
+      "title": "Elevate Your Personal Image with AI",
+      "description": "Craft stunning profile pictures, avatars, or professional headshots. Our AI blends styles or enhances your photos, helping you create a compelling personal image that truly stands out."
     },
     "portraitEnhancement": {
       "title": "AI Photo Enhancer & Style Transfer Fusion",

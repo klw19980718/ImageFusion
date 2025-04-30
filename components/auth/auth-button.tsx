@@ -26,8 +26,7 @@ export default function AuthButton() {
 
   return (
     <Button
-      variant="ghost"
-      className="text-foreground hover:text-primary hover:bg-transparent p-0 h-auto"
+      className="bg-primary text-primary-foreground hover:bg-primary/90"
       onClick={() => openSignIn()}
     >
       {t('login')}

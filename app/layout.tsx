@@ -101,21 +101,22 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <PaymentStatusModal />
         </Suspense>
+
+        {/* Google Analytics 跟踪代码 - 使用用户提供的代码 */}
         <Script
-          strategy="afterInteractive"
+          async
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          strategy="afterInteractive"
         />
         <Script
-          id="google-analytics"
+          id="google-analytics-init"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', '${GA_TRACKING_ID}', {
-                page_path: window.location.pathname,
-              });
+              gtag('config', '${GA_TRACKING_ID}');
             `,
           }}
         />

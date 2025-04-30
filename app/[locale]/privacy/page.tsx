@@ -1,49 +1,58 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Footer } from '../../../components/Footer';
-import PageLayout from '../page-layout';
 
-export default function PrivacyPolicyPage() {
+export default function PrivacyPage() {
   const t = useTranslations('privacy');
 
-  // 内容块（方便维护）
+  // 定义需要渲染的隐私政策部分及其对应的翻译键
   const sections = [
-    { key: 'collectTitle', contentKey: 'collectContent' },
-    { key: 'collectAutoTitle', contentKey: 'collectAutoContent' },
-    { key: 'cookiesTitle', contentKey: 'cookiesContent' },
-    { key: 'paymentTitle', contentKey: 'paymentContent' },
-    { key: 'notCollectTitle', contentKey: 'notCollectContent' },
-    { key: 'howUseTitle', contentKey: 'howUseContent' },
-    { key: 'dataSecurityTitle', contentKey: 'dataSecurityContent' },
-    { key: 'changesTitle', contentKey: 'changesContent' },
+    { titleKey: 'collectTitle', contentKey: 'collectContent' },
+    { titleKey: 'collectAutoTitle', contentKey: 'collectAutoContent' },
+    { titleKey: 'cookiesTitle', contentKey: 'cookiesContent' },
+    { titleKey: 'paymentTitle', contentKey: 'paymentContent' },
+    { titleKey: 'notCollectTitle', contentKey: 'notCollectContent' },
+    { titleKey: 'howUseTitle', contentKey: 'howUseContent' },
+    { titleKey: 'dataSecurityTitle', contentKey: 'dataSecurityContent' },
+    { titleKey: 'changesTitle', contentKey: 'changesContent' },
   ];
 
   return (
-    <PageLayout>
-      <div className="min-h-screen flex flex-col bg-background">
-        <main className="flex-grow py-12 md:py-16 px-6">
-          <div className="container mx-auto max-w-4xl">
-            <article className="prose prose-xl lg:prose-2xl max-w-none dark:prose-invert bg-white p-8 md:p-12 rounded-2xl shadow-custom">
-              <h1 className="text-center font-fredoka font-bold text-primary text-3xl md:text-4xl mb-4">{t('title')}</h1>
-              <p className="text-center text-base text-muted-foreground mb-10">{t('effectiveDate')}</p>
-              <p className="lead text-lg md:text-xl mb-8">{t('introduction')}</p>
-              
-              {sections.map((section) => (
-                <section key={section.key} className="mt-10">
-                  <h2 className="font-baloo font-semibold text-2xl md:text-3xl">{t(section.key)}</h2>
-                  <div className="text-base md:text-lg text-muted-foreground space-y-4">
-                    {t(section.contentKey).split('\n').map((paragraph, index) => (
-                      paragraph.trim() && <p key={index}>{paragraph}</p>
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </article>
-          </div>
-        </main>
-        <Footer />
+    // 主容器，设置背景和内边距
+    <main className="flex-grow py-16 px-6 bg-black text-white">
+      <div className="container mx-auto max-w-4xl"> {/* 限制最大宽度 */} 
+        {/* 内容卡片 */}
+        <div className="bg-gray-900 rounded-2xl p-8 md:p-12 border border-[#FFD700]/20 shadow-lg">
+          {/* 主标题 */}
+          <h1 className="text-3xl md:text-4xl font-bold text-center mb-4 text-[#FFD700]">
+            {t('title')}
+          </h1>
+          {/* 生效日期 */}
+          <p className="text-center text-sm text-gray-400 mb-10">
+            {t('effectiveDate')}
+          </p>
+          
+          {/* 引言段落 */}
+          <p className="mb-10 text-gray-300 leading-relaxed">
+            {t('introduction')}
+          </p>
+
+          {/* 循环渲染各个隐私政策部分 */}
+          {sections.map((section, index) => (
+            <section key={index} className="mb-8">
+              {/* 章节标题 */}
+              <h2 className="text-xl md:text-2xl font-semibold mb-3 text-gray-100">
+                {/* 注意：隐私政策的标题通常不带序号 */}
+                {t(section.titleKey as any)} 
+              </h2>
+              {/* 章节内容 - 使用 whitespace-pre-line 保留换行 */}
+              <p className="text-gray-400 leading-relaxed whitespace-pre-line">
+                {t(section.contentKey as any)}
+              </p>
+            </section>
+          ))}
+        </div>
       </div>
-    </PageLayout>
+    </main>
   );
 } 

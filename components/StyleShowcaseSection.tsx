@@ -18,7 +18,7 @@ export default function StyleShowcaseSection() {
           {imgFusionTemplates.slice(0, 4).map((template, index) => (
             <div 
               key={index} 
-              className="relative h-[400px] rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              className="relative h-[500px] rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
               {/* 结果图 - 填充整个卡片 */}
               <div className="absolute inset-0 w-full h-full">

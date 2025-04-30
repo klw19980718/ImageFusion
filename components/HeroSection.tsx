@@ -464,7 +464,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-[url('/bg-pattern.svg')] bg-center opacity-20"></div>
 
         <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-7xl">
-          <div className="text-center mb-16 max-w-3xl mx-auto">
+          <div className="text-center mb-16 max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5">
               {t("title")}
             </h1>
@@ -473,7 +473,7 @@ export default function HeroSection() {
             </p>
           </div>
 
-          <div className="max-w-6xl mx-auto">
+          <div className="mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-8">
               {/* Source区域 */}
               <div className="md:col-span-3">
@@ -481,16 +481,16 @@ export default function HeroSection() {
                   {t("sourceLabel")}
                 </h2>
                 <div className="bg-zinc-800 p-4 md:p-5 rounded-lg shadow-lg border border-zinc-700 mb-4 flex flex-col">
-                  {/* 当前源图预览 */}
-                  <div className="aspect-[3/4] relative overflow-hidden rounded-lg border border-zinc-600">
+                  {/* 统一增加最小高度 */}
+                  <div className="aspect-[3/4] min-h-[400px] relative overflow-hidden rounded-lg border border-zinc-600">
                     {!sourceImage ? (
                       <div
-                        className="flex flex-col items-center justify-center h-full cursor-pointer"
+                        className="flex flex-col items-center justify-center h-full cursor-pointer p-4"
                         onClick={handleUploadClick}
                         onDragOver={handleDragOver}
                         onDrop={handleDrop}
                       >
-                        <Upload className="h-10 w-10 text-yellow-500 mb-4" />
+                        <Upload className="h-12 w-12 text-yellow-500 mb-4" /> 
                         <p className="text-lg text-white text-center">
                           {t("dragDropText")}
                         </p>
@@ -547,15 +547,14 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {/* Style区域 - 简化版 */}
-              <div className="md:col-span-3">
+              {/* Style区域 */}
+              <div className="md:col-span-4">
                 <h2 className="text-2xl font-semibold text-white mb-4">
                   {t("styleLabel")}
                 </h2>
-
                 <div className="bg-zinc-800 p-4 md:p-5 rounded-lg shadow-lg border border-zinc-700 mb-4 flex flex-col">
-                  {/* 当前选中的风格预览或提示词展示 */}
-                  <div className="aspect-[3/4] relative overflow-hidden rounded-lg border border-zinc-600">
+                  {/* 统一增加最小高度 */}
+                  <div className="aspect-[3/4] min-h-[400px] relative overflow-hidden rounded-lg border border-zinc-600">
                     {isPromptMode ? (
                       <div className="h-full w-full flex items-center justify-center bg-zinc-700 rounded-lg p-1">
                         <Textarea
@@ -720,7 +719,8 @@ export default function HeroSection() {
                   {t("resultLabel")}
                 </h2>
                 <div className="bg-zinc-800 p-4 md:p-5 rounded-lg shadow-lg border border-zinc-700 mb-4 flex flex-col">
-                  <div className="aspect-[3/4] relative overflow-hidden rounded-lg border border-zinc-600 flex flex-col items-center justify-center">
+                  {/* 统一增加最小高度 */}
+                  <div className="aspect-[3/4] min-h-[400px] relative overflow-hidden rounded-lg border border-zinc-600 flex flex-col items-center justify-center">
                     {isGenerating ? (
                       <div className="flex flex-col items-center justify-center h-full w-full p-6">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500 mb-4"></div>

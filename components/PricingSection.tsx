@@ -15,6 +15,19 @@ export default function PricingSection() {
   const { user, isSignedIn } = useUser();
   const { openSignIn } = useClerk();
 
+  // 处理 Basic 计划按钮点击
+  const handleBasicClick = () => {
+    if (!isSignedIn) {
+      openSignIn();
+    } else {
+      // 滚动到 Hero Section (假设其 id="hero")
+      const heroSection = document.getElementById('hero'); 
+      if (heroSection) {
+        heroSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
   // 处理点击升级按钮的异步函数
   const handleUpgradeClick = async (priceId: string, planKey: string) => {
     // 1. 检查用户是否登录
@@ -112,7 +125,7 @@ export default function PricingSection() {
               return null;
             }
             const features = planDetails.features as string[];
-            const isBasic = plan.key === "basic"; // 检查是否是 Basic 计划
+            const isBasic = plan.key === "basic";
 
             return (
               <div
@@ -150,20 +163,20 @@ export default function PricingSection() {
                   )}
                 </div>
 
-                {/* 始终显示按钮，但 basic 是禁用状态 */}
+                {/* 修改按钮逻辑 */}
                 <Button
                   className={cn(
                     "w-full mb-6 transition-standard",
                     plan.popular
-                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                      : isBasic
-                      ? "bg-muted text-muted-foreground cursor-not-allowed" // Basic 禁用样式
-                      : "bg-card text-foreground hover:bg-muted border border-primary"
+                      ? "bg-primary text-primary-foreground hover:bg-primary/90" // Popular 样式
+                      : "bg-card text-foreground hover:bg-muted border border-primary" // 其他计划（包括 Basic）的样式
                   )}
-                  onClick={() =>
-                    !isBasic && handleUpgradeClick(plan.priceId, plan.key)
-                  } // Basic 不触发 onClick
-                  disabled={loadingPlan === plan.key || isBasic} // Basic 计划始终禁用
+                  onClick={ 
+                    isBasic 
+                      ? handleBasicClick // Basic 计划调用新函数
+                      : () => handleUpgradeClick(plan.priceId, plan.key) // 其他计划调用升级函数
+                  }
+                  disabled={loadingPlan === plan.key} // 移除 isBasic 的禁用条件
                 >
                   {loadingPlan === plan.key ? (
                     <span className="flex items-center">
@@ -171,13 +184,12 @@ export default function PricingSection() {
                       {t("loading")}
                     </span>
                   ) : isBasic ? (
-                    t("currentPlanText")
+                    t("basic.startGenerating") // 使用新的翻译键
                   ) : (
                     t("upgradePlan")
                   )}
                 </Button>
-                {/* 移除了 Basic 计划的占位符 div */}
-
+                
                 <div className="flex-grow border-t border-muted/30 pt-6">
                   <ul className="space-y-4">
                     {Array.isArray(features) &&

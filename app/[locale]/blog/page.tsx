@@ -18,9 +18,6 @@ export default function Blog() {
     ? allPostsMeta 
     : allPostsMeta.filter(post => post.category === activeCategory);
   
-  // 获取当前语言环境 (在客户端组件中获取)
-  const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : 'zh';
-
   return (
     <main className="flex-grow py-16 px-6 bg-black text-white">
       <div className="container mx-auto">
@@ -83,7 +80,7 @@ export default function Blog() {
             <div className="space-y-6">
               {filteredPostsMeta.map(post => (
                 <Link 
-                  href={`/${locale}/blog/${post.slug}`} 
+                  href={`/blog/${post.slug}`}
                   key={post.id}
                   className="block bg-gray-900 rounded-2xl p-6 border border-[#FFD700]/20 shadow-lg hover:shadow-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all"
                 >

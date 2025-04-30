@@ -141,7 +141,7 @@
 @layer base {
   html {
     scroll-behavior: smooth; /* 添加平滑滚动 */
-    font-family: 'Poppins', sans-serif; /* 设置全局默认字体 */
+    /* font-family: 'Poppins', sans-serif; */ /* 移除此行，让 Tailwind 控制 */
   }
 
   * {
@@ -149,10 +149,12 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* font-family: 'Poppins', sans-serif; */ /* 移除此行 */
   }
   
   /* 基于规范设置标题样式 */
   h1, .h1 {
+    /* 可以考虑也移除这里的 Poppins, 或者保留作为标题专用 */
     font-family: 'Poppins', sans-serif;
     font-size: 48px;
     font-weight: 700;

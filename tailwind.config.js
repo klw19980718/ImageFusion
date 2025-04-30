@@ -18,6 +18,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
+        sans: ['var(--font-inter)', 'sans-serif'],
         playfair: ['var(--font-playfair)'],
         inter: ['var(--font-inter)'],
         fredoka: ['var(--font-fredoka)'],
