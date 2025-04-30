@@ -460,7 +460,7 @@ export default function HeroSection() {
 
   return (
     <>
-      <section className="pt-24 pb-20 md:pt-28 md:pb-28 bg-gradient-to-b from-black to-zinc-900 relative overflow-hidden">
+      <section id="hero" className="pt-24 pb-20 md:pt-28 md:pb-28 bg-gradient-to-b from-black to-zinc-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/bg-pattern.svg')] bg-center opacity-20"></div>
 
         <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-7xl">
