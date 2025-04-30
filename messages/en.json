@@ -362,7 +362,7 @@
     "chooseFile": "Choose Files",
     "dragDropText": "Drag & Drop or click to upload source & style images",
     "tryExamples": "Try Fusion Examples",
-    "generateButton": "try again",
+    "generateButton": "fast Generate",
     "generatingText": "Generating Fusion...",
     "supportedFormats": "Supports: JPG, PNG, GIF, WebP, BMP (Max 50MB)",
     "maxFileSize": "",
