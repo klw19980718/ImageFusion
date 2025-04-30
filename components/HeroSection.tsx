@@ -13,6 +13,16 @@ import { useAuth, useClerk, useUser } from "@clerk/nextjs";
 import { Progress } from "./ui/progress";
 import { apiConfig } from "@/app/config/api";
 
+// --- localStorage Key ---
+const CACHED_SOURCE_IMAGE_KEY = "cachedSourceImage";
+
+// --- Helper function to convert Base64 back to File ---
+async function base64ToFile(dataUrl: string, filename: string, type: string): Promise<File> {
+  const res = await fetch(dataUrl);
+  const blob = await res.blob();
+  return new File([blob], filename, { type });
+}
+
 // 下载图片函数
 async function downloadImageWithCors(
   imageUrl: string,
@@ -108,6 +118,7 @@ export default function HeroSection() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [customStyleImage, setCustomStyleImage] = useState<File | null>(null);
   const [isUserUploadedSource, setIsUserUploadedSource] = useState(false);
+  const [isLoadingCache, setIsLoadingCache] = useState(true); // State to track cache loading
 
   // 添加生成和下载相关状态
   const [generationProgress, setGenerationProgress] = useState(0);
@@ -135,38 +146,99 @@ export default function HeroSection() {
     setGenerationProgress(0);
   };
 
+  // --- Effect for Initial Load (Cache or Default) ---
   useEffect(() => {
-    // 只有当用户未上传图片时，才在选择风格后加载默认图
-    if (!isUserUploadedSource) {
-      loadDefaultExample();
-    }
-    // 清理逻辑保持不变
+    let isMounted = true; // Flag to prevent state update on unmounted component
+    setIsLoadingCache(true);
+
+    const loadInitialSource = async () => {
+      try {
+        const cachedImageData = localStorage.getItem(CACHED_SOURCE_IMAGE_KEY);
+        if (cachedImageData) {
+          console.log("Found cached image data.");
+          const { dataUrl, name, type } = JSON.parse(cachedImageData);
+          if (dataUrl && name && type) {
+            const file = await base64ToFile(dataUrl, name, type);
+            if (isMounted) {
+              setSourceImage(file);
+              setIsUserUploadedSource(true);
+              console.log("Loaded image from cache.");
+            }
+          } else {
+            console.warn("Cached image data is incomplete, falling back to default.");
+            localStorage.removeItem(CACHED_SOURCE_IMAGE_KEY); // Clear invalid cache
+            if (isMounted) loadDefaultExample();
+          }
+        } else {
+          console.log("No cached image found, loading default.");
+          if (isMounted) loadDefaultExample();
+        }
+      } catch (error) {
+        console.error("Error loading cached image:", error);
+        localStorage.removeItem(CACHED_SOURCE_IMAGE_KEY); // Clear potentially corrupted cache
+        if (isMounted) loadDefaultExample(); // Fallback to default on error
+      } finally {
+        if (isMounted) setIsLoadingCache(false);
+      }
+    };
+
+    loadInitialSource();
+
+    // Cleanup function
     return () => {
+      isMounted = false;
       stopGenerationProcess();
     };
-  }, [selectedStyleIndex]);
+  }, []); // Empty dependency array ensures this runs only once on mount
 
-  // 加载默认示例图片
+  // 加载默认示例图片 (Now only called as fallback)
   const loadDefaultExample = () => {
+    console.log("Loading default example image...");
     const defaultSourceImg = "/images/templates/Magical Princess/new_source.png";
     fetch(defaultSourceImg)
       .then((res) => res.blob())
       .then((blob) => {
-        const file = new File([blob], `example-source.jpg`, {
-          type: "image/jpeg",
-        });
+        const file = new File([blob], `default-example-source.jpg`, { type: "image/jpeg" });
+        // Check if component is still mounted before setting state
+        // This check might be redundant if called from the mount effect's final block, but good practice
         setSourceImage(file);
-        setIsUserUploadedSource(false);
+        setIsUserUploadedSource(false); 
+      }).catch(error => {
+        console.error("Failed to load default example image:", error);
+        // Handle error, maybe set sourceImage to null or show an error placeholder
       });
   };
 
-  // 处理文件选择
+  // --- Helper to Cache File --- 
+  const cacheSourceFile = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const dataUrl = e.target?.result as string;
+        const cacheData = JSON.stringify({ dataUrl, name: file.name, type: file.type });
+        localStorage.setItem(CACHED_SOURCE_IMAGE_KEY, cacheData);
+        console.log("Cached source image.");
+      } catch (error) {
+        console.error("Failed to cache source image:", error);
+        // Optionally inform the user or clear potentially corrupted cache
+        localStorage.removeItem(CACHED_SOURCE_IMAGE_KEY);
+      }
+    };
+    reader.onerror = (error) => {
+      console.error("FileReader error while caching:", error);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // 处理文件选择 (Add Caching)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      setSourceImage(files[0]);
+      const file = files[0];
+      setSourceImage(file);
       setIsUserUploadedSource(true);
       setResultImage(null);
+      cacheSourceFile(file); // Cache the uploaded file
     }
   };
 
@@ -178,13 +250,16 @@ export default function HeroSection() {
     e.preventDefault();
   };
 
+  // 处理文件拖放 (Add Caching)
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
-      setSourceImage(files[0]);
+      const file = files[0];
+      setSourceImage(file);
       setIsUserUploadedSource(true);
       setResultImage(null);
+      cacheSourceFile(file); // Cache the dropped file
     }
   };
 
@@ -459,6 +534,19 @@ export default function HeroSection() {
       };
     }
   }, [currentTaskId, isGenerating]);
+
+  // Display loading state while checking cache
+  if (isLoadingCache) {
+    return (
+      <section id="hero" className="pt-24 pb-20 md:pt-28 md:pb-28 bg-gradient-to-b from-black to-zinc-900 relative overflow-hidden min-h-[80vh] flex items-center justify-center">
+        <div className="absolute inset-0 bg-[url('/bg-pattern.svg')] bg-center opacity-20"></div>
+        <div className="text-center z-10">
+          <Loader2 className="h-12 w-12 text-yellow-500 animate-spin mx-auto mb-4" />
+          <p className="text-xl text-white">Loading...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>

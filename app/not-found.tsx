@@ -6,11 +6,11 @@ export default function NotFound() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-6">
       {/* 404 错误码 */}
       <h1 className="text-6xl font-bold text-[#FFD700] mb-4">404</h1>
-      {/* 页面未找到标题 */}
-      <h2 className="text-2xl font-semibold mb-8">Page Not Found</h2>
-      {/* 描述信息 */}
+      {/* 页面未找到标题 - 加入关键词 */}
+      <h2 className="text-2xl font-semibold mb-8">AI Image Fusion - Page Not Found</h2>
+      {/* 描述信息 - 加入关键词 */}
       <p className="text-lg text-gray-400 mb-10 text-center max-w-md">
-        Oops! The page you are looking for does not exist or has been moved.
+        Oops! The AI Image Fusion page you are looking for does not exist or has been moved.
       </p>
       {/* 返回首页按钮 */}
       <Link href="/">
