@@ -41,7 +41,7 @@ export default function DemoSection() {
               <div className="relative">
                 <img
                   src="/demo.webp"
-                  alt={t('conceptArt.title')}
+                  alt={t('conceptArt.title') + ' - Example of AI Image Fusion for combining images'}
                   className="w-full rounded-lg shadow-lg object-cover"
                 />
                 {/* <div className="absolute bottom-5 left-5 bg-[#00b894] text-black px-5 py-2 rounded-full font-medium shadow-lg">
@@ -78,7 +78,7 @@ export default function DemoSection() {
           <div className="md:w-1/2 relative">
             <img
               src="/person.webp"
-              alt={t('productBranding.title')}
+              alt={t('productBranding.title') + ' - Enhance Images with AI Photo Fusion'}
               className="w-full rounded-lg shadow-lg object-cover max-h-[600px]"
             />
           </div>
@@ -94,7 +94,7 @@ export default function DemoSection() {
               <div className="relative w-full max-w-md mx-auto">
                 <img
                   src="/images/templates/Future Vivid Fashion/result.jpg"
-                  alt={`Result of AI Photo Enhancement - ${t('portraitEnhancement.title')}`}
+                  alt={`AI Photo Fusion Result - Merged photo from AI Image Blender - ${t('portraitEnhancement.title')}`}
                   className="block w-full rounded-lg shadow-lg object-cover"
                 />
                 <div className="absolute bottom-5 left-5 bg-[#00b894] text-black px-5 py-2 rounded-full font-medium shadow-lg z-10">
@@ -105,7 +105,7 @@ export default function DemoSection() {
               <div className="absolute top-4 left-4 z-10 w-40 h-40">
                 <img
                   src="/images/templates/Future Vivid Fashion/source.jpg"
-                  alt={`Source portrait for ${t('portraitEnhancement.title')}`}
+                  alt={`Source portrait for AI Photo Enhancer - Input for Image Combiner`}
                   className="w-full h-full rounded-lg shadow-lg object-cover border-4 border-white"
                 />
               </div>
@@ -113,7 +113,7 @@ export default function DemoSection() {
               <div className="absolute top-[11.5rem] left-4 z-10 w-40 h-40">
                 <img
                   src="/images/templates/Future Vivid Fashion/style.jpg"
-                  alt={`Style image for ${t('portraitEnhancement.title')}`}
+                  alt={`Style image for AI Image Blender - Style Transfer Fusion`}
                   className="w-full h-full rounded-lg shadow-lg object-cover border-4 border-white"
                 />
                 <div className="absolute -top-3 -left-3 bg-[#00b894] text-black p-1 rounded-full font-medium shadow-lg">
@@ -129,7 +129,7 @@ export default function DemoSection() {
               <div className="relative w-full max-w-xs mx-auto"> 
                 <img
                   src="/images/templates/Future Vivid Fashion/result.jpg"
-                  alt={`Result of AI Photo Enhancement - ${t('portraitEnhancement.title')}`}
+                  alt={`Mobile AI Photo Fusion Result - Blend Pictures - ${t('portraitEnhancement.title')}`}
                   className="block w-full rounded-lg shadow-lg object-cover"
                 />
                 <div className="absolute bottom-4 left-4 bg-[#00b894] text-black px-4 py-1 text-sm rounded-full font-medium shadow-lg z-10">
@@ -141,14 +141,14 @@ export default function DemoSection() {
                 {/* 原始照片 */}
                 <img
                   src="/images/templates/Future Vivid Fashion/source.jpg"
-                  alt={`Source portrait mobile`}
+                  alt={`Mobile source image for AI Photo Enhancer`}
                   className="w-24 h-24 rounded-lg shadow-lg object-cover border-2 border-white"
                 />
                 {/* 风格照片带加号 */}
                 <div className="relative w-24 h-24">
                   <img
                     src="/images/templates/Future Vivid Fashion/style.jpg"
-                    alt={`Style image mobile`}
+                    alt={`Mobile style image for Image Combiner`}
                     className="w-full h-full rounded-lg shadow-lg object-cover border-2 border-white"
                   />
                   <div className="absolute -top-2 -left-2 bg-[#00b894] text-black p-1 rounded-full font-medium shadow-lg">

@@ -24,7 +24,7 @@ export default function StyleShowcaseSection() {
               <div className="absolute inset-0 w-full h-full">
                 <Image
                   src={template.demo.resultImageSrc}
-                  alt={template.name}
+                  alt={`${template.name} - AI Image Fusion Result - Online Image Fusion Example`}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                   className="object-cover transition-transform hover:scale-105 duration-500"
@@ -37,7 +37,7 @@ export default function StyleShowcaseSection() {
                 <div className="relative w-20 h-20 rounded-md overflow-hidden border border-white/60 shadow-lg">
                   <Image
                     src={template.demo.sourceImageSrc}
-                    alt={`${template.name} 原图`}
+                    alt={`Source for ${template.name} - Combine Images with AI Photo Fusion`}
                     fill
                     sizes="80px"
                     className="object-cover"
@@ -47,7 +47,7 @@ export default function StyleShowcaseSection() {
                 <div className="relative w-20 h-20 rounded-md overflow-hidden border border-white/60 shadow-lg">
                   <Image
                     src={template.imageSrc}
-                    alt={`${template.name} 风格`}
+                    alt={`Style for ${template.name} - AI Image Blender to Blend Pictures`}
                     fill
                     sizes="80px"
                     className="object-cover"
