@@ -11,7 +11,7 @@ export default function StyleShowcaseSection() {
     <div className="py-16 px-6 bg-[#051525] text-white scroll-mt-20" id="showcase">
       <div className="container mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 pt-4">
-          {t('styleShowcase.title', { defaultMessage: '风格展示' })}
+          {t('styleShowcase.title')}
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

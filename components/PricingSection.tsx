@@ -168,10 +168,10 @@ export default function PricingSection() {
                   {loadingPlan === plan.key ? (
                     <span className="flex items-center">
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {t("loading", { defaultMessage: "Processing..." })}
+                      {t("loading")}
                     </span>
                   ) : isBasic ? (
-                    t("currentPlanText", { defaultMessage: "Current Plan" })
+                    t("currentPlanText")
                   ) : (
                     t("upgradePlan")
                   )}

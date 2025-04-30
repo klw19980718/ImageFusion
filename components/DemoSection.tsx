@@ -41,7 +41,7 @@ export default function DemoSection() {
               <div className="relative">
                 <img
                   src="/demo.webp"
-                  alt="合成结果"
+                  alt={t('conceptArt.title')}
                   className="w-full rounded-lg shadow-lg object-cover"
                 />
                 {/* <div className="absolute bottom-5 left-5 bg-[#00b894] text-black px-5 py-2 rounded-full font-medium shadow-lg">
@@ -74,22 +74,22 @@ export default function DemoSection() {
             </p>
           </div>
           <div className="md:w-1/2 relative">
-            {/* 产品图片布局 */}
+            {/* 产品图片布局 - 保留 gap 并调整宽度 */}
             <div className="flex gap-4">
               {/* 第一组图片 */}
-              <div className="flex-shrink-0 w-1/3">
+              <div className="flex-shrink-0" style={{ width: 'calc((100% - 2rem) / 3)' }}>
                 <img 
                   src="/images/templates/Magical Princess/source.jpg" 
-                  alt="产品组1"
+                  alt={`Source image for ${t('productBranding.title')}`}
                   className="w-full h-[350px] rounded-lg object-cover"
                 />
               </div>
               
               {/* 第二组图片 (中间组带加号) */}
-              <div className="flex-shrink-0 w-1/3 relative">
+              <div className="flex-shrink-0 relative" style={{ width: 'calc((100% - 2rem) / 3)' }}>
                 <img 
                   src="/images/templates/Magical Princess/style.jpg" 
-                  alt="产品组2"
+                  alt={`Style image for ${t('productBranding.title')}`}
                   className="w-full h-[350px] rounded-lg object-cover"
                 />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#00b894] text-black p-2 rounded-full font-medium shadow-lg">
@@ -98,10 +98,10 @@ export default function DemoSection() {
               </div>
               
               {/* 第三组图片 */}
-              <div className="flex-shrink-0 w-1/3">
+              <div className="flex-shrink-0" style={{ width: 'calc((100% - 2rem) / 3)' }}>
                 <img 
                   src="/images/templates/Magical Princess/result.jpg" 
-                  alt="产品组3"
+                  alt={`Result image from AI Image Fusion - ${t('productBranding.title')}`}
                   className="w-full h-[350px] rounded-lg object-cover"
                 />
               </div>
@@ -117,7 +117,7 @@ export default function DemoSection() {
               <div className="absolute top-10 left-0 z-10 w-48 h-48">
                 <img
                   src="/images/templates/Future Vivid Fashion/source.jpg"
-                  alt="原始照片"
+                  alt={`Source portrait for ${t('portraitEnhancement.title')}`}
                   className="w-full h-full rounded-lg shadow-lg object-cover border-4 border-white"
                 />
               </div>
@@ -126,7 +126,7 @@ export default function DemoSection() {
               <div className="absolute top-5 right-5 z-10 w-32 h-32">
                 <img
                   src="/images/templates/Future Vivid Fashion/style.jpg"
-                  alt="风格照片"
+                  alt={`Style image for ${t('portraitEnhancement.title')}`}
                   className="w-full h-full rounded-lg shadow-lg object-cover border-4 border-white"
                 />
                 <div className="absolute -top-3 -left-3 bg-[#00b894] text-black p-1 rounded-full font-medium shadow-lg">
@@ -138,7 +138,7 @@ export default function DemoSection() {
               <div className="mt-16 ml-20 relative">
                 <img
                   src="/images/templates/Future Vivid Fashion/result.jpg"
-                  alt="合成结果"
+                  alt={`Result of AI Photo Enhancement - ${t('portraitEnhancement.title')}`}
                   className="w-full rounded-lg shadow-lg object-cover"
                 />
                 <div className="absolute bottom-5 left-5 bg-[#00b894] text-black px-5 py-2 rounded-full font-medium shadow-lg">

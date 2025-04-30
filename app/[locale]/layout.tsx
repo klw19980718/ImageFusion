@@ -2,86 +2,52 @@ import ClientProviders from './ClientProviders';
 import ClerkProviderWithLocale from '../../components/auth/clerk-provider';
 import type { Metadata } from 'next';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com';
+// 使用固定值，与 app/layout.tsx 保持一致
+const BASE_URL = 'https://www.imagefusion.com'; 
 
 export function generateStaticParams() {
-  return [{ locale: 'en' }, { locale: 'zh' }];
+  return [{ locale: 'en' }];
 }
 
-// 根据不同语言提供不同的元数据
+// 提供与根布局一致的 SEO 优化元数据
 export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const locale = (await params).locale || 'zh';
-  
-  const metadata: Metadata = {
+  // 注意: params.locale 在这里实际未使用，因为我们已固定为 'en'
+  return {
+    title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
+    description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
+    keywords: ['AI Image Fusion', 'Image Fusion Tool', 'Online Image Fusion', 'AI Photo Fusion', 'Free Image Fusion', 'Combine Images', 'Merge Photos', 'Blend Pictures', 'Image Combiner', 'Image Blender', 'Photo Merger', 'AI Photo Enhancer', 'Enhance Images'],
     alternates: {
-      canonical: BASE_URL,
+      canonical: `${BASE_URL}/en`, // 指定英文版的规范 URL
       languages: {
         'en': `${BASE_URL}/en`,
-        'zh': `${BASE_URL}/zh`,
-        'x-default': `${BASE_URL}/en`,
+        'x-default': `${BASE_URL}/en`, // 默认指向英文版
       },
     },
-  };
-  
-  if (locale === 'en') {
-    return {
-      ...metadata,
-      title: 'ImageFusion - Intelligent Image Fusion & Enhancement Platform',
-      description: 'Use our AI-powered image fusion technology to seamlessly blend multiple images and create stunning visual effects. Easily achieve style transfer, image enhancement, and creative compositions.',
-      keywords: ['image fusion', 'AI image processing', 'intelligent image composition', 'style transfer', 'image enhancement', 'creative image tools', 'high-quality image processing', 'visual art creation'],
-      openGraph: {
-        title: 'ImageFusion - Intelligent Image Fusion & Enhancement Platform',
-        description: 'Use our AI-powered image fusion technology to seamlessly blend multiple images and create stunning visual effects. Easily achieve style transfer, image enhancement, and creative compositions.',
-        url: BASE_URL,
-        siteName: 'ImageFusion',
-        images: [
-          {
-            url: `${BASE_URL}/og-img.png`,
-            width: 1200,
-            height: 630,
-            alt: 'ImageFusion - Intelligent Image Fusion & Enhancement Platform Preview',
-          },
-        ],
-        locale: 'en_US',
-        type: 'website',
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: 'ImageFusion - Intelligent Image Fusion & Enhancement Platform',
-        description: 'Use our AI-powered image fusion technology to seamlessly blend multiple images and create stunning visual effects. Easily achieve style transfer, image enhancement, and creative compositions.',
-        images: [`${BASE_URL}/og-img.png`],
-      },
-    };
-  }
-  
-  // 默认使用中文
-  return {
-    ...metadata,
-    title: 'ImageFusion - 智能图像融合与增强平台',
-    description: '使用我们的AI驱动图像融合技术，将多种图像无缝融合，创造令人惊叹的视觉效果。轻松实现风格转换、图像增强和创意合成。',
-    keywords: ['图像融合', 'AI图像处理', '智能图像合成', '风格转换', '图像增强', '创意图像工具', '高质量图像处理', '视觉艺术创作'],
     openGraph: {
-      title: 'ImageFusion - 智能图像融合与增强平台',
-      description: '使用我们的AI驱动图像融合技术，将多种图像无缝融合，创造令人惊叹的视觉效果。轻松实现风格转换、图像增强和创意合成。',
-      url: BASE_URL,
+      title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
+      description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
+      url: `${BASE_URL}/en`, // Open Graph URL 指向英文版
       siteName: 'ImageFusion',
       images: [
         {
           url: `${BASE_URL}/og-img.png`,
           width: 1200,
           height: 630,
-          alt: 'ImageFusion - 智能图像融合与增强平台预览',
+          alt: 'AI Image Fusion Tool - Combine and Enhance Photos with AI',
         },
       ],
-      locale: 'zh_CN',
+      locale: 'en_US',
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'ImageFusion - 智能图像融合与增强平台',
-      description: '使用我们的AI驱动图像融合技术，将多种图像无缝融合，创造令人惊叹的视觉效果。轻松实现风格转换、图像增强和创意合成。',
+      title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
+      description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
       images: [`${BASE_URL}/og-img.png`],
+      // creator: '@yourTwitterHandle', // 可选
     },
+    // verification: { ... }, // 可选
+    // icons: { ... }, // 可选
   };
 }
 
@@ -92,24 +58,16 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const locale = (await params).locale || 'zh';
+  const locale = 'en'; // 固定为英文
   
   // 动态导入消息文件并进行错误处理
   let messages;
   try {
-    const userModule = await import(`../../messages/${locale}.json`);
+    const userModule = await import(`../../messages/en.json`);
     messages = userModule.default;
   } catch (error) {
-    console.error(`Failed to load messages for ${locale}:`, error);
-    // 如果无法加载特定语言，尝试加载默认语言
-    try {
-      const defaultModule = await import(`../../messages/zh.json`);
-      messages = defaultModule.default;
-    } catch (fallbackError) {
-      console.error(`Failed to load fallback messages:`, fallbackError);
-      // 如果连默认语言也加载失败，提供一个最小的消息对象以避免应用崩溃
-      messages = {};
-    }
+    console.error(`Failed to load messages for en:`, error);
+    messages = {};
   }
 
   return (

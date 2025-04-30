@@ -2,10 +2,10 @@ import { MetadataRoute } from 'next';
 
 // !!! IMPORTANT: Replace with your actual production domain !!!
 // You can use environment variables like process.env.NEXT_PUBLIC_SITE_URL
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://wwww.framepola.com';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const locales = ['en', 'zh']; // 支持的语言环境
+  const locales = ['en']; // 支持的语言环境
 
   // 静态页面列表 (相对于根目录)
   const staticPages = [

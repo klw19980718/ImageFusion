@@ -11,54 +11,69 @@ const fredoka = Fredoka({ subsets: ['latin'], variable: '--font-fredoka', weight
 const baloo = Baloo_2({ subsets: ['latin'], variable: '--font-baloo', weight: ['400', '500', '600', '700', '800'] });
 const nunito = Nunito({ subsets: ['latin'], variable: '--font-nunito', weight: ['200', '300', '400', '500', '600', '700', '800', '900'] });
 
-// 根据不同语言提供不同的元数据
+// 定义元数据
+const BASE_URL = 'https://www.imagefusion.com'; // 使用固定值
+
 export const metadata: Metadata = {
-  title: 'ImageFusion - 智能图像融合与增强平台',
-  description: '使用我们的AI驱动图像融合技术，将多种图像无缝融合，创造令人惊叹的视觉效果。轻松实现风格转换、图像增强和创意合成。',
-  keywords: ['图像融合', 'AI图像处理', '智能图像合成', '风格转换', '图像增强', '创意图像工具', '高质量图像处理', '视觉艺术创作'],
+  metadataBase: new URL(BASE_URL),
+  title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
+  description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
+  keywords: ['AI Image Fusion', 'Image Fusion Tool', 'Online Image Fusion', 'AI Photo Fusion', 'Free Image Fusion', 'Combine Images', 'Merge Photos', 'Blend Pictures', 'Image Combiner', 'Image Blender', 'Photo Merger', 'AI Photo Enhancer', 'Enhance Images'],
   openGraph: {
-    title: 'ImageFusion - 智能图像融合与增强平台',
-    description: '使用我们的AI驱动图像融合技术，将多种图像无缝融合，创造令人惊叹的视觉效果。轻松实现风格转换、图像增强和创意合成。',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com',
+    title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
+    description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
+    url: BASE_URL,
     siteName: 'ImageFusion',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com'}/og-img.png`,
+        url: `${BASE_URL}/og-img.png`,
         width: 1200,
         height: 630,
-        alt: 'ImageFusion - 智能图像融合与增强平台预览',
+        alt: 'AI Image Fusion Tool - Combine and Enhance Photos with AI',
       },
     ],
-    locale: 'zh_CN',
+    locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ImageFusion - 智能图像融合与增强平台',
-    description: '使用我们的AI驱动图像融合技术，将多种图像无缝融合，创造令人惊叹的视觉效果。轻松实现风格转换、图像增强和创意合成。',
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com'}/og-img.png`],
+    title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
+    description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
+    images: [`${BASE_URL}/og-img.png`],
+    // 可选: 添加 Twitter 账号
+    // creator: '@yourTwitterHandle',
   },
-}
+  // 可选: 添加其他元数据，如 robots.txt 指令、图标等
+  // icons: {
+  //   icon: '/favicon.ico',
+  //   shortcut: '/favicon-16x16.png',
+  //   apple: '/apple-touch-icon.png',
+  // },
+  // verification: {
+  //   google: 'your-google-site-verification-code',
+  //   other: {
+  //     me: ['your-email@example.com', 'your-link'],
+  //   },
+  // },
+};
 
 // 定义 Organization 和 WebSite 的 Schema 结构化数据
-function getSchemaData(locale: string) {
-  locale = locale || 'zh';
-  
+function getSchemaData() {
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Organization",
         "name": "ImageFusion",
-        "url": process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com'
+        "url": BASE_URL
       },
       {
         "@type": "WebSite",
         "name": "ImageFusion",
-        "url": process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com',
+        "url": BASE_URL,
         "potentialAction": {
           "@type": "SearchAction",
-          "target": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.imagefusion.com'}/search?q={search_term_string}`,
+          "target": `${BASE_URL}/search?q={search_term_string}`,
           "query-input": "required name=search_term_string"
         }
       }
@@ -71,9 +86,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode,
 }) {
-  // 由于我们不能在这里直接使用params，改为使用默认值
-  const locale = 'zh'; // 默认使用中文
-  const schemaData = getSchemaData(locale);
+  const locale = 'en'; // 固定为英文
+  const schemaData = getSchemaData();
   const GA_TRACKING_ID = 'G-3DB3HY13E2';
 
   return (

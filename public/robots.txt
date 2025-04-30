@@ -1,11 +1,25 @@
-# Allow all user agents access to the entire site by default
+# Default rules for all user agents
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /_next/ 
+# Disallow: /static/ # Uncomment if you have a public static folder you want to hide
+# Disallow: /admin/ # Uncomment if you have an admin section
 
-# Disallow specific paths if necessary in the future (e.g., API routes, admin panels)
-# Disallow: /api/
-# Disallow: /admin/
+# Rules for specific AI crawlers (following the example)
+User-Agent: GPTBot
+Allow: /llms.txt
+Disallow: /
 
-# Point to the sitemap (using the correct domain)
-# Ensure your sitemap is accessible at /sitemap.xml
-Sitemap: https://www.framepola.com/sitemap.xml 
+User-Agent: anthropic-ai
+Allow: /llms.txt
+Disallow: /
+
+# Explicit allow for Google (optional but clear)
+User-Agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+# Point to the correct sitemap
+Sitemap: https://www.imagefusion.com/sitemap.xml 
