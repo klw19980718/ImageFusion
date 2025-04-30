@@ -14,7 +14,6 @@ export default function SignInPage() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#FFF8F0] py-12">
       <h1 className="text-3xl font-bold mb-8">{t('welcome')}</h1>
       <SignIn 
-        redirectUrl={`/${locale}`}
         appearance={{
           elements: {
             formButtonPrimary: 'bg-[#FFB347] hover:bg-[#F67280]',
