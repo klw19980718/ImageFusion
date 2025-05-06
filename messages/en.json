@@ -78,8 +78,12 @@
     "goGenerate": "Generate Images Now",
     "historyTitle": "Generation History",
     "generatedImageAlt": "Generated image",
+    "totalApiCalls": "Total API Calls",
     "paginationPrevious": "Previous",
-    "paginationNext": "Next"
+    "paginationNext": "Next",
+    "downloadFailed": "Download failed!",
+    "downloadCorsError": "Could not fetch image from {imageUrl}. This is often due to missing CORS headers (Access-Control-Allow-Origin) on the server. Check the browser console for details.",
+    "downloadGenericError": "Error: {errorMsg}"
   },
   "blog": {
     "title": "AI Image Fusion Blog: Tips, Tutorials & Updates",

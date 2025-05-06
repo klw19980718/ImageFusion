@@ -438,6 +438,13 @@ export default function ProfilePage() {
                         {userApiInfo?.api_used_times || 0}
                       </p>
                     </div>
+
+                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
+                      <p className="text-sm text-gray-400">{t('totalApiCalls')}</p>
+                      <p className="text-lg font-medium text-[#FFD700]">
+                        {userApiInfo?.api_total_times || 0}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -490,6 +497,13 @@ export default function ProfilePage() {
                       <p className="text-sm text-gray-400">{t('generatedImages')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
                         {userApiInfo?.api_used_times || 0}
+                      </p>
+                    </div>
+
+                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
+                      <p className="text-sm text-gray-400">{t('totalApiCalls')}</p>
+                      <p className="text-lg font-medium text-[#FFD700]">
+                        {userApiInfo?.api_total_times || 0}
                       </p>
                     </div>
                   </div>
