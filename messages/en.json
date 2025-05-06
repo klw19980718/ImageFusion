@@ -147,9 +147,9 @@
     },
     "premium": {
       "title": "Premium Plan",
-      "price": "$5",
+      "price": "$1",
       "features": [
-        "Generate 200 fused images per month",
+        "5 generation credits",
         "HD fused image download",
         "Faster AI generation for merging photos",
         "Commercial use license included",

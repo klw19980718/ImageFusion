@@ -11,7 +11,7 @@ const pricingPlans: PricingPlan[] = [
   },
   {
     key: "premium",
-    priceId: "price_1RJ9Ig02vixuoLgQjF7r5w2u",
+    priceId: "price_1RLhYO02vixuoLgQPU1RI4Hu",
     popular: true,
   },
   {
