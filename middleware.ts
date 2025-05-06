@@ -13,7 +13,16 @@ const intlMiddleware = createMiddleware({
 });
 
 export default function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  const { pathname, hostname } = request.nextUrl;
+
+  // --- Block Google indexing for clerk subdomain ---
+  if (hostname === 'clerk.imagefusionai.com') {
+    // Allow request to proceed but add the X-Robots-Tag header
+    const response = NextResponse.next();
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+    return response; // Skip locale handling for this subdomain
+  }
+  // --- End block ---
 
   // 检查是否需要添加 /en 前缀进行内部重写
   // 1. 路径不是 API, _next, _vercel, 或包含点号 (静态文件)
