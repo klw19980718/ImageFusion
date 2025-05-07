@@ -13,7 +13,6 @@ export default function ProfileLayout({
       <div className="flex-grow">
         {children}
       </div>
-      <Footer />
     </div>
   );
 } 
