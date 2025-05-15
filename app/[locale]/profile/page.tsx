@@ -135,7 +135,7 @@ async function downloadImageWithCors(
     // 4. 创建 <a> 标签并触发下载
     const link = document.createElement("a");
     link.href = objectUrl;
-    link.download = filename || `polatoons-image-${imageId}.png`; // 使用传入的 filename 或生成一个
+    link.download = filename || `ImageFusion-image-${imageId}.png`; // 使用传入的 filename 或生成一个
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -197,17 +197,7 @@ export default function ProfilePage() {
   const historyPageSize = 30;
   const [isDownloading, setIsDownloading] = useState<number | null>(null); // 跟踪正在下载的图片ID
 
-  // 动态设置页面标题
-  useEffect(() => {
-    if (isLoaded && user) {
-      document.title = `${
-        user.fullName || user.username || "Profile"
-      } - PolaToons`;
-    } else if (isLoaded && !user) {
-      document.title = `Profile - PolaToons`; // 用户未登录的情况
-    }
-  }, [isLoaded, user]);
-
+ 
   // 未登录用户重定向到首页
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
@@ -583,7 +573,7 @@ export default function ProfilePage() {
                           onClick={() =>
                             downloadImageWithCors(
                               item.dist_image,
-                              `polatoons-image-${item.id}.png`,
+                              `ImageFusion-image-${item.id}.png`,
                               setIsDownloading,
                               item.id,
                               t
