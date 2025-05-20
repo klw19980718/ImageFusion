@@ -3,6 +3,8 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /_next/ 
+Disallow: /js/cnzz1.js
+Disallow: /js/cnzz2.js
 # Disallow: /static/ # Uncomment if you have a public static folder you want to hide
 # Disallow: /admin/ # Uncomment if you have an admin section
 
@@ -20,6 +22,8 @@ User-Agent: Googlebot
 Allow: /
 Disallow: /api/
 Disallow: /_next/
+Disallow: /js/cnzz1.js
+Disallow: /js/cnzz2.js
 
 # Point to the correct sitemap
 Sitemap: https://www.imagefusionai.com/sitemap.xml 

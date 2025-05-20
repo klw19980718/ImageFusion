@@ -88,7 +88,6 @@ export default function RootLayout({
 }) {
   const locale = 'en'; // 固定为英文
   const schemaData = getSchemaData();
-  const GA_TRACKING_ID = 'G-3DB3HY13E2';
 
   return (
     <html lang={locale}>
@@ -102,23 +101,16 @@ export default function RootLayout({
           <PaymentStatusModal />
         </Suspense>
 
-        {/* Google Analytics 跟踪代码 - 使用用户提供的代码 */}
+        {/* CNZZ 统计代码 */}
         <Script
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          id="cnzz-stat1"
           strategy="afterInteractive"
+          src="/js/cnzz1.js"
         />
         <Script
-          id="google-analytics-init"
+          id="cnzz-stat2"
           strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_TRACKING_ID}');
-            `,
-          }}
+          src="/js/cnzz2.js"
         />
       </body>
     </html>
