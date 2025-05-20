@@ -103,14 +103,9 @@ export default function RootLayout({
 
         {/* CNZZ 统计代码 */}
         <Script
-          id="cnzz-stat1"
+          id="analytics"
           strategy="afterInteractive"
-          src="/js/cnzz1.js"
-        />
-        <Script
-          id="cnzz-stat2"
-          strategy="afterInteractive"
-          src="/js/cnzz2.js"
+          src="/js/cy1.js"
         />
       </body>
     </html>
