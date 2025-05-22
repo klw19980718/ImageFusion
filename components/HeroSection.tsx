@@ -202,7 +202,7 @@ export default function HeroSection() {
         // Check if component is still mounted before setting state
         // This check might be redundant if called from the mount effect's final block, but good practice
         setSourceImage(file);
-        setIsUserUploadedSource(false); 
+        setIsUserUploadedSource(false);
       }).catch(error => {
         console.error("Failed to load default example image:", error);
         // Handle error, maybe set sourceImage to null or show an error placeholder
@@ -353,14 +353,18 @@ export default function HeroSection() {
     // 构建合适的提示词
     const basePrompt = imgFusionTemplates[selectedStyleIndex].prompt;
 
-    const customStylePrompt = "将图2的关键风格特征融合到图片1上面";
+    const customStylePrompt = `Use the uploaded reference style image to apply its visual elements — such as clothing, accessories, colors, or background — to the person in the user's original photo. The final image must maintain a realistic, photographic appearance of the person, even if the reference style image is cartoon, anime, or illustration.
+
+Strictly preserve the person's face, identity, skin tone, expression, and pose from the original photo. Do not alter the facial features or stylize them. Do not convert the image into a cartoon or illustration.
+
+Blend only the style image’s [fashion, textures, colors, and atmosphere] into the original photo, while keeping the person in realistic photo style. Ensure seamless and natural integration with photo-level details and lighting. "; `
 
     if (customStyleImage) {
       // 如果使用了自定义风格图片，则使用自定义风格的默认提示词
       formData.append("prompt", customStylePrompt);
     } else {
       // 如果没有提示词或不是提示词模式，使用默认提示词
-      formData.append("prompt", basePrompt);
+      formData.append("prompt", customStylePrompt);
     }
 
     // 设置尺寸比例，使用1:1固定值
@@ -580,7 +584,7 @@ export default function HeroSection() {
                         onDragOver={handleDragOver}
                         onDrop={handleDrop}
                       >
-                        <Upload className="h-12 w-12 text-yellow-500 mb-4" /> 
+                        <Upload className="h-12 w-12 text-yellow-500 mb-4" />
                         <p className="text-lg text-white text-center">
                           {t("dragDropText")}
                         </p>
@@ -715,12 +719,11 @@ export default function HeroSection() {
                           <div
                             key={index}
                             className={`aspect-square relative overflow-hidden rounded-md cursor-pointer
-                              ${
-                                selectedStyleIndex === index &&
+                              ${selectedStyleIndex === index &&
                                 !isPromptMode &&
                                 !customStyleImage
-                                  ? "ring-2 ring-yellow-500"
-                                  : "opacity-80 hover:opacity-100"
+                                ? "ring-2 ring-yellow-500"
+                                : "opacity-80 hover:opacity-100"
                               }`}
                             onClick={() => selectStyle(index)}
                           >
