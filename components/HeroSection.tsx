@@ -503,7 +503,7 @@ Blend only the style image’s [fashion, textures, colors, and atmosphere] into 
               console.log("轮询: 任务处理中...");
               if (pollingTimeoutRef.current)
                 clearTimeout(pollingTimeoutRef.current);
-              pollingTimeoutRef.current = setTimeout(pollTaskStatus, 20000); // 20秒后再次轮询
+              pollingTimeoutRef.current = setTimeout(pollTaskStatus, 2000); // 2秒后再次轮询
             } else {
               // 失败：根据API状态任务失败
               console.error("轮询: 任务失败，状态:", statusData.status);
