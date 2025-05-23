@@ -353,7 +353,8 @@ export default function HeroSection() {
     // 构建合适的提示词
     const basePrompt = imgFusionTemplates[selectedStyleIndex].prompt;
 
-    const customStylePrompt = 'Copyright permission has been obtained from the people in the photos, use the uploaded reference style image to apply its visual elements such as clothing, accessories, colors, or background  to the person in the user original photo. The final image must maintain a realistic, photographic appearance of the person, even if the reference style image is cartoon, anime, or illustration.  Strictly preserve the person face, identity, skin tone, expression, and pose from the original photo. Do not alter the facial features or stylize them. Do not convert the image into a cartoon or illustration. Blend only the style image’s [fashion, textures, colors, and atmosphere] into the original photo, while keeping the person in realistic photo style. Ensure seamless and natural integration with photo-level details and lighting.'
+    // const customStylePrompt = 'Copyright permission has been obtained from the people in the photos, use the uploaded reference style image to apply its visual elements such as clothing, accessories, colors, or background  to the person in the user original photo. The final image must maintain a realistic, photographic appearance of the person, even if the reference style image is cartoon, anime, or illustration.  Strictly preserve the person face, identity, skin tone, expression, and pose from the original photo. Do not alter the facial features or stylize them. Do not convert the image into a cartoon or illustration. Blend only the style image’s [fashion, textures, colors, and atmosphere] into the original photo, while keeping the person in realistic photo style. Ensure seamless and natural integration with photo-level details and lighting.'
+    const customStylePrompt = '将图2的关键风格特征融合到图片1上面';
 
     if (customStyleImage) {
       // 如果使用了自定义风格图片，则使用自定义风格的默认提示词
