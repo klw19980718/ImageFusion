@@ -96,12 +96,12 @@ export function Footer() {
             </ul>
           </div>
           
-          {/* Legal */}
+          {/* Legal & Contact */}
           <div className="md:col-span-1">
             <h3 className="font-semibold text-lg mb-4 text-foreground">
               {t('legal')}
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 mb-6">
               <li>
                 <Link 
                   href="/terms"
@@ -119,6 +119,16 @@ export function Footer() {
                 </Link>
               </li>
             </ul>
+            
+            <div>
+              <h4 className="font-semibold text-base mb-2 text-foreground">Support</h4>
+              <a 
+                href="mailto:support@imagefusionai.com" 
+                className="text-muted-foreground hover:text-primary transition-standard text-sm hover:underline decoration-primary decoration-1 underline-offset-2"
+              >
+                support@imagefusionai.com
+              </a>
+            </div>
           </div>
         </div>
       </div>
