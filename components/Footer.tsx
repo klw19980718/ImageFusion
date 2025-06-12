@@ -10,6 +10,7 @@ export function Footer() {
   // const currentLocale = params.locale as string || 'zh'; // No longer needed
   
   const partnerSites = [
+    { url: 'https://www.seedancepro.com/', name: 'Seedance' },
     { url: 'https://www.framepola.com', name: 'AIPolaroid' },
     { url: 'https://www.ghiblimagicmaker.com', name: 'GhibliImage' },
     { url: 'https://www.ghiblitattoo.com', name: 'GhibliTattoo' },
