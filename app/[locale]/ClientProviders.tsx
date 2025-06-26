@@ -2,6 +2,9 @@
 
 import { NextIntlClientProvider } from 'next-intl';
 import { ReactNode } from 'react';
+import { UserProvider } from '@/lib/providers';
+import { ToastProvider } from '@/components/ui/toast-provider';
+import ClerkProviderWithLocale from '@/components/auth/clerk-provider';
 
 interface ClientProvidersProps {
   locale: string;
@@ -16,7 +19,13 @@ export default function ClientProviders({ locale, messages, children }: ClientPr
       messages={messages}
       timeZone="Asia/Shanghai"
     >
-      {children}
+      <ClerkProviderWithLocale>
+        <ToastProvider>
+          <UserProvider>
+            {children}
+          </UserProvider>
+        </ToastProvider>
+      </ClerkProviderWithLocale>
     </NextIntlClientProvider>
   );
 } 

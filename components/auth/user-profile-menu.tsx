@@ -15,66 +15,20 @@ import { UserResource } from "@clerk/types";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { useEffect } from "react";
-import { apiConfig } from "@/app/config/api";
+import { api } from "@/app/config/api";
 
 interface UserProfileMenuProps {
   user: UserResource;
 }
 
-// 使用模块级变量记录同步状态 (谨慎使用)
-const syncStatusByUser: { [userId: string]: boolean } = {};
-
 export default function UserProfileMenu({ user }: UserProfileMenuProps) {
-  const userId = user?.id;
-
   const { signOut } = useClerk();
   const t = useTranslations("user");
   const params = useParams();
   const pathname = usePathname();
-  const locale = (params.locale as string) || "zh";
+  const locale = (params.locale as string) || "en";
 
   const initials = `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`;
-
-  useEffect(() => {
-    const effectUserId = user?.id;
-    const userEmail = user?.primaryEmailAddress?.emailAddress;
-
-    if (effectUserId && userEmail && !syncStatusByUser[effectUserId]) {
-      syncStatusByUser[effectUserId] = true;
-
-      const userData = {
-        google_id: effectUserId,
-        email: userEmail,
-        name: user.fullName,
-        avatar: user.imageUrl,
-      };
-
-      const syncUser = async () => {
-        try {
-          const response = await fetch(apiConfig.userRegisterOrUpdate, {
-            method: "POST",
-            body: JSON.stringify(userData),
-          });
-
-          if (!response.ok) {
-            const errorData = await response.text();
-            throw new Error(
-              `API Error ${response.status}: ${
-                errorData || response.statusText
-              }`
-            );
-          }
-
-          console.log("用户数据同步 API 调用成功:", await response.json());
-        } catch (error) {
-          console.error("用户数据同步 API 调用失败:", error);
-        }
-      };
-
-      syncUser();
-    }
-  }, [user]);
 
   return (
     <DropdownMenu>
@@ -95,9 +49,6 @@ export default function UserProfileMenu({ user }: UserProfileMenuProps) {
             <p className="text-xs leading-none text-muted-foreground">
               {user.primaryEmailAddress?.emailAddress}
             </p>
-            <p className="text-xs leading-none text-muted-foreground mt-1">
-              ID: {user.id.substring(0, 8)}...
-            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -114,6 +65,7 @@ export default function UserProfileMenu({ user }: UserProfileMenuProps) {
           className="cursor-pointer focus:bg-muted hover:bg-muted"
           onClick={() => {
             console.log("用户登出");
+            api.auth.clearTokens(); // 清除存储的token
             signOut();
           }}
         >
