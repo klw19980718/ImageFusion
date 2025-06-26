@@ -488,6 +488,9 @@ export default function ProfilePage() {
 
   const currentPlanName = getPlanName(userInfo?.level);
 
+  // 过滤出有效图片的历史记录
+  const validHistoryList = historyList.filter((item) => item.generate_image && item.generate_image.trim() !== '');
+
   return (
     <div className="min-h-screen bg-black text-white">
       <main className="container mx-auto px-4 py-12">
@@ -665,10 +668,10 @@ export default function ProfilePage() {
                   {t("retry", { defaultMessage: "Retry" })}
                 </Button>
               </div>
-            ) : totalHistoryCount > 0 ? (
+            ) : validHistoryList.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                  {historyList.map((item) => (
+                  {validHistoryList.map((item) => (
                     <div
                       key={item.id}
                       className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl overflow-hidden shadow-lg hover:shadow-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all"
@@ -694,20 +697,20 @@ export default function ProfilePage() {
                           className="absolute top-2 right-2 bg-black/60 p-2 rounded-full hover:bg-black/80 transition-colors"
                           title={t('downloadImage')}
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            className="w-5 h-5 text-white"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                            />
-                          </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          className="w-5 h-5 text-white"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                          />
+                        </svg>
                         </button>
                       </div>
                       <div className="p-3">

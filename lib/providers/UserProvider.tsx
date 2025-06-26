@@ -63,15 +63,40 @@ export function UserProvider({ children }: UserProviderProps) {
     globalSyncStatus[userId] = true;
 
     try {
+      // 获取 Clerk JWT token，添加错误处理
+      let clerkToken: string | null = null;
+      try {
+        clerkToken = await getToken();
+        console.log('Clerk Token 获取成功:', clerkToken ? 'Token已获取' : 'Token为空');
+      } catch (tokenError) {
+        console.error('获取 Clerk Token 失败:', tokenError);
+        // token 获取失败时，重置同步状态并退出
+        delete globalSyncStatus[userId];
+        showErrorToast('Failed to get user token');
+        return;
+      }
+
+      // 如果没有获取到有效的 token，不进行同步
+      if (!clerkToken) {
+        console.warn('Clerk Token 为空，跳过同步');
+        delete globalSyncStatus[userId];
+        showErrorToast('User token is empty, skipping sync');
+        return;
+      }
+
       const userData = {
         uuid: userId,
         email: user.primaryEmailAddress.emailAddress,
         nickname: user.fullName || user.firstName || undefined,
         avatar: user.imageUrl || undefined,
         from_login: "google",
+        token: clerkToken // 新增 token 参数
       };
 
-      console.log('UserProvider: 开始同步用户数据', userData);
+      console.log('UserProvider: 开始同步用户数据', {
+        ...userData,
+        token: '***' // 安全起见，不在日志中显示完整token
+      });
       
       const responseData = await api.auth.syncUser(userData);
       console.log('UserProvider: 用户数据同步成功', responseData);

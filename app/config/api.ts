@@ -49,8 +49,9 @@ export const authApi = {
     nickname?: string;
     avatar?: string;
     from_login: string;
+    token: string; // 新增 token 参数
   }) => {
-    const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/user/auth`, {
+    const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/user/loginAuth`, {
       method: 'POST',
       headers: getHeaders(false), // 登录接口不需要Authorization
       body: JSON.stringify(userData),
@@ -176,7 +177,73 @@ export const paymentApi = {
 
 // 图片生成相关接口
 export const imageApi = {
-  // 生成图片
+  // 上传图片接口
+  uploadImage: async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // 为FormData请求创建特殊的头部（不包含Content-Type，让浏览器自动设置）
+    const token = localStorage.getItem('access_token');
+    const headers: Record<string, string> = {
+      'x-appid': API_CONFIG.APP_ID,
+    };
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/common/upload`, {
+      method: 'POST',
+      headers: headers,
+      body: formData,
+    });
+
+    return handleApiError(response);
+  },
+
+  // 创建AI生成图片任务
+  createTask: async (params: {
+    file: File;
+    prompt: string;
+    size: string;
+    other_image: string;
+  }) => {
+    const formData = new FormData();
+    formData.append('file', params.file);
+    formData.append('prompt', params.prompt);
+    formData.append('size', params.size);
+    formData.append('other_image', params.other_image);
+
+    // 为FormData请求创建特殊的头部（不包含Content-Type，让浏览器自动设置）
+    const token = localStorage.getItem('access_token');
+    const headers: Record<string, string> = {
+      'x-appid': API_CONFIG.APP_ID,
+    };
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/task/create`, {
+      method: 'POST',
+      headers: headers,
+      body: formData,
+    });
+
+    return handleApiError(response);
+  },
+
+  // 检查任务状态
+  checkTaskStatus: async (taskId: string) => {
+    const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/task/check?task_id=${taskId}`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+
+    return handleApiError(response);
+  },
+
+  // 生成图片 (保留旧接口以备兼容)
   generateImage: async (params: {
     prompt?: string;
     style?: string;
@@ -215,7 +282,7 @@ export const imageApi = {
     return handleApiError(response);
   },
 
-  // 检查生成状态
+  // 检查生成状态 (保留旧接口以备兼容)
   checkGenerationStatus: async (taskId: string) => {
     const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/generateImage/check?task_id=${taskId}`, {
       method: 'GET',
@@ -269,10 +336,15 @@ export const api = {
 export const apiConfig = {
   baseApiUrl: API_CONFIG.VIDOR_AI_BASE,
   userInfo: `${API_CONFIG.VIDOR_AI_BASE}/api/user/info`,
-  userRegisterOrUpdate: `${API_CONFIG.VIDOR_AI_BASE}/api/user/auth`,
+  userRegisterOrUpdate: `${API_CONFIG.VIDOR_AI_BASE}/api/user/loginAuth`, // 更新为新的接口地址
   stripeSubscriptionCreate: `${API_CONFIG.VIDOR_AI_BASE}/api/pay/stripe`,
   opusList: `${API_CONFIG.VIDOR_AI_BASE}/api/user/opus_list`,
   priceList: `${API_CONFIG.VIDOR_AI_BASE}/api/website/pricelist`,
+  // 新接口
+  uploadImage: `${API_CONFIG.VIDOR_AI_BASE}/api/common/upload`,
+  createTask: `${API_CONFIG.VIDOR_AI_BASE}/api/task/create`,
+  checkTaskStatus: `${API_CONFIG.VIDOR_AI_BASE}/api/task/check`,
+  // 旧接口（保留兼容性）
   generateImage: `${API_CONFIG.VIDOR_AI_BASE}/api/generateImage/generate`,
   checkStatus: `${API_CONFIG.VIDOR_AI_BASE}/api/generateImage/check`,
 };
