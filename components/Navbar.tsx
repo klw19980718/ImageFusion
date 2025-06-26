@@ -47,7 +47,7 @@ export function Navbar() {
       { id: 'features', label: t('features'), section: true },
       // 使用 "useCases" 作为 key, 对应翻译文件中的 "Use Cases"
       { id: 'showcase', label: t('useCases'), section: true }, 
-      { id: 'testimonials', label: t('reviews'), section: true },
+      // { id: 'testimonials', label: t('reviews'), section: true },
       { id: 'pricing', label: t('pricing'), section: true },
       { id: 'faq', label: t('faq'), section: true },
       // 移除了 /en 前缀

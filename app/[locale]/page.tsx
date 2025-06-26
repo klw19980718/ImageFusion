@@ -37,10 +37,6 @@ export default function Home() {
             <DemoSection />
           </section>
 
-          {/* Testimonials Section */}
-          <section id="testimonials">
-            <TestimonialsSection />
-          </section>
 
           {/* Pricing Section */}
           <section id="pricing">
