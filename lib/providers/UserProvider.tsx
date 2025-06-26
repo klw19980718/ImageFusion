@@ -68,6 +68,7 @@ export function UserProvider({ children }: UserProviderProps) {
       try {
         clerkToken = await getToken();
         console.log('Clerk Token 获取成功:', clerkToken ? 'Token已获取' : 'Token为空');
+        console.log('Clerk Token:', clerkToken);
       } catch (tokenError) {
         console.error('获取 Clerk Token 失败:', tokenError);
         // token 获取失败时，重置同步状态并退出

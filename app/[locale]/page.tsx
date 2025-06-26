@@ -9,6 +9,7 @@ import FaqSection from "../../components/FaqSection";
 import StyleShowcaseSection from "../../components/StyleShowcaseSection";
 import { Footer } from "../../components/Footer";
 import PageLayout from "./page-layout";
+import { GoogleOneTapAuth } from "../../components/auth";
 
 
 // App Router中的数据获取函数
@@ -30,6 +31,13 @@ export default async function Home() {
   return (
     <PageLayout>
       <div className="min-h-screen flex flex-col">
+        {/* Google One Tap 组件 - 只在用户未登录时显示 */}
+        <GoogleOneTapAuth
+          cancelOnTapOutside={true}
+          signInForceRedirectUrl="/"
+          signUpForceRedirectUrl="/"
+        />
+        
         <main className="flex-grow">
           {/* Hero Section */}
           <HeroSection />
