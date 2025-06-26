@@ -29,6 +29,15 @@ function extractExcerpt(content: string, maxLength: number = 150): string {
     : plainText;
 }
 
+// 预估阅读时间
+function estimateReadingTime(content: string): string {
+  const wordsPerMinute = 200;
+  const textContent = content.replace(/<[^>]*>/g, ''); // 移除HTML标签
+  const wordCount = textContent.split(/\s+/).length;
+  const readingTime = Math.ceil(wordCount / wordsPerMinute);
+  return `${readingTime} min`;
+}
+
 // 获取博客数据
 async function getBlogData() {
   try {
@@ -57,79 +66,100 @@ export default async function BlogPage({
   }
 
   return (
-    <main className="flex-grow container mx-auto px-4 py-12">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-          AI Image Fusion Blog
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Tips, tutorials, and updates about AI image fusion, photo blending, and creative image combination techniques.
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-primary/10 via-muted/20 to-primary/5 pt-20 pb-16">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent" style={{ lineHeight: '2' }}>
+            AI Image Fusion Blog
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Tips, tutorials, and updates about AI image fusion, photo blending, and creative image combination techniques.
+          </p>
+        </div>
       </div>
 
-      {/* Blog Posts Grid */}
-      {blogData.list.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogData.list.map((post: BlogPost) => {
-            const slug = generateSlug(post.title);
-            
-            return (
-              <article key={post.id} className="bg-card border border-muted/30 rounded-standard p-6 hover:shadow-custom transition-standard">
-                {/* Thumbnail if available */}
-                {post.thumb && (
-                  <div className="mb-4 aspect-video bg-muted rounded-lg overflow-hidden">
-                    <img 
-                      src={post.thumb} 
-                      alt={post.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-                
-                {/* Post Content */}
-                <div className="space-y-3">
-                  <h2 className="text-xl font-semibold text-foreground line-clamp-2 hover:text-primary transition-colors">
-                    <Link href={`/${locale}/blog/${slug}`}>
-                      {post.title}
-                    </Link>
-                  </h2>
-                  
-                  <p className="text-muted-foreground text-sm line-clamp-3">
-                    {post.abstract || extractExcerpt(post.content)}
-                  </p>
-                  
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <time dateTime={new Date(post.created_time * 1000).toISOString()}>
-                      {formatDate(post.created_time)}
-                    </time>
+      {/* Blog Posts Section */}
+      <div className="container mx-auto px-6 py-16">
+        {blogData.list.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {blogData.list.map((post: BlogPost) => {
+              const slug = generateSlug(post.title);
+              
+              return (
+                <Link href={`/${locale}/blog/${slug}`} key={post.id}>
+                  <article className="group bg-card rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-border overflow-hidden hover:-translate-y-2">
+                    {/* Thumbnail if available */}
+                    {post.thumb && (
+                      <div className="aspect-video bg-muted overflow-hidden">
+                        <img 
+                          src={post.thumb} 
+                          alt={post.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
                     
-                    <Link 
-                      href={`/${locale}/blog/${slug}`}
-                      className="text-primary hover:text-primary/80 font-medium transition-colors"
-                    >
-                      Read more →
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      ) : (
-        // Fallback content when no blog posts are available
-        <div className="text-center py-12">
-          <div className="max-w-md mx-auto">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              Coming Soon
-            </h2>
-            <p className="text-muted-foreground">
-              We're working on exciting blog content about AI image fusion techniques, tutorials, and tips. Check back soon!
+                    {/* Article Content */}
+                    <div className="p-8">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-2 h-2 bg-primary rounded-full"></div>
+                        <span className="text-xs font-medium text-primary uppercase tracking-wider">
+                          Article
+                        </span>
+                      </div>
+                      
+                      <h2 className="text-2xl font-bold mb-4 text-foreground line-clamp-2 group-hover:text-primary transition-colors duration-200">
+                        {post.title}
+                      </h2>
+                      
+                      <p className="text-muted-foreground text-base mb-6 line-clamp-3 leading-relaxed">
+                        {post.abstract || extractExcerpt(post.content)}
+                      </p>
+                      
+                      {/* Article Footer */}
+                      <div className="flex items-center justify-between pt-4 border-t border-border">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-r from-primary to-blue-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">IF</span>
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-foreground">ImageFusion Team</div>
+                            <div className="text-xs text-muted-foreground">
+                              {formatDate(post.created_time)} • {estimateReadingTime(post.content)}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center text-primary group-hover:translate-x-1 transition-transform duration-200">
+                          <span className="text-sm font-medium">Read More</span>
+                          <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          /* Empty State */
+          <div className="text-center py-20">
+            <div className="w-24 h-24 bg-gradient-to-r from-primary/20 to-muted rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-4">No Blog Posts Yet</h3>
+            <p className="text-muted-foreground text-lg max-w-md mx-auto">
+              We're working on creating amazing content about AI image fusion. Check back soon!
             </p>
           </div>
-        </div>
-      )}
-    </main>
+        )}
+      </div>
+    </div>
   );
 }
 

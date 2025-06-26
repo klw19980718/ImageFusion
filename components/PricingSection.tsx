@@ -8,12 +8,14 @@ import { useUser, useClerk } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { api } from "@/app/config/api";
 import pricingPlans from "@/app/config/price";
+import { useToast } from "@/components/ui/toast-provider";
 
 export default function PricingSection() {
   const t = useTranslations("pricing");
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const { user, isSignedIn } = useUser();
   const { openSignIn } = useClerk();
+  const { error: showErrorToast } = useToast();
 
   // 处理 Basic 计划按钮点击
   const handleBasicClick = () => {
@@ -41,8 +43,8 @@ export default function PricingSection() {
     const userId = user?.id;
     if (!userId) {
       console.error("User is signed in but user ID is missing.");
-      // 可以选择提示用户或记录错误
-      alert(
+      // 使用 toast 替代 alert
+      showErrorToast(
         t("error.missingUserId", {
           defaultMessage:
             "Could not get user information. Please try refreshing the page.",
@@ -60,12 +62,12 @@ export default function PricingSection() {
         window.location.href = result.data.url;
       } else {
         console.error("Stripe subscription creation failed:", result);
-        alert(result.msg || t("error.generic"));
+        showErrorToast(result.msg || t("error.generic"));
         setLoadingPlan(null);
       }
     } catch (error) {
       console.error("Error during subscription creation request:", error);
-      alert(t("error.network"));
+      showErrorToast(t("error.network"));
       setLoadingPlan(null);
     }
   };
