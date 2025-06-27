@@ -25,36 +25,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
-  // Add localized static pages URLs
-  const locales = ['en', 'zh'];
-  
-  locales.forEach(locale => {
-    staticPages.forEach(page => {
-      sitemapEntries.push({
-        url: `${BASE_URL}/${locale}${page === '/' ? '' : page}`, // Add locale prefix
-        lastModified: new Date(), 
-        changeFrequency: page === '/' ? 'daily' : 'weekly',
-        priority: page === '/' ? 1.0 : 0.8,
-      });
+
+
+  staticPages.forEach(page => {
+    sitemapEntries.push({
+      url: `${BASE_URL}${page === '/' ? '' : page}`, // Add locale prefix
+      lastModified: new Date(),
+      changeFrequency: page === '/' ? 'daily' : 'weekly',
+      priority: page === '/' ? 1.0 : 0.8,
     });
   });
 
   // Get blog posts from API and add dynamic blog post URLs
   try {
     const blogResponse = await serverCmsApi.getBlogList(1, 100, 0);
-    
+
     blogResponse.list.forEach(post => {
       const slug = generateSlug(post.title);
-      locales.forEach(locale => {
-        sitemapEntries.push({
-          url: `${BASE_URL}/${locale}/blog/${slug}`, // Correct path structure with locale
-          lastModified: new Date(post.updated_time * 1000), // Convert timestamp to Date
-          changeFrequency: 'monthly', 
-          priority: 0.7,
-        });
+      sitemapEntries.push({
+        url: `${BASE_URL}/blog/${slug}`, // Correct path structure with locale
+        lastModified: new Date(post.updated_time * 1000), // Convert timestamp to Date
+        changeFrequency: 'monthly',
+        priority: 0.7,
       });
+
     });
-    
+
     console.log(`Sitemap: Generated ${blogResponse.list.length} blog post URLs for each locale`);
   } catch (error) {
     console.error('Sitemap: Failed to fetch blog posts for sitemap:', error);
