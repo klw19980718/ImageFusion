@@ -6,14 +6,16 @@ import { Check, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
-import { apiConfig } from "@/app/config/api";
+import { api } from "@/app/config/api";
 import pricingPlans from "@/app/config/price";
+import { useToast } from "@/components/ui/toast-provider";
 
 export default function PricingSection() {
   const t = useTranslations("pricing");
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const { user, isSignedIn } = useUser();
   const { openSignIn } = useClerk();
+  const { error: showErrorToast } = useToast();
 
   // 处理 Basic 计划按钮点击
   const handleBasicClick = () => {
@@ -41,8 +43,8 @@ export default function PricingSection() {
     const userId = user?.id;
     if (!userId) {
       console.error("User is signed in but user ID is missing.");
-      // 可以选择提示用户或记录错误
-      alert(
+      // 使用 toast 替代 alert
+      showErrorToast(
         t("error.missingUserId", {
           defaultMessage:
             "Could not get user information. Please try refreshing the page.",
@@ -53,46 +55,19 @@ export default function PricingSection() {
 
     setLoadingPlan(planKey); // 设置当前加载的计划
     try {
-      // 3. 使用真实的用户 ID 调用 API
-      const response = await fetch(apiConfig.stripeSubscriptionCreate, {
-        method: "POST",
-        body: JSON.stringify({
-          google_id: userId, // 使用 Clerk user.id 作为 google_id 发送给后端
-          price_id: priceId,
-          website: "ai_polatoons", //站点标识,默认现在站点ai_polaroid，其他站点的以后增加
-        }),
-      });
+      // 3. 使用新的 API 调用支付接口
+      const result = await api.payment.createStripeSubscription(priceId);
 
-      if (!response.ok) {
-        const errorData = await response
-          .json()
-          .catch(() => ({ message: t("error.generic") }));
-        console.error(
-          "Stripe subscription creation failed:",
-          response.status,
-          errorData
-        );
-        alert(errorData.message || t("error.generic"));
-        setLoadingPlan(null);
-        return;
-      }
-
-      const data = await response.json();
-
-      // 检查返回的数据结构是否符合预期（之前是 data.data.url）
-      // 请根据您的 API 实际返回结构调整
-      const checkoutUrl = data?.data?.url || data?.url;
-
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
+      if (result.code === 200 && result.data?.url) {
+        window.location.href = result.data.url;
       } else {
-        console.error("Stripe subscription response missing URL:", data);
-        alert(t("error.missingUrl"));
+        console.error("Stripe subscription creation failed:", result);
+        showErrorToast(result.msg || t("error.generic"));
         setLoadingPlan(null);
       }
     } catch (error) {
       console.error("Error during subscription creation request:", error);
-      alert(t("error.network"));
+      showErrorToast(t("error.network"));
       setLoadingPlan(null);
     }
   };
@@ -153,14 +128,6 @@ export default function PricingSection() {
                     {planDetails.price}{" "}
                     {/* 直接使用翻译文件中的价格，包括 "$0" */}
                   </span>
-                  {/* 对 basic 也显示 /月，如果需要可以条件隐藏 */}
-                  {/* <span className="text-gray-400 text-lg ml-1">{t('perMonth')}</span> */}
-                  {/* 或者条件显示 */}
-                  {!isBasic && (
-                    <span className="text-muted-foreground text-lg ml-1">
-                      {t("perMonth")}
-                    </span>
-                  )}
                 </div>
 
                 {/* 修改按钮逻辑 */}

@@ -133,6 +133,7 @@
     "title": "Choose Your Perfect AI Image Fusion Plan",
     "description": "All plans include HD image download and fast AI generation for combining images online.",
     "perMonth": "/month",
+    "oneTime": "one-time",
     "mostPopular": "Most Popular",
     "upgradePlan": "Upgrade Plan",
     "saveAnnually": "Save 20% with annual billing",
@@ -153,7 +154,7 @@
       "title": "Premium Plan",
       "price": "$1",
       "features": [
-        "5 generation credits",
+        "5 generation credits one-time",
         "HD fused image download",
         "Faster AI generation for merging photos",
         "Commercial use license included",

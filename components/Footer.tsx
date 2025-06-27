@@ -2,54 +2,44 @@
 
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { FriendLink } from '@/lib/server-api';
 // import { useParams } from 'next/navigation'; // No longer needed
 
-export function Footer() {
+interface FooterProps {
+  friendlyLinks?: FriendLink[];
+}
+
+export function Footer({ friendlyLinks = [] }: FooterProps) {
   const t = useTranslations('footer');
   // const params = useParams(); // No longer needed
   // const currentLocale = params.locale as string || 'zh'; // No longer needed
   
-  const partnerSites = [
-    { url: 'https://www.seedancepro.com/', name: 'Seedance' },
-    { url: 'https://www.framepola.com', name: 'AIPolaroid' },
-    { url: 'https://www.ghiblimagicmaker.com', name: 'GhibliImage' },
-    { url: 'https://www.ghiblitattoo.com', name: 'GhibliTattoo' },
-    { url: 'https://www.aioutfitgen.com', name: 'OutfitAI' },
-    { url: 'https://www.girlaniai.com', name: 'GirlCoolAnimeWallpaper' },
-    { url: 'https://www.4oimagex.com', name: '4oImageX' },
-    { url: 'https://www.invictgen.com', name: 'InvincibleTitleCardGenerator' },
-    { url: 'https://www.aibabytalk.com', name: 'AiBabyPodcast' },
-    { url: 'https://www.pencilartai.com', name: 'PencilArtMagic' },
-    { url: 'https://www.imginpaint.com', name: 'AiInpainting' },
-    { url: 'https://www.xbgremove.com', name: 'EraseBG' },
-    { url: 'https://www.aithumbgen.com', name: 'AiThumbGen' },
-    { url: 'https://www.genbabyname.com', name: 'NamiGenie' },
-  ];
-  
   return (
     <footer className="bg-background border-t border-muted py-12">
       <div className="container mx-auto px-6">
-        {/* Partner Sites - Moved to Top */}
-        <div className="mb-10 pb-6 border-b border-muted">
-          <h3 className="font-semibold text-base text-foreground mb-4">
-            PartnerSites
-          </h3>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {partnerSites.map((site, index) => (
-              <a
-                key={index}
-                href={site.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-standard text-sm hover:underline decoration-primary decoration-1 underline-offset-2"
-              >
-                {site.name}
-              </a>
-            ))}
+        {/* Partner Sites - Only show if there are friendly links */}
+        {friendlyLinks.length > 0 && (
+          <div className="mb-10 pb-6 border-b border-muted">
+            <h3 className="font-semibold text-base text-foreground mb-4">
+              PartnerSites
+            </h3>
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              {friendlyLinks.map((site, index) => (
+                <a
+                  key={index}
+                  href={site.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-standard text-sm hover:underline decoration-primary decoration-1 underline-offset-2"
+                >
+                  {site.name}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Main Content Section - Moved to Bottom */}
+        {/* Main Content Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo & Copyright */}
           <div className="md:col-span-1">

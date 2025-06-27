@@ -3,6 +3,7 @@
 import { SignUp } from '@clerk/nextjs';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { GoogleOneTapAuth } from '@/components/auth';
 
 export default function SignUpPage() {
   const params = useParams();
@@ -12,6 +13,12 @@ export default function SignUpPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#FFF8F0] py-12">
+      {/* Google One Tap - 在注册页面显示 */}
+      <GoogleOneTapAuth
+        signInForceRedirectUrl={`/${locale}`}
+        signUpForceRedirectUrl={`/${locale}`}
+      />
+      
       <h1 className="text-3xl font-bold mb-8">{t('createAccount', { defaultMessage: '创建账号' })}</h1>
       <SignUp 
         redirectUrl={`/${locale}`}

@@ -19,43 +19,81 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import Link from "next/link";
-import { apiConfig } from "@/app/config/api";
+import { api } from "@/app/config/api";
+import { useUserInfo } from "@/lib/providers";
+import { useToast } from "@/components/ui/toast-provider";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
-// 定义从API获取的用户信息类型
-interface UserApiInfo {
-  google_id: string;
-  avatar: string;
-  name: string;
-  email: string;
-  level: 0 | 1 | 2; // 0: none, 1: premium, 2: ultimate
-  api_total_times: number;
-  api_used_times: number;
-  api_left_times: number;
-  subscription_status: string; // 可能为空或有值
-  current_period_end: number; // 时间戳
-  created: number; // 时间戳
+// 定义积分记录项的类型
+interface TimesLogItem {
+  id: number;
+  user_id: number;
+  change_type: string;
+  use_limit: number;
+  created_at: number;
+  updated_at: number;
+}
+
+// 定义积分记录 API 返回的数据结构
+interface TimesLogResponse {
+  count: number;
+  list: TimesLogItem[];
+  total_page: number;
+}
+
+// 定义订阅记录项的类型
+interface SubscriptionItem {
+  id: number;
+  pay_type: string;
+  user_id: number;
+  customer_id: string;
+  subscription_id: string;
+  price_id: string;
+  created_at: number;
+  updated_at: number;
+  price_info: {
+    id: number;
+    appid: string;
+    name: string;
+    description: string;
+    price: number;
+    features: string;
+    is_popular: number;
+    button_text: string;
+    usage_limit: number;
+    level: number;
+    stripe_id: number;
+    prices_id: string;
+    stripe_type: string;
+    status: number;
+  };
 }
 
 // 定义图片历史记录项的类型
 interface GenerationHistoryItem {
   id: number;
-  google_id: string;
+  user_id: number;
   task_id: string;
   prompt: string;
   origin_image: string;
-  dist_image: string; // 我们将主要使用这个图片URL
-  size: string;
-  is_enhance: number;
+  generate_image: string; // 生成的图片URL
   status: number;
-  created: number;
-  updated: number;
+  created_at: number;
+  updated_at: number;
 }
 
 // 定义图片历史记录 API 返回的数据结构
 interface GenerationHistoryResponse {
   count: number;
   list: GenerationHistoryItem[];
-  total_page: number; // API 直接返回了总页数，很好
+  total_page: number;
 }
 
 // 将辅助函数移到组件外部
@@ -106,86 +144,60 @@ function getPaginationItems(
 }
 
 // --- 将下载逻辑定义为独立函数 ---
-// 添加 setIsDownloading 和 t 作为参数
 async function downloadImageWithCors(
   imageUrl: string,
   filename: string,
-  setIsDownloading: (id: number | null) => void, // 用于更新加载状态
-  imageId: number, // 图片 ID 用于设置加载状态
-  t: Function // 翻译函数
+  setIsDownloading: (id: number | null) => void,
+  imageId: number,
+  showToast: (message: string, type: 'success' | 'error') => void
 ) {
-  setIsDownloading(imageId); // 开始下载，设置加载状态
+  setIsDownloading(imageId);
   try {
-    // 1. 发起 fetch 请求
     const response = await fetch(imageUrl, { mode: "cors" });
 
-    // 检查响应是否成功并且是 CORS 允许的
     if (!response.ok) {
       throw new Error(
         `HTTP error! status: ${response.status}. Failed to fetch image. Check CORS headers on the server.`
       );
     }
 
-    // 2. 将响应体转换为 Blob 对象
     const blob = await response.blob();
-
-    // 3. 创建一个指向 Blob 的 Object URL
     const objectUrl = URL.createObjectURL(blob);
 
-    // 4. 创建 <a> 标签并触发下载
     const link = document.createElement("a");
     link.href = objectUrl;
-    link.download = filename || `ImageFusion-image-${imageId}.png`; // 使用传入的 filename 或生成一个
+    link.download = filename || `ImageFusion-image-${imageId}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    // 5. 释放 Object URL 资源
     URL.revokeObjectURL(objectUrl);
 
+    showToast('Image downloaded successfully!', 'success');
     console.log("Image download initiated!");
   } catch (error: any) {
     console.error("Download failed:", error);
-    // 使用翻译函数 t 显示错误信息
-    const errorMessage = t("downloadFailed", {
-      defaultMessage: "Download failed!",
-    });
-    const corsMessage = t("downloadCorsError", {
-      defaultMessage:
-        "Could not fetch image from {imageUrl}. This is often due to missing CORS headers (Access-Control-Allow-Origin) on the server. Check the browser console for details.",
-      imageUrl: imageUrl,
-    });
-    const genericMessage = t("downloadGenericError", {
-      defaultMessage: "Error: {errorMsg}",
-      errorMsg: error.message,
-    });
-
-    // 检查是否是网络错误或类型错误（通常与 CORS 相关）
-    if (
-      error.message.includes("Failed to fetch") ||
-      error.name === "TypeError"
-    ) {
-      alert(`${errorMessage}\n\n${corsMessage}`);
+    const errorMessage = 'Download failed!';
+    
+    if (error.message.includes("Failed to fetch") || error.name === "TypeError") {
+      showToast(`${errorMessage} Could not fetch image due to CORS restrictions.`, 'error');
     } else {
-      alert(`${errorMessage} ${genericMessage}`);
+      showToast(`${errorMessage} Error: ${error.message}`, 'error');
     }
   } finally {
-    setIsDownloading(null); // 结束下载（无论成功或失败），清除加载状态
+    setIsDownloading(null);
   }
 }
 
 export default function ProfilePage() {
   const { user, isLoaded, isSignedIn } = useUser();
+  const { userInfo, isLoadingUserInfo, refreshUserInfo } = useUserInfo();
+  const { success: showSuccessToast, error: showErrorToast } = useToast();
   const t = useTranslations("user");
   const commonT = useTranslations("common");
   const params = useParams();
   const router = useRouter();
-  const locale = (params.locale as string) || "zh";
-
-  // API 数据状态 (用户信息)
-  const [userApiInfo, setUserApiInfo] = useState<UserApiInfo | null>(null);
-  const [isLoadingUserInfo, setIsLoadingUserInfo] = useState(true);
-  const [userInfoError, setUserInfoError] = useState<string | null>(null);
+  const locale = (params.locale as string) || "en";
 
   // 图片历史记录状态
   const [historyList, setHistoryList] = useState<GenerationHistoryItem[]>([]);
@@ -195,9 +207,24 @@ export default function ProfilePage() {
   const [totalPages, setTotalPages] = useState(0);
   const [totalHistoryCount, setTotalHistoryCount] = useState(0);
   const historyPageSize = 30;
-  const [isDownloading, setIsDownloading] = useState<number | null>(null); // 跟踪正在下载的图片ID
+  const [isDownloading, setIsDownloading] = useState<number | null>(null);
 
- 
+  // 积分记录状态
+  const [timesLogList, setTimesLogList] = useState<TimesLogItem[]>([]);
+  const [isLoadingTimesLog, setIsLoadingTimesLog] = useState(false);
+  const [timesLogError, setTimesLogError] = useState<string | null>(null);
+  const [timesLogCurrentPage, setTimesLogCurrentPage] = useState(1);
+  const [timesLogTotalPages, setTimesLogTotalPages] = useState(0);
+  const [isTimesLogDialogOpen, setIsTimesLogDialogOpen] = useState(false);
+  const timesLogPageSize = 10;
+
+  // 订阅记录状态
+  const [subscriptionList, setSubscriptionList] = useState<SubscriptionItem[]>([]);
+  const [isLoadingSubscriptions, setIsLoadingSubscriptions] = useState(false);
+  const [subscriptionError, setSubscriptionError] = useState<string | null>(null);
+  const [isSubscriptionDialogOpen, setIsSubscriptionDialogOpen] = useState(false);
+  const [cancellingSubscriptionId, setCancellingSubscriptionId] = useState<number | null>(null);
+
   // 未登录用户重定向到首页
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
@@ -205,125 +232,219 @@ export default function ProfilePage() {
     }
   }, [isLoaded, isSignedIn, locale, router]);
 
-  // 添加调试日志
-  useEffect(() => {
-    console.log("Auth state:", { isLoaded, isSignedIn, userId: user?.id });
-  }, [isLoaded, isSignedIn, user]);
-
-  // API 调用 Effect (获取用户信息)
-  useEffect(() => {
-    if (isLoaded && user?.id) {
-      const fetchUserInfo = async () => {
-        setIsLoadingUserInfo(true);
-        setUserInfoError(null);
-        try {
-          const googleIdToFetch = user?.id || "";
-          const response = await fetch(
-            `${apiConfig.userInfo}?google_id=${googleIdToFetch}`
-          );
-          if (!response.ok) {
-            throw new Error(
-              `API Error: ${response.status} ${response.statusText}`
-            );
-          }
-          const result = await response.json();
-          if (result.code === 1000 && result.data) {
-            setUserApiInfo(result.data);
-          } else {
-            console.warn(
-              "User info API returned success code but no data for:",
-              googleIdToFetch
-            );
-            setUserApiInfo(null);
-          }
-        } catch (error) {
-          console.error("Failed to fetch user API info:", error);
-          setUserInfoError(
-            error instanceof Error
-              ? error.message
-              : "An unknown error occurred fetching user info"
-          );
-        } finally {
-          setIsLoadingUserInfo(false);
-        }
-      };
-      fetchUserInfo();
-    } else if (isLoaded && !user) {
-      setIsLoadingUserInfo(false);
-      setUserApiInfo(null);
-    }
-  }, [isLoaded, user]);
-
   // API 调用 Effect (获取图片历史记录)
   useEffect(() => {
-    if (isLoaded && user?.id) {
-      const fetchGenerationHistory = async (page: number) => {
-        setIsLoadingHistory(true);
-        setHistoryError(null);
-        try {
-          const googleIdToFetch = user?.id || "";
-          const response = await fetch(`${apiConfig.opusList}`, {
-            method: "POST",
-            body: JSON.stringify({
-              page: page,
-              page_size: historyPageSize,
-              google_id: googleIdToFetch,
-            }),
-          });
+    const fetchGenerationHistory = async (page: number) => {
+      if (!isLoaded || !user?.id) {
+        setIsLoadingHistory(false);
+        setHistoryList([]);
+        setTotalPages(0);
+        setTotalHistoryCount(0);
+        return;
+      }
 
-          if (!response.ok) {
-            throw new Error(
-              `API Error: ${response.status} ${response.statusText}`
-            );
-          }
-          const result = await response.json();
+      setIsLoadingHistory(true);
+      setHistoryError(null);
+      try {
+        const result = await api.user.getUserOpusList(page, historyPageSize, 0);
 
-          if (result.code === 1000 && result.data) {
-            setHistoryList(result.data.list || []);
-            setTotalPages(result.data.total_page || 0);
-            setTotalHistoryCount(result.data.count || 0);
-          } else {
-            console.error(
-              "Failed to fetch history:",
-              result.msg || "Unknown API error"
-            );
-            setHistoryError(
-              result.msg ||
-                t("historyFetchError", { defaultMessage: "获取历史记录失败" })
-            );
-            setHistoryList([]);
-          }
-        } catch (error) {
-          console.error("Failed to fetch history:", error);
-          setHistoryError(
-            error instanceof Error
-              ? error.message
-              : "获取历史记录时发生未知错误"
-          );
+        if (result.code === 200 && result.data) {
+          setHistoryList(result.data.list || []);
+          setTotalPages(result.data.total_page || 0);
+          setTotalHistoryCount(result.data.count || 0);
+        } else {
+          console.error("Failed to fetch history:", result.msg || 'Unknown API error');
+          setHistoryError(result.msg || t("historyFetchError", { defaultMessage: "获取历史记录失败" }));
           setHistoryList([]);
-        } finally {
-          setIsLoadingHistory(false);
+          setTotalPages(0);
+          setTotalHistoryCount(0);
         }
-      };
+      } catch (error) {
+        console.error("Failed to fetch history:", error);
+        setHistoryError(error instanceof Error ? error.message : "获取历史记录时发生未知错误");
+        setHistoryList([]);
+        setTotalPages(0);
+        setTotalHistoryCount(0);
+      } finally {
+        setIsLoadingHistory(false);
+      }
+    };
 
-      fetchGenerationHistory(currentPage);
-    } else if (isLoaded && !user) {
-      setIsLoadingHistory(false);
-      setHistoryList([]);
-    }
-  }, [isLoaded, user, currentPage, historyPageSize, t]);
+    fetchGenerationHistory(currentPage);
+  }, [isLoaded, user?.id, currentPage, historyPageSize, t]);
 
   // 处理分页变化
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
       setCurrentPage(newPage);
-      const historySection = document.getElementById(
-        "generation-history-section"
-      );
+      const historySection = document.getElementById("generation-history-section");
       if (historySection) {
         historySection.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
+  };
+
+  // 刷新历史记录
+  const refreshHistory = async () => {
+    if (!isLoaded || !user?.id) return;
+
+    setIsLoadingHistory(true);
+    setHistoryError(null);
+    try {
+      const result = await api.user.getUserOpusList(currentPage, historyPageSize, 0);
+
+      if (result.code === 200 && result.data) {
+        setHistoryList(result.data.list || []);
+        setTotalPages(result.data.total_page || 0);
+        setTotalHistoryCount(result.data.count || 0);
+        showSuccessToast('History refreshed successfully!');
+      } else {
+        console.error("Failed to fetch history:", result.msg || 'Unknown API error');
+        setHistoryError(result.msg || "获取历史记录失败");
+        setHistoryList([]);
+        setTotalPages(0);
+        setTotalHistoryCount(0);
+        showErrorToast('Failed to refresh history: ' + (result.msg || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error("Failed to fetch history:", error);
+      setHistoryError(error instanceof Error ? error.message : "获取历史记录时发生未知错误");
+      setHistoryList([]);
+      setTotalPages(0);
+      setTotalHistoryCount(0);
+      showErrorToast('Failed to refresh history: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
+
+  // 格式化时间戳
+  const formatTimestamp = (timestamp: number): string => {
+    if (!timestamp) return 'N/A';
+    try {
+      return new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', {
+        year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      }).format(new Date(timestamp * 1000));
+    } catch (e) {
+      console.error("Error formatting date:", e);
+      return new Date(timestamp * 1000).toLocaleDateString();
+    }
+  };
+
+  // 获取积分记录数据的函数
+  const fetchTimesLog = async (page: number) => {
+    if (!isLoaded || !user?.id) return;
+
+    setIsLoadingTimesLog(true);
+    setTimesLogError(null);
+    try {
+      const result = await api.user.getTimesLog(page, timesLogPageSize);
+
+      if (result.code === 200 && result.data) {
+        setTimesLogList(result.data.list || []);
+        setTimesLogTotalPages(result.data.total_page || 0);
+      } else {
+        console.error("Failed to fetch times log:", result.msg || 'Unknown API error');
+        setTimesLogList([]);
+        setTimesLogTotalPages(0);
+        setTimesLogError(result.msg || 'Failed to fetch times log');
+      }
+    } catch (error) {
+      console.error("Failed to fetch times log:", error);
+      setTimesLogError(error instanceof Error ? error.message : 'An unknown error occurred fetching times log');
+      setTimesLogList([]);
+      setTimesLogTotalPages(0);
+    } finally {
+      setIsLoadingTimesLog(false);
+    }
+  };
+
+  // Format change type
+  const formatChangeType = (changeType: string): string => {
+    const typeMap: Record<string, string> = {
+      'buy_package': 'Buy Package',
+      'create_task_free': 'Free Generation',
+      'month_free': 'Monthly Free',
+      'register_give': 'Registration Gift',
+      'invite_reward': 'Invitation Reward',
+      'daily_check': 'Daily Check-in',
+      'refund': 'Refund',
+    };
+    return typeMap[changeType] || changeType;
+  };
+
+  // Open points log dialog
+  const handleOpenTimesLogDialog = () => {
+    setIsTimesLogDialogOpen(true);
+    setTimesLogCurrentPage(1);
+    fetchTimesLog(1);
+  };
+
+  // Handle points log page change
+  const handleTimesLogPageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= timesLogTotalPages && newPage !== timesLogCurrentPage) {
+      setTimesLogCurrentPage(newPage);
+      fetchTimesLog(newPage);
+    }
+  };
+
+  // 获取订阅记录数据的函数
+  const fetchSubscriptions = async () => {
+    if (!isLoaded || !user?.id) return;
+
+    setIsLoadingSubscriptions(true);
+    setSubscriptionError(null);
+    try {
+      const result = await api.payment.getSubscriptions();
+
+      if (result.code === 200 && Array.isArray(result.data)) {
+        setSubscriptionList(result.data);
+      } else {
+        console.error("Failed to fetch subscriptions:", result.msg || 'Unknown API error');
+        setSubscriptionList([]);
+        setSubscriptionError(result.msg || 'Failed to fetch subscriptions');
+      }
+    } catch (error) {
+      console.error("Failed to fetch subscriptions:", error);
+      setSubscriptionError(error instanceof Error ? error.message : 'An unknown error occurred fetching subscriptions');
+      setSubscriptionList([]);
+    } finally {
+      setIsLoadingSubscriptions(false);
+    }
+  };
+
+  // 取消订阅函数
+  const handleCancelSubscription = async (subscriptionId: number) => {
+    setCancellingSubscriptionId(subscriptionId);
+    try {
+      const result = await api.payment.cancelSubscription(subscriptionId);
+
+      if (result.code === 200) {
+        // 取消成功，刷新订阅记录
+        await fetchSubscriptions();
+        showSuccessToast('Subscription cancelled successfully!');
+      } else {
+        console.error("Failed to cancel subscription:", result.msg || 'Unknown API error');
+        showErrorToast('Failed to cancel subscription: ' + (result.msg || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error("Failed to cancel subscription:", error);
+      showErrorToast('Failed to cancel subscription: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    } finally {
+      setCancellingSubscriptionId(null);
+    }
+  };
+
+  // 打开订阅记录弹窗
+  const handleOpenSubscriptionDialog = () => {
+    setIsSubscriptionDialogOpen(true);
+    fetchSubscriptions();
+  };
+
+  // 格式化价格显示
+  const formatPrice = (price: number): string => {
+    return `$${price.toFixed(2)}`;
   };
 
   if (!isLoaded) {
@@ -343,29 +464,32 @@ export default function ProfilePage() {
     return null;
   }
 
-  const initials = `${user.firstName?.[0] || ""}${
-    user.lastName?.[0] || ""
-  }`.toUpperCase();
+  const initials = `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase();
 
   // 根据 API 数据计算使用率
-  const usagePercentage =
-    userApiInfo?.api_total_times && userApiInfo.api_total_times > 0
-      ? (userApiInfo.api_used_times / userApiInfo.api_total_times) * 100
-      : 0;
+  const usagePercentage = userInfo?.total_limit && userInfo.total_limit > 0
+    ? (userInfo.use_limit / userInfo.total_limit) * 100
+    : 0;
 
-  // 获取订阅计划名称 (可以从翻译文件获取)
+  // 获取订阅计划名称
   const getPlanName = (level: number | undefined) => {
+    if (!level && level !== 0) return t("freeUser", { defaultMessage: "Free User" });
     switch (level) {
+      case 0:
+        return t("freeUser", { defaultMessage: "Free User" });
       case 1:
-        return t("premiumPlan", { defaultMessage: "Premium Plan" }); // Level 1 -> Basic
+        return t("premiumPlan", { defaultMessage: "Premium Plan" });
       case 2:
-        return t("ultimatePlan", { defaultMessage: "Ultimate Plan" }); // Level 2 -> Premium
-      // case 3: return t('ultimatePlan', {defaultMessage: 'Ultimate Plan'}); // Level 3 -> Ultimate
+        return t("ultimatePlan", { defaultMessage: "Ultimate Plan" });
       default:
-        return t("noSubscription", { defaultMessage: "No Subscription" }); // Level 0 或 undefined -> No Subscription
+        return t("freeUser", { defaultMessage: "Free User" });
     }
   };
-  const currentPlanName = getPlanName(userApiInfo?.level);
+
+  const currentPlanName = getPlanName(userInfo?.level);
+
+  // 过滤出有效图片的历史记录
+  const validHistoryList = historyList.filter((item) => item.generate_image && item.generate_image.trim() !== '');
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -378,22 +502,22 @@ export default function ProfilePage() {
               <div className="w-48 h-6 bg-gray-800 rounded animate-pulse mb-2"></div>
               <div className="w-32 h-4 bg-gray-800 rounded animate-pulse"></div>
             </div>
-          ) : userInfoError ? (
+          ) : userInfo ? (
             <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 shadow-lg">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                 <div className="relative">
                   <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#FFD700]/30">
-                    {userApiInfo?.avatar ? (
+                    {userInfo?.avatar ? (
                       <Image
-                        src={userApiInfo.avatar}
-                        alt={t('avatarAlt', { name: userApiInfo.name || 'User' })}
+                        src={userInfo.avatar}
+                        alt={t('avatarAlt', { name: userInfo.nickname || 'User' })}
                         width={128}
                         height={128}
                         className="object-cover w-full h-full"
                       />
                     ) : (
                       <div className="w-full h-full bg-gray-800 flex items-center justify-center text-4xl text-[#FFD700]">
-                        {(userApiInfo?.name || "U").charAt(0).toUpperCase()}
+                        {(userInfo?.nickname || "U").charAt(0).toUpperCase()}
                       </div>
                     )}
                   </div>
@@ -401,101 +525,58 @@ export default function ProfilePage() {
 
                 <div className="flex-1 text-center md:text-left">
                   <h1 className="text-2xl font-bold mb-2">
-                    {userApiInfo?.name || t('nicknameNotSet')}
+                    {userInfo?.nickname || t('nicknameNotSet')}
                   </h1>
-                  <p className="text-gray-400 mb-4">{userApiInfo?.email}</p>
+                  <p className="text-gray-400 mb-4">{userInfo?.email}</p>
 
                   <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
                       <p className="text-sm text-gray-400">{t('membershipLevel')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
-                        {userApiInfo && userApiInfo.level > 0
-                          ? currentPlanName
-                          : t("freeUser")}
+                        {currentPlanName}
                       </p>
                     </div>
 
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
                       <p className="text-sm text-gray-400">{t('pointsRemaining')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
-                        {userApiInfo?.api_left_times || 0}
+                        {userInfo.total_credits || 0}
                       </p>
                     </div>
 
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
                       <p className="text-sm text-gray-400">{t('generatedImages')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
-                        {userApiInfo?.api_used_times || 0}
+                        {userInfo?.use_limit || 0}
                       </p>
                     </div>
 
                     <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
                       <p className="text-sm text-gray-400">{t('totalApiCalls')}</p>
                       <p className="text-lg font-medium text-[#FFD700]">
-                        {userApiInfo?.api_total_times || 0}
+                        {userInfo?.total_limit || 0}
                       </p>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          ) : userApiInfo ? (
-            <div className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl p-8 shadow-lg">
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-                <div className="relative">
-                  <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#FFD700]/30">
-                    {userApiInfo?.avatar ? (
-                      <Image
-                        src={userApiInfo.avatar}
-                        alt={t('avatarAlt', { name: userApiInfo.name || 'User' })}
-                        width={128}
-                        height={128}
-                        className="object-cover w-full h-full"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gray-800 flex items-center justify-center text-4xl text-[#FFD700]">
-                        {(userApiInfo?.name || "U").charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-                </div>
 
-                <div className="flex-1 text-center md:text-left">
-                  <h1 className="text-2xl font-bold mb-2">
-                    {userApiInfo?.name || t('nicknameNotSet')}
-                  </h1>
-                  <p className="text-gray-400 mb-4">{userApiInfo?.email}</p>
-
-                  <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
-                      <p className="text-sm text-gray-400">{t('membershipLevel')}</p>
-                      <p className="text-lg font-medium text-[#FFD700]">
-                        {userApiInfo && userApiInfo.level > 0
-                          ? currentPlanName
-                          : t("freeUser")}
-                      </p>
-                    </div>
-
-                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
-                      <p className="text-sm text-gray-400">{t('pointsRemaining')}</p>
-                      <p className="text-lg font-medium text-[#FFD700]">
-                        {userApiInfo?.api_left_times || 0}
-                      </p>
-                    </div>
-
-                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
-                      <p className="text-sm text-gray-400">{t('generatedImages')}</p>
-                      <p className="text-lg font-medium text-[#FFD700]">
-                        {userApiInfo?.api_used_times || 0}
-                      </p>
-                    </div>
-
-                    <div className="bg-gray-800 rounded-xl px-4 py-3 border border-[#FFD700]/10">
-                      <p className="text-sm text-gray-400">{t('totalApiCalls')}</p>
-                      <p className="text-lg font-medium text-[#FFD700]">
-                        {userApiInfo?.api_total_times || 0}
-                      </p>
-                    </div>
+                  {/* Action Buttons */}
+                  <div className="mt-6 flex gap-3 flex-wrap">
+                    <Button
+                      onClick={handleOpenTimesLogDialog}
+                      variant="outline"
+                      size="sm"
+                      className="border-[#FFD700]/30 text-[#FFD700] hover:bg-[#FFD700]/10"
+                    >
+                      Points Log
+                    </Button>
+                    <Button
+                      onClick={handleOpenSubscriptionDialog}
+                      variant="outline"
+                      size="sm"
+                      className="border-[#FFD700]/30 text-[#FFD700] hover:bg-[#FFD700]/10"
+                    >
+                      Subscriptions
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -516,11 +597,45 @@ export default function ProfilePage() {
         </div>
 
         {/* 生成历史区 */}
-        {userApiInfo && (
+        {userInfo && (
           <div id="generation-history-section" className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 border-b border-[#FFD700]/20 pb-2 text-[#FFD700]">
-              {t('historyTitle')}
-            </h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold border-b border-[#FFD700]/20 pb-2 text-[#FFD700]">
+                {t('historyTitle')}
+              </h2>
+              <Button 
+                onClick={refreshHistory} 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-2 border-[#FFD700]/30 text-[#FFD700] hover:bg-[#FFD700]/10"
+                disabled={isLoadingHistory}
+              >
+                {isLoadingHistory ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-[#FFD700] border-t-transparent rounded-full animate-spin"></div>
+                    <span>Refreshing...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
+                    </svg>
+                    <span>Refresh</span>
+                  </>
+                )}
+              </Button>
+            </div>
 
             {isLoadingHistory ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -553,17 +668,17 @@ export default function ProfilePage() {
                   {t("retry", { defaultMessage: "Retry" })}
                 </Button>
               </div>
-            ) : totalHistoryCount > 0 ? (
+            ) : validHistoryList.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                  {historyList.map((item) => (
+                  {validHistoryList.map((item) => (
                     <div
                       key={item.id}
                       className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl overflow-hidden shadow-lg hover:shadow-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all"
                     >
                       <div className="relative bg-gray-800 overflow-hidden" style={{ paddingBottom: '150%' }}>
                         <Image
-                          src={item.dist_image}
+                          src={item.generate_image}
                           alt={t('generatedImageAlt')}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 16vw"
@@ -572,35 +687,35 @@ export default function ProfilePage() {
                         <button
                           onClick={() =>
                             downloadImageWithCors(
-                              item.dist_image,
+                              item.generate_image,
                               `ImageFusion-image-${item.id}.png`,
                               setIsDownloading,
                               item.id,
-                              t
+                              (message, type) => type === 'success' ? showSuccessToast(message) : showErrorToast(message)
                             )
                           }
                           className="absolute top-2 right-2 bg-black/60 p-2 rounded-full hover:bg-black/80 transition-colors"
                           title={t('downloadImage')}
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            className="w-5 h-5 text-white"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                            />
-                          </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          className="w-5 h-5 text-white"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                          />
+                        </svg>
                         </button>
                       </div>
                       <div className="p-3">
                         <p className="text-gray-400 text-sm">
-                          {new Date(item.created * 1000).toLocaleDateString()}
+                          {formatTimestamp(item.created_at)}
                         </p>
                       </div>
                     </div>
@@ -643,6 +758,202 @@ export default function ProfilePage() {
             )}
           </div>
         )}
+
+        {/* 积分记录对话框 */}
+        <Dialog open={isTimesLogDialogOpen} onOpenChange={setIsTimesLogDialogOpen}>
+          <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto rounded-3xl border border-[#FFD700]/20 bg-gray-900 text-white">
+            <DialogHeader className="text-center pb-6 border-b border-[#FFD700]/20">
+              <DialogTitle className="text-2xl font-semibold text-[#FFD700]">
+                Points Log
+              </DialogTitle>
+              <DialogDescription className="text-gray-400 mt-2">
+                View your points transaction history
+              </DialogDescription>
+            </DialogHeader>
+            <div className="pt-6">
+              {isLoadingTimesLog ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 border-4 border-[#FFD700] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-gray-400 font-medium">{commonT('loading', { defaultMessage: '加载中...' })}</p>
+                </div>
+              ) : timesLogError ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-red-500 text-2xl">⚠️</span>
+                  </div>
+                  <p className="text-red-400 font-medium">Failed to load: {timesLogError}</p>
+                </div>
+              ) : timesLogList.length > 0 ? (
+                <>
+                  <div className="space-y-3">
+                    {timesLogList.map((item) => (
+                      <div key={item.id} className="group p-6 rounded-2xl bg-gray-800 hover:bg-gray-700 transition-all duration-200 border border-[#FFD700]/10">
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-4 mb-2">
+                              <span className="font-semibold text-[#FFD700] text-lg">
+                                {formatChangeType(item.change_type)}
+                              </span>
+                              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-bold ${
+                                item.use_limit > 0 
+                                  ? 'bg-green-100 text-green-700' 
+                                  : 'bg-red-100 text-red-700'
+                              }`}>
+                                {item.use_limit > 0 ? '+' : ''}{item.use_limit}
+                              </span>
+                            </div>
+                            <p className="text-gray-400 text-sm font-medium">
+                              {formatTimestamp(item.created_at)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* 积分记录分页 */}
+                  {timesLogTotalPages > 1 && (
+                    <div className="flex justify-center mt-6 space-x-2">
+                      <button
+                        onClick={() => handleTimesLogPageChange(timesLogCurrentPage - 1)}
+                        disabled={timesLogCurrentPage === 1}
+                        className="px-4 py-2 rounded-lg border border-[#FFD700]/20 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors"
+                      >
+                        {t('paginationPrevious')}
+                      </button>
+                      <span className="px-4 py-2 rounded-lg bg-gray-800 border border-[#FFD700]/30">
+                        {timesLogCurrentPage} / {timesLogTotalPages}
+                      </span>
+                      <button
+                        onClick={() => handleTimesLogPageChange(timesLogCurrentPage + 1)}
+                        disabled={timesLogCurrentPage === timesLogTotalPages}
+                        className="px-4 py-2 rounded-lg border border-[#FFD700]/20 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors"
+                      >
+                        {t('paginationNext')}
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-16">
+                  <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-[#FFD700] text-3xl">📊</span>
+                  </div>
+                  <p className="text-gray-400 font-medium text-lg">No points records yet</p>
+                  <p className="text-gray-500 text-sm mt-1">Your transaction history will appear here</p>
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* 订阅记录对话框 */}
+        <Dialog open={isSubscriptionDialogOpen} onOpenChange={setIsSubscriptionDialogOpen}>
+          <DialogContent className="max-w-fit min-w-[800px] max-h-[90vh] overflow-y-auto rounded-3xl border border-[#FFD700]/20 bg-gray-900 text-white">
+            <DialogHeader className="text-center pb-6 border-b border-[#FFD700]/20">
+              <DialogTitle className="text-2xl font-semibold text-[#FFD700]">
+                Subscriptions
+              </DialogTitle>
+              <DialogDescription className="text-gray-400 mt-2">
+                Manage your subscriptions
+              </DialogDescription>
+            </DialogHeader>
+            <div className="pt-6">
+              {isLoadingSubscriptions ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 border-4 border-[#FFD700] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-gray-400 font-medium">{commonT('loading', { defaultMessage: '加载中...' })}</p>
+                </div>
+              ) : subscriptionError ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-red-500 text-2xl">⚠️</span>
+                  </div>
+                  <p className="text-red-400 font-medium">Failed to load: {subscriptionError}</p>
+                </div>
+              ) : subscriptionList.length > 0 ? (
+                <div className="grid gap-6">
+                  {subscriptionList.map((subscription) => (
+                    <div key={subscription.id} className="group relative p-6 rounded-3xl bg-gray-800 border border-[#FFD700]/20 shadow-lg hover:shadow-[#FFD700]/10 transition-all duration-300">
+                      {/* 顶部彩条 */}
+                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-t-3xl"></div>
+                      
+                      {/* 头部区域：名称、状态、价格、按钮 */}
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <h3 className="text-2xl font-bold text-[#FFD700] tracking-tight">
+                            {subscription.price_info.name}
+                          </h3>
+                          <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
+                            <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            Active
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center gap-6">
+                          <div className="text-3xl font-bold text-[#FFD700]">
+                            {formatPrice(subscription.price_info.price)}
+                          </div>
+                          <Button
+                            variant={subscription.price_info.button_text === 'Contact Sales' ? 'outline' : 'destructive'}
+                            size="sm"
+                            onClick={() => handleCancelSubscription(subscription.id)}
+                            disabled={cancellingSubscriptionId === subscription.id || subscription.price_info.button_text === 'Contact Sales'}
+                            className={`min-w-[120px] rounded-full transition-all duration-200 ${
+                              subscription.price_info.button_text === 'Contact Sales' 
+                                ? 'border-gray-400 text-gray-400 cursor-not-allowed opacity-60' 
+                                : 'bg-red-500 hover:bg-red-600 text-white border-red-500 hover:border-red-600 shadow-md hover:shadow-lg'
+                            }`}
+                          >
+                            {cancellingSubscriptionId === subscription.id ? (
+                              <>
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                                <span>Cancelling...</span>
+                              </>
+                            ) : (
+                              subscription.price_info.button_text === 'Contact Sales' 
+                                ? 'Contact Sales'
+                                : 'Cancel Plan'
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      {/* 底部信息 */}
+                      <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400 bg-gray-700/50 rounded-2xl p-4 mt-4">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-gray-300">ID:</span>
+                          <span className="font-mono text-xs bg-gray-600 px-2 py-1 rounded">{subscription.subscription_id.slice(-8)}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-gray-300">Started:</span>
+                          <span>{formatTimestamp(subscription.created_at)}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-gray-300">Usage Limit:</span>
+                          <span className="font-semibold text-[#FFD700]">
+                            {subscription.price_info.usage_limit === 99999 
+                              ? 'Unlimited'
+                              : subscription.price_info.usage_limit
+                            }
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-20">
+                  <div className="w-24 h-24 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span className="text-[#FFD700] text-4xl">💳</span>
+                  </div>
+                  <p className="text-gray-300 font-semibold text-xl mb-2">No active subscriptions</p>
+                  <p className="text-gray-500 text-sm">Subscribe to get started</p>
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </main>
       <Footer />
     </div>

@@ -1,5 +1,4 @@
 import ClientProviders from './ClientProviders';
-import ClerkProviderWithLocale from '../../components/auth/clerk-provider';
 import type { Metadata } from 'next';
 
 // 使用固定值，与 app/layout.tsx 保持一致
@@ -72,11 +71,9 @@ export default async function LocaleLayout({
 
   return (
     <ClientProviders locale={locale} messages={messages}>
-      <ClerkProviderWithLocale>
-        <main className="min-h-screen">
-          {children}
-        </main>
-      </ClerkProviderWithLocale>
+      <main className="min-h-screen">
+        {children}
+      </main>
     </ClientProviders>
   )
 } 
