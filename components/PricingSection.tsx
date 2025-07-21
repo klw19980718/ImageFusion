@@ -17,18 +17,7 @@ export default function PricingSection() {
   const { openSignIn } = useClerk();
   const { error: showErrorToast } = useToast();
 
-  // 处理 Basic 计划按钮点击
-  const handleBasicClick = () => {
-    if (!isSignedIn) {
-      openSignIn();
-    } else {
-      // 滚动到 Hero Section (假设其 id="hero")
-      const heroSection = document.getElementById('hero'); 
-      if (heroSection) {
-        heroSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-  };
+
 
   // 处理点击升级按钮的异步函数
   const handleUpgradeClick = async (priceId: string, planKey: string) => {
@@ -82,9 +71,9 @@ export default function PricingSection() {
           {t("description")}
         </p>
 
-        {/* --- 恢复三栏布局 --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {pricingPlans.map((plan) => {
+        {/* 两栏布局，左右居中，过滤掉 Basic 计划 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {pricingPlans.filter(plan => plan.key !== 'basic').map((plan) => {
             const planDetails = t.raw(plan.key);
             if (
               !planDetails ||
@@ -100,7 +89,6 @@ export default function PricingSection() {
               return null;
             }
             const features = planDetails.features as string[];
-            const isBasic = plan.key === "basic";
 
             return (
               <div
@@ -130,28 +118,21 @@ export default function PricingSection() {
                   </span>
                 </div>
 
-                {/* 修改按钮逻辑 */}
                 <Button
                   className={cn(
                     "w-full mb-6 transition-standard",
                     plan.popular
-                      ? "bg-primary text-primary-foreground hover:bg-primary/90" // Popular 样式
-                      : "bg-card text-foreground hover:bg-muted border border-primary" // 其他计划（包括 Basic）的样式
+                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                      : "bg-card text-foreground hover:bg-muted border border-primary"
                   )}
-                  onClick={ 
-                    isBasic 
-                      ? handleBasicClick // Basic 计划调用新函数
-                      : () => handleUpgradeClick(plan.priceId, plan.key) // 其他计划调用升级函数
-                  }
-                  disabled={loadingPlan === plan.key} // 移除 isBasic 的禁用条件
+                  onClick={() => handleUpgradeClick(plan.priceId, plan.key)}
+                  disabled={loadingPlan === plan.key}
                 >
                   {loadingPlan === plan.key ? (
                     <span className="flex items-center">
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       {t("loading")}
                     </span>
-                  ) : isBasic ? (
-                    t("basic.startGenerating") // 使用新的翻译键
                   ) : (
                     t("upgradePlan")
                   )}

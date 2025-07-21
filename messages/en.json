@@ -140,16 +140,6 @@
     "newTag": "New",
     "loading": "Processing...",
     "currentPlanText": "Free Plan Active",
-    "basic": {
-      "title": "Basic Plan",
-      "price": "$0",
-      "features": [
-        "2 free generation points for new users",
-        "Standard generation speed for image combination",
-        "Download generated images enabled"
-      ],
-      "startGenerating": "Login to experience for free"
-    },
     "premium": {
       "title": "Premium Plan",
       "price": "$1",
@@ -165,7 +155,7 @@
       "title": "Ultimate Plan",
       "price": "$10",
       "features": [
-        "Generate 500 blended pictures per month",
+        "Generate 100 blended pictures per month",
         "Everything in Premium Image Fusion",
         "Priority support for AI photo fusion",
         "Early access to new AI image combiner features"
