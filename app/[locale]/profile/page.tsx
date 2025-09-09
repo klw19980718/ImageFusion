@@ -676,13 +676,13 @@ export default function ProfilePage() {
                       key={item.id}
                       className="bg-gray-900 border border-[#FFD700]/20 rounded-2xl overflow-hidden shadow-lg hover:shadow-[#FFD700]/10 hover:border-[#FFD700]/30 transition-all"
                     >
-                      <div className="relative bg-gray-800 overflow-hidden" style={{ paddingBottom: '150%' }}>
+                      <div className="relative bg-gray-800 overflow-hidden" style={{ paddingBottom: '56.25%' }}>
                         <Image
                           src={item.generate_image}
                           alt={t('generatedImageAlt')}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 16vw"
-                          className="object-cover transition-transform hover:scale-105"
+                          className="object-contain transition-transform hover:scale-105"
                         />
                         <button
                           onClick={() =>

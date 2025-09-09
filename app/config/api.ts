@@ -51,7 +51,9 @@ export const authApi = {
     from_login: string;
     token: string; // 新增 token 参数
   }) => {
-    const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/user/loginAuth`, {
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const endpoint = isDevelopment ? 'loginAuthCyTest' : 'loginAuth';
+    const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/user/${endpoint}`, {
       method: 'POST',
       headers: getHeaders(false), // 登录接口不需要Authorization
       body: JSON.stringify(userData),
@@ -285,6 +287,31 @@ export const imageApi = {
   // 检查生成状态 (保留旧接口以备兼容)
   checkGenerationStatus: async (taskId: string) => {
     const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/generateImage/check?task_id=${taskId}`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+
+    return handleApiError(response);
+  },
+
+  // Nano Banana Edit 相关接口
+  createNanoBananaTask: async (params: {
+    prompt: string;
+    image_urls: string[];
+    output_format: "png" | "jpeg";
+    image_size: "auto" | "1:1" | "3:4" | "9:16" | "4:3" | "16:9";
+  }) => {
+    const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/task/kieai/nano-banana-edit`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(params),
+    });
+
+    return handleApiError(response);
+  },
+
+  checkNanoBananaTaskStatus: async (taskId: string) => {
+    const response = await fetch(`${API_CONFIG.VIDOR_AI_BASE}/api/task/kieai/nano-banana-edit/check_task_status?task_id=${taskId}`, {
       method: 'GET',
       headers: getHeaders(),
     });

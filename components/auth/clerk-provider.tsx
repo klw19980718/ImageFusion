@@ -2,7 +2,6 @@
 
 import { ClerkProvider } from '@clerk/nextjs';
 import { useParams } from 'next/navigation';
-import { zhCN, enUS } from '@clerk/localizations';
 import { DeepPartial, LocalizationResource } from '@clerk/types';
 
 export default function ClerkProviderWithLocale({
@@ -10,16 +9,13 @@ export default function ClerkProviderWithLocale({
 }: {
   children: React.ReactNode;
 }) {
-  const params = useParams();
-  const locale = params.locale as string || 'zh';
-  console.log('Current locale for Clerk:', locale);
+  
 
-  // 根据当前语言选择不同的本地化配置
-  const localization = locale === 'zh' ? zhCN : enUS;
+  
 
   return (
     <ClerkProvider 
-      localization={localization}
+     
       appearance={{
         layout: {
           socialButtonsVariant: "iconButton",
