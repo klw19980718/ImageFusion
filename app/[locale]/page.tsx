@@ -68,7 +68,7 @@ export default async function Home() {
             <FaqSection />
           </section>
         </main>
-        <Footer friendlyLinks={friendlyLinks} />
+        <Footer />
       </div>
     </PageLayout>
   );
