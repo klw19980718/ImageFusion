@@ -2,43 +2,13 @@
 
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { FriendLink } from '@/lib/server-api';
-// import { useParams } from 'next/navigation'; // No longer needed
 
-interface FooterProps {
-  friendlyLinks?: FriendLink[];
-}
-
-export function Footer({ friendlyLinks = [] }: FooterProps) {
+export function Footer() {
   const t = useTranslations('footer');
-  // const params = useParams(); // No longer needed
-  // const currentLocale = params.locale as string || 'zh'; // No longer needed
-  
+
   return (
     <footer className="bg-background border-t border-muted py-12">
       <div className="container mx-auto px-6">
-        {/* Partner Sites - Only show if there are friendly links */}
-        {friendlyLinks.length > 0 && (
-          <div className="mb-10 pb-6 border-b border-muted">
-            <h3 className="font-semibold text-base text-foreground mb-4">
-              PartnerSites
-            </h3>
-            <div className="flex flex-wrap gap-x-4 gap-y-2">
-              {friendlyLinks.map((site, index) => (
-                <a
-                  key={index}
-                  href={site.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-standard text-sm hover:underline decoration-primary decoration-1 underline-offset-2"
-                >
-                  {site.name}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Main Content Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo & Copyright */}
@@ -83,6 +53,16 @@ export function Footer({ friendlyLinks = [] }: FooterProps) {
                 >
                   {t('pricing')}
                 </Link>
+              </li>
+              <li>
+                <a
+                  href="https://www.jxp.com/seedance/seedance-2-pro"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-standard text-sm"
+                >
+                  seedance2
+                </a>
               </li>
             </ul>
           </div>
