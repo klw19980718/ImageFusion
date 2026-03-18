@@ -8,9 +8,9 @@ export function generateStaticParams() {
   return [{ locale: 'en' }];
 }
 
-// 提供与根布局一致的 SEO 优化元数据
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  // 注意: params.locale 在这里实际未使用，因为我们已固定为 'en'
+// 提供与根布局一致的 SEO 优化元数据 (Next.js 15: params is a Promise)
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  await params; // 注意: params.locale 在这里实际未使用，因为我们已固定为 'en'
   return {
     title: 'AI Image Fusion Tool | Free Online Photo Combiner & Enhancer',
     description: 'AI Image Fusion: Combine images online effortlessly. Our powerful tool uses AI to intelligently merge your photos, enhancing detail and creating seamless results. Free and easy image combination awaits!',
@@ -52,11 +52,12 @@ export async function generateMetadata({ params }: { params: { locale: string } 
 
 export default async function LocaleLayout({
   children,
-  params
+  params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  await params; // Next.js 15: params is a Promise
   const locale = 'en'; // 固定为英文
   
   // 动态导入消息文件并进行错误处理
