@@ -2,6 +2,7 @@
 const API_CONFIG = {
   VIDOR_AI_BASE: 'https://svc.imagefusionai.com',
   APP_ID: 'ai_image_fusion',
+  
 };
 
 // 通用请求头
