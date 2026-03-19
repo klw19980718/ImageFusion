@@ -61,7 +61,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-standard text-sm"
                 >
-                  seedance2
+                  Seedance 2.0
                 </a>
               </li>
             </ul>
