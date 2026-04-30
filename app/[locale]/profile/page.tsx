@@ -3,7 +3,6 @@
 import { useUser } from "@clerk/nextjs";
 import { useTranslations } from "next-intl";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Footer } from "../../../components/Footer";
 import Image from "next/image";
 import { Progress } from "../../../components/ui/progress";
 import { useEffect, useState } from "react";
@@ -960,7 +959,6 @@ export default function ProfilePage() {
           </DialogContent>
         </Dialog>
       </main>
-      <Footer />
     </div>
   );
 }

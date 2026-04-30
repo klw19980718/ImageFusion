@@ -2,15 +2,20 @@
 
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { FriendLink } from '@/lib/server-api';
 
-export function Footer() {
+interface FooterProps {
+  friendlyLinks?: FriendLink[];
+}
+
+export function Footer({ friendlyLinks = [] }: FooterProps) {
   const t = useTranslations('footer');
 
   return (
     <footer className="bg-background border-t border-muted py-12">
       <div className="container mx-auto px-6">
         {/* Main Content Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Copyright */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center space-x-2 mb-4">
@@ -100,6 +105,27 @@ export function Footer() {
                 support@imagefusionai.com
               </a>
             </div>
+          </div>
+
+          {/* AI model */}
+          <div className="md:col-span-1">
+            <h3 className="font-semibold text-lg mb-4 text-foreground">
+              AI model
+            </h3>
+            <ul className="space-y-2">
+              {friendlyLinks.map((link) => (
+                <li key={link.id}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary transition-standard text-sm"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
