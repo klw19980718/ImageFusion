@@ -5,12 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
     "@clerk/localizations": "^3.13.13",
-    "@clerk/nextjs": "^6.17.0",
+    "@clerk/nextjs": "^6.39.7",
     "@clerk/themes": "^2.2.35",
     "@clerk/types": "^4.55.0",
     "@radix-ui/react-avatar": "^1.1.6",
@@ -25,8 +24,8 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "lucide-react": "^0.503.0",
-    "next": "^15.3.8",
-    "next-intl": "^4.0.2",
+    "next": "^16.4.6",
+    "next-intl": "^4.14.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",

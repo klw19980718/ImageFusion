@@ -90,7 +90,7 @@ export default function RootLayout({
   const schemaData = getSchemaData();
 
   return (
-    <html lang={locale}>
+    <html data-scroll-behavior="smooth" lang={locale}>
       <body className={`${inter.variable} ${playfair.variable} ${fredoka.variable} ${baloo.variable} ${nunito.variable} bg-background text-foreground`}>
         <script
           type="application/ld+json"
